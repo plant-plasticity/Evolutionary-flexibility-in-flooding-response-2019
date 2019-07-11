@@ -3,7 +3,7 @@ Code and supplementary files used in analysis for "Evolutionary flexibility in f
 
 **Title:** Evolutionary flexibility in flooding response circuitry in angiosperms
 
-**Authors:**  [Mauricio A. Reynoso](https://github.com/reynosoma), [Kaisa Kajala](https://github.com/kaisakajala), [Marko Bajic](https://github.com/DealLab), Germain Pauluzzi,  Donnelly A. West, Andrew Yao, Katie Hatch, Kristina  Zumstein, Margaret Woodhouse, [Joel Rodriguez-Medina](https://github.com/rodriguezmDNA), Neelima Sinha, Siobhan M. Brady, [Roger B. Deal](https://github.com/DealLab), Julia Bailey-Serres
+**Authors:**  [Mauricio A. Reynoso](https://github.com/reynosoma), [Kaisa Kajala](https://github.com/kaisakajala), [Marko Bajic](https://github.com/DealLab), Germain Pauluzzi,  Donnelly A. West, Andrew Yao, Katie Hatch, Kristina  Zumstein, Margaret Woodhouse, [Joel Rodriguez-Medina](https://github.com/rodriguezmDNA), Neelima Sinha, Siobhan M. Brady, [Roger B. Deal](https://github.com/DealLab), [Julia Bailey-Serres](https://github.com/jbserres)
 
 **Journal:** To be added
 
