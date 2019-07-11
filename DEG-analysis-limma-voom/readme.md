@@ -4,3 +4,5 @@ SL = Solanum lycopersicum
 SP = Solanum pennellii
 OS = Oryza sativa
 MT = Medicago truncatula
+
+To run RPKM calculation, run RPKM_Calculation.R
