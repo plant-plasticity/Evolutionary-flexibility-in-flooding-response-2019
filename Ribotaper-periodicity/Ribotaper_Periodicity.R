@@ -5,7 +5,7 @@ gtf=read.delim("/Mydirectory/Medicago_truncatula.MedtrA17_4.0.39.gtf",comment.ch
 ## Edition of gene ID names may be needed to match differences between gff3 and gtf
 # medicago_clust$gene2=gsub("Medtr","MTR_",medicago_clust$gene)
 ## Read annotations
-anno_mt=read.delim("/Users/mauricio/Documents/Mauricio JBS postdoc/PUBLICATIONS/SUB_Paper/SUB_Paper_Medicago/interaction-limma/SUB-MT-interaction/Clusters/descr_medicago.txt",header=T)
+anno_mt=read.delim("/Mydirectory/interaction-limma/SUB-MT-interaction/Clusters/descr_medicago.txt",header=T)
 ## Select genes that have not a good annotation "Hypothetical protein" or low confidence "LOW QUALITY" or similar
 hypo_mt=(anno_mt[anno_mt$Annotation=="hypothetical protein",])
 low_qual=anno_sl[substr(anno_sl$Description,1,10)=="LOW QUALIT",]
