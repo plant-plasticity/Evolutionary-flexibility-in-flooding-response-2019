@@ -1,5 +1,5 @@
 # Evolutionary-flexibility-in-flooding-response-2019
-Code used to analyse data in "Evolutionary flexibility in flooding response circuitry in angiosperms" (2019)
+Code and supplementary files used in analysis for "Evolutionary flexibility in flooding response circuitry in angiosperms" (2019)
 
 **Title:** Evolutionary flexibility in flooding response circuitry in angiosperms
 
@@ -13,7 +13,7 @@ Code used to analyse data in "Evolutionary flexibility in flooding response circ
 
 
 
-## Code used by topic (*In Progress*)
+## Code used by topic (*in progress*)
 
 - [ATAC-seq](https://github.com/plant-plasticity/Evolutionary-flexibility-in-flooding-response-2019/tree/master/ATAC-seq)
 - [RNA mapping for rice](https://github.com/plant-plasticity/Evolutionary-flexibility-in-flooding-response-2019/tree/master/Mapping-RNA-seq-Os)
@@ -21,3 +21,4 @@ Code used to analyse data in "Evolutionary flexibility in flooding response circ
 - [Ribotaper for periodicity](https://github.com/plant-plasticity/Evolutionary-flexibility-in-flooding-response-2019/tree/master/Ribotaper-periodicity)
 - [Clustering]()
 - [Cross-species comparisons using Phytozome gene families](https://github.com/plant-plasticity/Evolutionary-flexibility-in-flooding-response-2019/tree/master/Gene-families-Phytozome)
+- [Cross-species comparisons using synteny](https://github.com/plant-plasticity/Evolutionary-flexibility-in-flooding-response-2019/tree/master/Synteny)
