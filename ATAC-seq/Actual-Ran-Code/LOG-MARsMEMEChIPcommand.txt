@@ -1,0 +1,8 @@
+
+tomtom=paste0("module load meme; tomtom -o 'tomtom_anr_check_control",cluster,"_",name,"' './meme_anr_rev_control",cluster,"_",name,"'/meme.txt 
+
+'./motif_databases/ARABD/ArabidopsisDAPv1.meme' 
+
+'./motif_databases/ARABD/ArabidopsisPBM_20140210.meme' './motif_databases/CIS-BP/Arabidopsis_thaliana.meme'  './motif_databases/CIS-BP/Medicago_truncatula.meme' '
+
+./motif_databases/CIS-BP/Oryza_sativa.meme' './motif_databases/CIS-BP/Solanum_lycopersicum.meme

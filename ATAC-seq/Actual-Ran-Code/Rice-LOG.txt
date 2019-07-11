@@ -1,0 +1,434 @@
+samtools view -c ATCON1.filt.bam; 
+samtools view -c ATCON2.filt.bam; 
+samtools view -c ATCON3.filt.bam; 
+samtools view -c ATCON4.filt.bam; 
+samtools view -c ATSUB1.filt.bam; 
+samtools view -c ATSUB2.filt.bam; 
+samtools view -c ATSUB3.filt.bam; 
+samtools view -c ATSUB4.filt.bam; 
+
+6,789,156
+13,399,961
+5,535,576
+6,177,612
+7,403,194
+4,926,969
+4,372,241
+5,949,994
+
+0.644003613998559
+0.326287591434035
+0.789843911455646
+0.707755844815116
+0.590588467626270
+0.887409886280997
+1.000000000000000
+0.734831161174280
+
+samtools view -s 0.644003613998559 -b ATCON1.filt.bam > OS-CON1.bam; 
+samtools view -s 0.326287591434035 -b ATCON2.filt.bam > OS-CON2.bam; 
+samtools view -s 0.789843911455646 -b ATCON3.filt.bam > OS-CON3.bam; 
+samtools view -s 0.707755844815116 -b ATCON4.filt.bam > OS-CON4.bam; 
+samtools view -s 0.590588467626270 -b ATSUB1.filt.bam > OS-SUB1.bam; 
+samtools view -s 0.887409886280997 -b ATSUB2.filt.bam > OS-SUB2.bam; 
+samtools view -s 0.734831161174280 -b ATSUB4.filt.bam > OS-SUB4.bam; 
+
+#Renamed ATSUB3 to OS-SUB3
+samtools index OS-CON1.bam; 
+samtools index OS-CON2.bam; 
+samtools index OS-CON3.bam; 
+samtools index OS-CON4.bam; 
+samtools index OS-SUB1.bam;
+samtools index OS-SUB3.bam;
+samtools index OS-SUB2.bam; 
+samtools index OS-SUB4.bam; 
+
+samtools view -c OS-CON1.bam; 
+samtools view -c OS-CON2.bam; 
+samtools view -c OS-CON3.bam; 
+samtools view -c OS-CON4.bam; 
+samtools view -c OS-SUB1.bam;
+samtools view -c OS-SUB2.bam;
+samtools view -c OS-SUB3.bam; 
+samtools view -c OS-SUB4.bam; 
+
+4,372,849
+4,377,191
+4,372,825
+4,369,877
+4,369,548
+4,371,892
+4,372,241
+4,371,495
+
+samtools index ATCON1.filt.bam; 
+samtools index ATCON2.filt.bam; 
+samtools index ATCON3.filt.bam; 
+samtools index ATCON4.filt.bam; 
+samtools index ATSUB1.filt.bam; 
+samtools index ATSUB2.filt.bam; 
+samtools index ATSUB4.filt.bam;  
+
+multiBamSummary bins -b ATCON1.filt.bam ATCON2.filt.bam ATCON3.filt.bam ATCON4.filt.bam ATSUB1.filt.bam ATSUB2.filt.bam OS-SUB3.bam ATSUB4.filt.bam -out OS-CON-SUB.npz -bs=5000 -p=max; 
+plotPCA -T=OS-CON-SUB -in OS-CON-SUB.npz -o OS-CON-SUB.pdf --labels OS-CON-1 OS-CON-2 OS-CON-3 OS-CON-4 OS-SUB-1 OS-SUB-2 OS-SUB-3 OS-SUB-4; 
+
+multiBamSummary bins -b OS-CON1.bam OS-CON2.bam OS-CON3.bam OS-CON4.bam OS-SUB1.bam OS-SUB2.bam OS-SUB3.bam OS-SUB4.bam -out OS-CON-SUB.npz -bs=5000 -p=max; 
+plotPCA -T=OS-CON-SUB -in OS-CON-SUB.npz -o OS-CON-SUB.pdf --labels OS-CON-1 OS-CON-2 OS-CON-3 OS-CON-4 OS-SUB-1 OS-SUB-2 OS-SUB-3 OS-SUB-4; 
+
+java -jar /Users/deallabuser/Documents/Software/picard.jar CollectInsertSizeMetrics I=OS-CON1.bam O=OS-CON1.txt H=OS-CON1.pdf M=0.5; 
+java -jar /Users/deallabuser/Documents/Software/picard.jar CollectInsertSizeMetrics I=OS-CON2.bam O=OS-CON2.txt H=OS-CON2.pdf M=0.5; 
+java -jar /Users/deallabuser/Documents/Software/picard.jar CollectInsertSizeMetrics I=OS-CON3.bam O=OS-CON3.txt H=OS-CON3.pdf M=0.5; 
+java -jar /Users/deallabuser/Documents/Software/picard.jar CollectInsertSizeMetrics I=OS-CON4.bam O=OS-CON4.txt H=OS-CON4.pdf M=0.5; 
+java -jar /Users/deallabuser/Documents/Software/picard.jar CollectInsertSizeMetrics I=OS-SUB1.bam O=OS-SUB1.txt H=OS-SUB1.pdf M=0.5; 
+java -jar /Users/deallabuser/Documents/Software/picard.jar CollectInsertSizeMetrics I=OS-SUB2.bam O=OS-SUB2.txt H=OS-SUB2.pdf M=0.5; 
+java -jar /Users/deallabuser/Documents/Software/picard.jar CollectInsertSizeMetrics I=OS-SUB3.bam O=OS-SUB3.txt H=OS-SUB3.pdf M=0.5; 
+java -jar /Users/deallabuser/Documents/Software/picard.jar CollectInsertSizeMetrics I=OS-SUB4.bam O=OS-SUB4.txt H=OS-SUB4.pdf M=0.5; 
+
+bamCoverage -b OS-CON1.bam -o OS-CON1.bw -bs=1 --normalizeUsingRPKM -p=max; 
+bamCoverage -b OS-CON2.bam -o OS-CON2.bw -bs=1 --normalizeUsingRPKM -p=max; 
+bamCoverage -b OS-CON3.bam -o OS-CON3.bw -bs=1 --normalizeUsingRPKM -p=max; 
+bamCoverage -b OS-CON4.bam -o OS-CON4.bw -bs=1 --normalizeUsingRPKM -p=max; 
+bamCoverage -b OS-SUB1.bam -o OS-SUB1.bw -bs=1 --normalizeUsingRPKM -p=max; 
+bamCoverage -b OS-SUB2.bam -o OS-SUB2.bw -bs=1 --normalizeUsingRPKM -p=max; 
+bamCoverage -b OS-SUB3.bam -o OS-SUB3.bw -bs=1 --normalizeUsingRPKM -p=max; 
+bamCoverage -b OS-SUB4.bam -o OS-SUB4.bw -bs=1 --normalizeUsingRPKM -p=max; 
+
+makeTagDirectory OS-CON1 OS-CON1.bam; 
+makeTagDirectory OS-CON2 OS-CON2.bam; 
+makeTagDirectory OS-CON3 OS-CON3.bam; 
+makeTagDirectory OS-CON4 OS-CON4.bam; 
+makeTagDirectory OS-SUB1 OS-SUB1.bam; 
+makeTagDirectory OS-SUB2 OS-SUB2.bam; 
+makeTagDirectory OS-SUB3 OS-SUB3.bam; 
+makeTagDirectory OS-SUB4 OS-SUB4.bam; 
+
+samtools sort OS-CON1.bam -o OS-CON1-sorted.bam; samtools index OS-CON1-sorted.bam; 
+samtools sort OS-CON2.bam -o OS-CON2-sorted.bam; samtools index OS-CON2-sorted.bam; 
+samtools sort OS-CON3.bam -o OS-CON3-sorted.bam; samtools index OS-CON3-sorted.bam; 
+samtools sort OS-CON4.bam -o OS-CON4-sorted.bam; samtools index OS-CON4-sorted.bam; 
+samtools sort OS-SUB1.bam -o OS-SUB1-sorted.bam; samtools index OS-SUB1-sorted.bam; 
+samtools sort OS-SUB2.bam -o OS-SUB2-sorted.bam; samtools index OS-SUB2-sorted.bam; 
+samtools sort OS-SUB3.bam -o OS-SUB3-sorted.bam; samtools index OS-SUB3-sorted.bam; 
+samtools sort OS-SUB4.bam -o OS-SUB4-sorted.bam; samtools index OS-SUB4-sorted.bam; 
+
+makeTagDirectory OS-CON1 OS-CON1-sorted.bam; 
+makeTagDirectory OS-CON2 OS-CON2-sorted.bam; 
+makeTagDirectory OS-CON3 OS-CON3-sorted.bam; 
+makeTagDirectory OS-CON4 OS-CON4-sorted.bam; 
+makeTagDirectory OS-SUB1 OS-SUB1-sorted.bam; 
+makeTagDirectory OS-SUB2 OS-SUB2-sorted.bam; 
+makeTagDirectory OS-SUB3 OS-SUB3-sorted.bam; 
+makeTagDirectory OS-SUB4 OS-SUB4-sorted.bam; 
+
+
+findpeaks OS-CON1/ -o OS-CON1-mD150 -minDist 150; pos2bed.pl OS-CON1-mD150 | bedtools sort | bedtools merge > OSC-CON1-mD150.bed; mv OSC-CON1-mD150.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/MinDist150-NoRegion; 
+findpeaks OS-CON2/ -o OS-CON2-mD150 -minDist 150; pos2bed.pl OS-CON2-mD150 | bedtools sort | bedtools merge > OSC-CON2-mD150.bed; mv OSC-CON2-mD150.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/MinDist150-NoRegion; 
+findpeaks OS-CON3/ -o OS-CON3-mD150 -minDist 150; pos2bed.pl OS-CON3-mD150 | bedtools sort | bedtools merge > OSC-CON3-mD150.bed; mv OSC-CON3-mD150.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/MinDist150-NoRegion; 
+findpeaks OS-CON4/ -o OS-CON4-mD150 -minDist 150; pos2bed.pl OS-CON4-mD150 | bedtools sort | bedtools merge > OSC-CON4-mD150.bed; mv OSC-CON4-mD150.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/MinDist150-NoRegion; 
+findpeaks OS-SUB1/ -o OS-SUB1-mD150 -minDist 150; pos2bed.pl OS-SUB1-mD150 | bedtools sort | bedtools merge > OSC-SUB1-mD150.bed; mv OSC-SUB1-mD150.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/MinDist150-NoRegion; 
+findpeaks OS-SUB2/ -o OS-SUB2-mD150 -minDist 150; pos2bed.pl OS-SUB2-mD150 | bedtools sort | bedtools merge > OSC-SUB2-mD150.bed; mv OSC-SUB2-mD150.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/MinDist150-NoRegion; 
+findpeaks OS-SUB3/ -o OS-SUB3-mD150 -minDist 150; pos2bed.pl OS-SUB3-mD150 | bedtools sort | bedtools merge > OSC-SUB3-mD150.bed; mv OSC-SUB3-mD150.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/MinDist150-NoRegion; 
+findpeaks OS-SUB4/ -o OS-SUB4-mD150 -minDist 150; pos2bed.pl OS-SUB4-mD150 | bedtools sort | bedtools merge > OSC-SUB4-mD150.bed; mv OSC-SUB4-mD150.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/MinDist150-NoRegion; 
+
+findpeaks OS-CON1/ -o OS-CON1-150R -minDist 150 -region; pos2bed.pl OS-CON1-150R | bedtools sort | bedtools merge > OSC-CON1-mD150R.bed; mv OSC-CON1-mD150R.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/MinDist150-Region; 
+findpeaks OS-CON2/ -o OS-CON2-150R -minDist 150 -region; pos2bed.pl OS-CON2-150R | bedtools sort | bedtools merge > OSC-CON2-mD150R.bed; mv OSC-CON2-mD150R.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/MinDist150-Region; 
+findpeaks OS-CON3/ -o OS-CON3-150R -minDist 150 -region; pos2bed.pl OS-CON3-150R | bedtools sort | bedtools merge > OSC-CON3-mD150R.bed; mv OSC-CON3-mD150R.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/MinDist150-Region; 
+findpeaks OS-CON4/ -o OS-CON4-150R -minDist 150 -region; pos2bed.pl OS-CON4-150R | bedtools sort | bedtools merge > OSC-CON4-mD150R.bed; mv OSC-CON4-mD150R.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/MinDist150-Region; 
+findpeaks OS-SUB1/ -o OS-SUB1-150R -minDist 150 -region; pos2bed.pl OS-SUB1-150R | bedtools sort | bedtools merge > OSC-SUB1-mD150R.bed; mv OSC-SUB1-mD150R.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/MinDist150-Region; 
+findpeaks OS-SUB2/ -o OS-SUB2-150R -minDist 150 -region; pos2bed.pl OS-SUB2-150R | bedtools sort | bedtools merge > OSC-SUB2-mD150R.bed; mv OSC-SUB2-mD150R.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/MinDist150-Region; 
+findpeaks OS-SUB3/ -o OS-SUB3-150R -minDist 150 -region; pos2bed.pl OS-SUB3-150R | bedtools sort | bedtools merge > OSC-SUB3-mD150R.bed; mv OSC-SUB3-mD150R.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/MinDist150-Region; 
+findpeaks OS-SUB4/ -o OS-SUB4-150R -minDist 150 -region; pos2bed.pl OS-SUB4-150R | bedtools sort | bedtools merge > OSC-SUB4-mD150R.bed; mv OSC-SUB4-mD150R.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/MinDist150-Region; 
+
+findpeaks OS-CON1/ -o OS-CON1-150Rr1 -minDist 150 -region -regionRes 1; pos2bed.pl OS-CON1-150Rr1 | bedtools sort | bedtools merge > OSC-CON1-mD150Rr1.bed; mv OSC-CON1-mD150Rr1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/MinDist150-RegionRes1; 
+findpeaks OS-CON2/ -o OS-CON2-150Rr1 -minDist 150 -region -regionRes 1; pos2bed.pl OS-CON2-150Rr1 | bedtools sort | bedtools merge > OSC-CON2-mD150Rr1.bed; mv OSC-CON2-mD150Rr1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/MinDist150-RegionRes1; 
+findpeaks OS-CON3/ -o OS-CON3-150Rr1 -minDist 150 -region -regionRes 1; pos2bed.pl OS-CON3-150Rr1 | bedtools sort | bedtools merge > OSC-CON3-mD150Rr1.bed; mv OSC-CON3-mD150Rr1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/MinDist150-RegionRes1; 
+findpeaks OS-CON4/ -o OS-CON4-150Rr1 -minDist 150 -region -regionRes 1; pos2bed.pl OS-CON4-150Rr1 | bedtools sort | bedtools merge > OSC-CON4-mD150Rr1.bed; mv OSC-CON4-mD150Rr1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/MinDist150-RegionRes1; 
+findpeaks OS-SUB1/ -o OS-SUB1-150Rr1 -minDist 150 -region -regionRes 1; pos2bed.pl OS-SUB1-150Rr1 | bedtools sort | bedtools merge > OSC-SUB1-mD150Rr1.bed; mv OSC-SUB1-mD150Rr1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/MinDist150-RegionRes1; 
+findpeaks OS-SUB2/ -o OS-SUB2-150Rr1 -minDist 150 -region -regionRes 1; pos2bed.pl OS-SUB2-150Rr1 | bedtools sort | bedtools merge > OSC-SUB2-mD150Rr1.bed; mv OSC-SUB2-mD150Rr1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/MinDist150-RegionRes1; 
+findpeaks OS-SUB3/ -o OS-SUB3-150Rr1 -minDist 150 -region -regionRes 1; pos2bed.pl OS-SUB3-150Rr1 | bedtools sort | bedtools merge > OSC-SUB3-mD150Rr1.bed; mv OSC-SUB3-mD150Rr1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/MinDist150-RegionRes1; 
+findpeaks OS-SUB4/ -o OS-SUB4-150Rr1 -minDist 150 -region -regionRes 1; pos2bed.pl OS-SUB4-150Rr1 | bedtools sort | bedtools merge > OSC-SUB4-mD150Rr1.bed; mv OSC-SUB4-mD150Rr1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/MinDist150-RegionRes1; 
+
+
+findpeaks OS-CON1/ -o OS-CON1-N; pos2bed.pl OS-CON1-N | bedtools sort | bedtools merge > OSC-CON1.bed; mv OSC-CON1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/NoMinDist-NoRegion; 
+findpeaks OS-CON2/ -o OS-CON2-N; pos2bed.pl OS-CON2-N | bedtools sort | bedtools merge > OSC-CON2.bed; mv OSC-CON2.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/NoMinDist-NoRegion; 
+findpeaks OS-CON3/ -o OS-CON3-N; pos2bed.pl OS-CON3-N | bedtools sort | bedtools merge > OSC-CON3.bed; mv OSC-CON3.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/NoMinDist-NoRegion; 
+findpeaks OS-CON4/ -o OS-CON4-N; pos2bed.pl OS-CON4-N | bedtools sort | bedtools merge > OSC-CON4.bed; mv OSC-CON4.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/NoMinDist-NoRegion; 
+findpeaks OS-SUB1/ -o OS-SUB1-N; pos2bed.pl OS-SUB1-N | bedtools sort | bedtools merge > OSC-SUB1.bed; mv OSC-SUB1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/NoMinDist-NoRegion; 
+findpeaks OS-SUB2/ -o OS-SUB2-N; pos2bed.pl OS-SUB2-N | bedtools sort | bedtools merge > OSC-SUB2.bed; mv OSC-SUB2.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/NoMinDist-NoRegion; 
+findpeaks OS-SUB3/ -o OS-SUB3-N; pos2bed.pl OS-SUB3-N | bedtools sort | bedtools merge > OSC-SUB3.bed; mv OSC-SUB3.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/NoMinDist-NoRegion; 
+findpeaks OS-SUB4/ -o OS-SUB4-N; pos2bed.pl OS-SUB4-N | bedtools sort | bedtools merge > OSC-SUB4.bed; mv OSC-SUB4.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/NoMinDist-NoRegion; 
+
+
+findpeaks OS-CON1/ -o OS-CON1-R -region; pos2bed.pl OS-CON1-R | bedtools sort | bedtools merge > OSC-CON1-R.bed; mv OSC-CON1-R.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/NoMinDist-Region; 
+findpeaks OS-CON2/ -o OS-CON2-R -region; pos2bed.pl OS-CON2-R | bedtools sort | bedtools merge > OSC-CON2-R.bed; mv OSC-CON2-R.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/NoMinDist-Region; 
+findpeaks OS-CON3/ -o OS-CON3-R -region; pos2bed.pl OS-CON3-R | bedtools sort | bedtools merge > OSC-CON3-R.bed; mv OSC-CON3-R.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/NoMinDist-Region; 
+findpeaks OS-CON4/ -o OS-CON4-R -region; pos2bed.pl OS-CON4-R | bedtools sort | bedtools merge > OSC-CON4-R.bed; mv OSC-CON4-R.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/NoMinDist-Region; 
+findpeaks OS-SUB1/ -o OS-SUB1-R -region; pos2bed.pl OS-SUB1-R | bedtools sort | bedtools merge > OSC-SUB1-R.bed; mv OSC-SUB1-R.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/NoMinDist-Region; 
+findpeaks OS-SUB2/ -o OS-SUB2-R -region; pos2bed.pl OS-SUB2-R | bedtools sort | bedtools merge > OSC-SUB2-R.bed; mv OSC-SUB2-R.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/NoMinDist-Region; 
+findpeaks OS-SUB3/ -o OS-SUB3-R -region; pos2bed.pl OS-SUB3-R | bedtools sort | bedtools merge > OSC-SUB3-R.bed; mv OSC-SUB3-R.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/NoMinDist-Region; 
+findpeaks OS-SUB4/ -o OS-SUB4-R -region; pos2bed.pl OS-SUB4-R | bedtools sort | bedtools merge > OSC-SUB4-R.bed; mv OSC-SUB4-R.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/NoMinDist-Region; 
+
+findpeaks OS-CON1/ -o OS-CON1-Rr1 -region -regionRes 1; pos2bed.pl OS-CON1-Rr1 | bedtools sort | bedtools merge > OSC-CON1-Rr1.bed; mv OSC-CON1-Rr1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/NoMinDist-RegionRes1; 
+findpeaks OS-CON2/ -o OS-CON2-Rr1 -region -regionRes 1; pos2bed.pl OS-CON2-Rr1 | bedtools sort | bedtools merge > OSC-CON2-Rr1.bed; mv OSC-CON2-Rr1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/NoMinDist-RegionRes1; 
+findpeaks OS-CON3/ -o OS-CON3-Rr1 -region -regionRes 1; pos2bed.pl OS-CON3-Rr1 | bedtools sort | bedtools merge > OSC-CON3-Rr1.bed; mv OSC-CON3-Rr1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/NoMinDist-RegionRes1; 
+findpeaks OS-CON4/ -o OS-CON4-Rr1 -region -regionRes 1; pos2bed.pl OS-CON4-Rr1 | bedtools sort | bedtools merge > OSC-CON4-Rr1.bed; mv OSC-CON4-Rr1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/NoMinDist-RegionRes1; 
+findpeaks OS-SUB1/ -o OS-SUB1-Rr1 -region -regionRes 1; pos2bed.pl OS-SUB1-Rr1 | bedtools sort | bedtools merge > OSC-SUB1-Rr1.bed; mv OSC-SUB1-Rr1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/NoMinDist-RegionRes1; 
+findpeaks OS-SUB2/ -o OS-SUB2-Rr1 -region -regionRes 1; pos2bed.pl OS-SUB2-Rr1 | bedtools sort | bedtools merge > OSC-SUB2-Rr1.bed; mv OSC-SUB2-Rr1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/NoMinDist-RegionRes1; 
+findpeaks OS-SUB3/ -o OS-SUB3-Rr1 -region -regionRes 1; pos2bed.pl OS-SUB3-Rr1 | bedtools sort | bedtools merge > OSC-SUB3-Rr1.bed; mv OSC-SUB3-Rr1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/NoMinDist-RegionRes1; 
+findpeaks OS-SUB4/ -o OS-SUB4-Rr1 -region -regionRes 1; pos2bed.pl OS-SUB4-Rr1 | bedtools sort | bedtools merge > OSC-SUB4-Rr1.bed; mv OSC-SUB4-Rr1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/NoMinDist-RegionRes1; 
+
+
+findpeaks OS-CON1/ -o OS-CON1-H-R -style dnase -region; pos2bed.pl OS-CON1-H-R | bedtools sort | bedtools merge > OSC-CON1-H-R.bed; mv OSC-CON1-H-R.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/Histone-Region; 
+findpeaks OS-CON2/ -o OS-CON2-H-R -style dnase -region; pos2bed.pl OS-CON2-H-R | bedtools sort | bedtools merge > OSC-CON2-H-R.bed; mv OSC-CON2-H-R.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/Histone-Region; 
+findpeaks OS-CON3/ -o OS-CON3-H-R -style dnase -region; pos2bed.pl OS-CON3-H-R | bedtools sort | bedtools merge > OSC-CON3-H-R.bed; mv OSC-CON3-H-R.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/Histone-Region; 
+findpeaks OS-CON4/ -o OS-CON4-H-R -style dnase -region; pos2bed.pl OS-CON4-H-R | bedtools sort | bedtools merge > OSC-CON4-H-R.bed; mv OSC-CON4-H-R.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/Histone-Region; 
+findpeaks OS-SUB1/ -o OS-SUB1-H-R -style dnase -region; pos2bed.pl OS-SUB1-H-R | bedtools sort | bedtools merge > OSC-SUB1-H-R.bed; mv OSC-SUB1-H-R.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/Histone-Region; 
+findpeaks OS-SUB2/ -o OS-SUB2-H-R -style dnase -region; pos2bed.pl OS-SUB2-H-R | bedtools sort | bedtools merge > OSC-SUB2-H-R.bed; mv OSC-SUB2-H-R.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/Histone-Region; 
+findpeaks OS-SUB3/ -o OS-SUB3-H-R -style dnase -region; pos2bed.pl OS-SUB3-H-R | bedtools sort | bedtools merge > OSC-SUB3-H-R.bed; mv OSC-SUB3-H-R.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/Histone-Region; 
+findpeaks OS-SUB4/ -o OS-SUB4-H-R -style dnase -region; pos2bed.pl OS-SUB4-H-R | bedtools sort | bedtools merge > OSC-SUB4-H-R.bed; mv OSC-SUB4-H-R.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks/Histone-Region; 
+
+
+
+
+#Too many
+bedtools intersect -a OSC-SUB4-mD150Rr1.bed -b OSC-SUB1-mD150Rr1.bed OSC-SUB2-mD150Rr1.bed OSC-SUB3-mD150Rr1.bed > OS-SUB-mD150-rR1.bed; 
+bedtools intersect -a OSC-CON1-mD150Rr1.bed -b OSC-CON2-mD150Rr1.bed OSC-CON3-mD150Rr1.bed OSC-CON4-mD150Rr1.bed > OS-CON-mD150-rR1.bed;
+bedtools sort -i CON-SUB-mD150-rR1.bed | bedtools merge > OS-CON-SUB-mD150rR1.bed; 
+
+
+
+multiBamSummary bins -b OS-CON1-sorted.bam OS-CON2-sorted.bam OS-CON3-sorted.bam OS-CON4-sorted.bam -out OS-CON.npz -bs=5000 -p=max; 
+plotPCA -T=OS-CON -in OS-CON.npz -o OS-CON.pdf --labels OS-CON-1 OS-CON-2 OS-CON-3 OS-CON-4; 
+multiBamSummary bins -b OS-SUB1-sorted.bam OS-SUB2-sorted.bam OS-SUB3-sorted.bam OS-SUB4-sorted.bam -out OS-SUB.npz -bs=5000 -p=max; 
+plotPCA -T=OS-SUB -in OS-SUB.npz -o OS-SUB.pdf --labels OS-SUB-1 OS-SUB-2 OS-SUB-3 OS-SUB-4; 
+
+
+multiBamSummary bins -b OS-CON1-sorted.bam OS-CON4-sorted.bam OS-SUB1-sorted.bam OS-SUB4-sorted.bam -out OS-CON-SUB-1and4.npz -bs=5000 -p=max; 
+plotPCA -T=OS-CON-SUB-1and4 -in OS-CON-SUB-1and4.npz -o OS-CON-SUB-1and4.pdf --labels OS-CON-1 OS-CON-4 OS-SUB-1 OS-SUB-4; 
+
+
+
+#Better
+bedtools intersect -a OSC-SUB4-mD150Rr1.bed -b OSC-SUB1-mD150Rr1.bed > OS-SUB-1and4-mD150-rR1.bed; 
+bedtools intersect -a OSC-CON1-mD150Rr1.bed -b OSC-CON4-mD150Rr1.bed > OS-CON-1and4-mD150-rR1.bed;
+bedtools sort -i CON-SUB-mD150-rR1.bed | bedtools merge > OS-CON-SUB-mD150rR1.bed; 
+
+#Numbers Setting Up For Counting
+22218 CON
+28971 SUB
+31459 Together
+
+bedtools subtract -A -a OS-SUB-1and4-mD150-rR1.bed -b OS-CON-1and4-mD150-rR1.bed > SUBonly.bed; 
+bedtools subtract -A -a OS-CON-1and4-mD150-rR1.bed -b OS-SUB-1and4-mD150-rR1.bed > CONonly.bed; 
+bedtools intersect -a OS-SUB-1and4-mD150-rR1.bed -b OS-CON-1and4-mD150-rR1.bed > CON-SUB-IntersectForCounting.bed; 
+
+#Numbers For Venn
+5432 CON only
+12367 SUB only
+19591 Intersect (Both) BUT really this number should be 31459 - 5432 - 12367 = 13660
+
+htseq-count -m union -s no -i gene_id -t exon -f bam OS-CON1-sorted.bam OS-CON-SUB-CONUNTING.gff3 > OS-CON-1-counts.txt; mv OS-CON-1-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/DESeq; 
+htseq-count -m union -s no -i gene_id -t exon -f bam OS-CON2-sorted.bam OS-CON-SUB-CONUNTING.gff3 > OS-CON-2-counts.txt; mv OS-CON-2-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/DESeq; 
+htseq-count -m union -s no -i gene_id -t exon -f bam OS-CON3-sorted.bam OS-CON-SUB-CONUNTING.gff3 > OS-CON-3-counts.txt; mv OS-CON-3-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/DESeq; 
+htseq-count -m union -s no -i gene_id -t exon -f bam OS-CON4-sorted.bam OS-CON-SUB-CONUNTING.gff3 > OS-CON-4-counts.txt; mv OS-CON-4-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/DESeq; 
+htseq-count -m union -s no -i gene_id -t exon -f bam OS-SUB1-sorted.bam OS-CON-SUB-CONUNTING.gff3 > OS-SUB-1-counts.txt; mv OS-SUB-1-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/DESeq; 
+htseq-count -m union -s no -i gene_id -t exon -f bam OS-SUB2-sorted.bam OS-CON-SUB-CONUNTING.gff3 > OS-SUB-2-counts.txt; mv OS-SUB-2-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/DESeq; 
+htseq-count -m union -s no -i gene_id -t exon -f bam OS-SUB3-sorted.bam OS-CON-SUB-CONUNTING.gff3 > OS-SUB-3-counts.txt; mv OS-SUB-3-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/DESeq; 
+htseq-count -m union -s no -i gene_id -t exon -f bam OS-SUB4-sorted.bam OS-CON-SUB-CONUNTING.gff3 > OS-SUB-4-counts.txt; mv OS-SUB-4-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/DESeq; 
+
+Did a weird thing where the counts were on a new line after a tab... so weird, changed to just a tab on the same line as the id... WTF?
+Oh well
+
+DESeq2 time
+
+mkdir Up-In-SUB; 
+java -jar -Xmx512m /Users/deallabuser/Documents/Software/PeakAnnotator_Java_1.4/PeakAnnotator.jar -u TSS -p OS-ATAC-UpInSUB.bed -a O-sativa-Gene-TSS.bed -o Up-In-SUB;
+cd Up-In-SUB/; 
+awk 'NR>1 {print $7}' OS-ATAC-UpInSUB.tss.bed > OS-ATAC-UpInSUB-GENES.bed; 
+cd ..;
+
+mkdir Down-In-SUB; 
+java -jar -Xmx512m /Users/deallabuser/Documents/Software/PeakAnnotator_Java_1.4/PeakAnnotator.jar -u TSS -p OS-ATAC-DownInSUB.bed -a O-sativa-Gene-TSS.bed -o Down-In-SUB;
+cd Down-In-SUB/; 
+awk 'NR>1 {print $7}' OS-ATAC-DownInSUB.tss.bed > OS-ATAC-DownInSUB-GENES.bed; 
+cd ..;
+
+
+computeMatrix reference-point -S OS-CON1.bw OS-CON2.bw OS-CON3.bw OS-CON4.bw OS-SUB1.bw OS-SUB2.bw OS-SUB3.bw OS-SUB4.bw -R OS-ATAC-DownInSUB.bed -a 1000 -b 1000 -o OS-ATAC-DownInSUB.gz; 
+plotProfile -m OS-ATAC-DownInSUB.gz --samplesLabel CON-1 CON-2 CON-3 CON-4 SUB-1 SUB-2 SUB-3 SUB-4 --refPointLabel THS-center --color blue lightblue cyan navy green lightgreen forestgreen darkgreen --perGroup --outFileName OS-ATAC-DownInSUB; 
+plotHeatmap -m OS-ATAC-DownInSUB.gz --samplesLabel CON-1 CON-2 CON-3 CON-4 SUB-1 SUB-2 SUB-3 SUB-4 --refPointLabel THS-center -out OS-ATAC-DownInSUB.pdf --colorMap=Blues; 
+
+computeMatrix reference-point -S OS-CON1.bw OS-CON2.bw OS-CON3.bw OS-CON4.bw OS-SUB1.bw OS-SUB2.bw OS-SUB3.bw OS-SUB4.bw -R OS-ATAC-UpInSUB.bed -a 1000 -b 1000 -o OS-ATAC-UpInSUB.gz; 
+plotProfile -m OS-ATAC-UpInSUB.gz --samplesLabel CON-1 CON-2 CON-3 CON-4 SUB-1 SUB-2 SUB-3 SUB-4 --refPointLabel THS-center --color blue lightblue cyan navy green lightgreen forestgreen darkgreen --perGroup --outFileName OS-ATAC-UpInSUB; 
+plotHeatmap -m OS-ATAC-UpInSUB.gz --samplesLabel CON-1 CON-2 CON-3 CON-4 SUB-1 SUB-2 SUB-3 SUB-4 --refPointLabel THS-center -out OS-ATAC-UpInSUB.pdf --colorMap=Blues; 
+
+
+
+
+awk '{ for(i=1;i<=NF;i++){if(i==NF){printf("%s\n",$NF);}else {printf("%s\t",$i)}}}' OS-ATAC-UpInSUB-SCALEDto300.bed > OS-ATAC-UpInSUB-SCALEDto300-fixed.bed; 
+
+bedtools sort -i OS-ATAC-UpInSUB-SCALEDto300-fixed.bed > OS-ATAC-UpInSUB-SCALEDto300-fixed-sorted.bed; 
+
+
+
+
+
+Do NOT intersect for counting, merge instead you blockhead!
+
+
+
+
+bedtools intersect -a OSC-CON1-mD150Rr1.bed -b OSC-CON2-mD150Rr1.bed OSC-CON3-mD150Rr1.bed OSC-CON4-mD150Rr1.bed > OS-CON-md150rR1-intersects.bed; 
+bedtools intersect -a OSC-SUB1-mD150Rr1.bed -b OSC-SUB2-mD150Rr1.bed OSC-SUB3-mD150Rr1.bed OSC-SUB4-mD150Rr1.bed > OS-SUB-md150rR1-intersects.bed; 
+
+cat or combine the two files by hand OS-CON-md150rR1-intersects.bed OS-SUB-md150rR1-intersects.bed
+bedtools sort -i OS-CON-SUB-md150rR1-intersects.bed | bedtools merge > OS-CON-SUB-md150rR1.bed; 
+
+NOT the right way to do this
+bedtools subtract -A -a OS-CON-md150rR1-intersects.bed -b OS-SUB-md150rR1-intersects.bed > OS-CONonly.bed; 
+bedtools subtract -A -a OS-SUB-md150rR1-intersects.bed -b OS-CON-md150rR1-intersects.bed > OS-SUBonly.bed; 
+bedtools intersect -a OS-SUB-md150rR1-intersects.bed -b OS-CON-md150rR1-intersects.bed > OS-intersect-of-CONandSUB.bed; 
+12274 CON only
+20171 SUB only
+169391 intersect
+
+bedtools subtract -A -a OS-CON-SUB-md150rR1.bed -b OS-SUB-md150rR1-intersects.bed > OS-CONonly-ACTUAL.bed; 
+bedtools subtract -A -a OS-CON-SUB-md150rR1.bed -b OS-CON-md150rR1-intersects.bed > OS-SUBonly-ACTUAL.bed; 
+
+33,232		OS-CON-SUB-md150rR1.bed
+6,883		OS-CONonly-ACTUAL.bed
+9,826 		OS-SUBonly-ACTUAL.bed
+Therefore 33232-6883-9826 = 16,523		In Common
+
+
+
+
+OS-CON-SUB-md150rR1.bed
+
+htseq-count -m union -s no -i gene_id -t exon -f bam OS-CON1-sorted.bam OS-CON-SUB-CONUNTING.gff3 > OS-CON-1-counts.txt; mv OS-CON-1-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/DESeq-BETTER; 
+htseq-count -m union -s no -i gene_id -t exon -f bam OS-CON2-sorted.bam OS-CON-SUB-CONUNTING.gff3 > OS-CON-2-counts.txt; mv OS-CON-2-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/DESeq-BETTER; 
+htseq-count -m union -s no -i gene_id -t exon -f bam OS-CON3-sorted.bam OS-CON-SUB-CONUNTING.gff3 > OS-CON-3-counts.txt; mv OS-CON-3-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/DESeq-BETTER; 
+htseq-count -m union -s no -i gene_id -t exon -f bam OS-CON4-sorted.bam OS-CON-SUB-CONUNTING.gff3 > OS-CON-4-counts.txt; mv OS-CON-4-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/DESeq-BETTER; 
+htseq-count -m union -s no -i gene_id -t exon -f bam OS-SUB1-sorted.bam OS-CON-SUB-CONUNTING.gff3 > OS-SUB-1-counts.txt; mv OS-SUB-1-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/DESeq-BETTER; 
+htseq-count -m union -s no -i gene_id -t exon -f bam OS-SUB2-sorted.bam OS-CON-SUB-CONUNTING.gff3 > OS-SUB-2-counts.txt; mv OS-SUB-2-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/DESeq-BETTER; 
+htseq-count -m union -s no -i gene_id -t exon -f bam OS-SUB3-sorted.bam OS-CON-SUB-CONUNTING.gff3 > OS-SUB-3-counts.txt; mv OS-SUB-3-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/DESeq-BETTER; 
+htseq-count -m union -s no -i gene_id -t exon -f bam OS-SUB4-sorted.bam OS-CON-SUB-CONUNTING.gff3 > OS-SUB-4-counts.txt; mv OS-SUB-4-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/DESeq-BETTER; 
+
+
+
+
+2 freaking lines were way out compared to the rest and really screwed up the results, overrepresentation. By removing them the heatmap would look a lot better, but also who cares about seeing the heatmap
+
+
+
+computeMatrix reference-point -S OS-CON1.bw OS-CON2.bw OS-CON3.bw OS-CON4.bw OS-SUB1.bw OS-SUB2.bw OS-SUB3.bw OS-SUB4.bw -R OS-DOWNInSUB.bed -a 1000 -b 1000 -o OS-ATAC-DownInSUB.gz; 
+plotProfile -m OS-ATAC-DownInSUB.gz --samplesLabel CON-1 CON-2 CON-3 CON-4 SUB-1 SUB-2 SUB-3 SUB-4 --refPointLabel THS-center --color blue lightblue cyan navy green lightgreen forestgreen darkgreen --perGroup --outFileName OS-ATAC-DownInSUB; 
+plotHeatmap -m OS-ATAC-DownInSUB.gz --samplesLabel CON-1 CON-2 CON-3 CON-4 SUB-1 SUB-2 SUB-3 SUB-4 --refPointLabel THS-center -out OS-ATAC-DownInSUB.pdf --colorMap=Blues; 
+
+computeMatrix reference-point -S OS-CON1.bw OS-CON2.bw OS-CON3.bw OS-CON4.bw OS-SUB1.bw OS-SUB2.bw OS-SUB3.bw OS-SUB4.bw -R OS-UpInSUB.bed -a 1000 -b 1000 -o OS-ATAC-UpInSUB.gz; 
+plotProfile -m OS-ATAC-UpInSUB.gz --samplesLabel CON-1 CON-2 CON-3 CON-4 SUB-1 SUB-2 SUB-3 SUB-4 --refPointLabel THS-center --color blue lightblue cyan navy green lightgreen forestgreen darkgreen --perGroup --outFileName OS-ATAC-UpInSUB; 
+plotHeatmap -m OS-ATAC-UpInSUB.gz --samplesLabel CON-1 CON-2 CON-3 CON-4 SUB-1 SUB-2 SUB-3 SUB-4 --refPointLabel THS-center -out OS-ATAC-UpInSUB.pdf --colorMap=Blues; 
+
+
+mkdir Up-In-SUB; 
+java -jar -Xmx512m /Users/deallabuser/Documents/Software/PeakAnnotator_Java_1.4/PeakAnnotator.jar -u TSS -p OS-UpInSUB.bed -a O-sativa-Gene-TSS.bed -o Up-In-SUB;
+cd Up-In-SUB/; 
+awk 'NR>1 {print $7}' OS-UpInSUB.tss.bed > OS-ATAC-UpInSUB-GENES.bed; 
+cd ..;
+
+mkdir Down-In-SUB; 
+java -jar -Xmx512m /Users/deallabuser/Documents/Software/PeakAnnotator_Java_1.4/PeakAnnotator.jar -u TSS -p OS-DOWNInSUB.bed -a O-sativa-Gene-TSS.bed -o Down-In-SUB;
+cd Down-In-SUB/; 
+awk 'NR>1 {print $7}' OS-DOWNInSUB.tss.bed > OS-ATAC-DownInSUB-GENES.bed; 
+cd ..;
+
+
+
+
+computeMatrix scale-regions -S OS-CON1.bw OS-CON2.bw OS-CON3.bw OS-CON4.bw OS-SUB1.bw OS-SUB2.bw OS-SUB3.bw OS-SUB4.bw -R OS-ATAC-UpInSUB-GeneCoords.bed -a 1000 -b 1000 -o OS-ATAC-UpInSUB-GeneCoords.gz; 
+plotProfile -m OS-ATAC-UpInSUB-GeneCoords.gz --startLabel TSS --endLabel TES --samplesLabel CON-1 CON-2 CON-3 CON-4 SUB-1 SUB-2 SUB-3 SUB-4 --color green lightgreen forestgreen darkgreen blue lightblue cyan navy --perGroup --outFileName OS-ATAC-UpInSUB-GeneCoords; 
+plotHeatmap -m OS-ATAC-UpInSUB-GeneCoords.gz --samplesLabel CON-1 CON-2 CON-3 CON-4 SUB-1 SUB-2 SUB-3 SUB-4 --startLabel TSS --endLabel TES -out OS-ATAC-UpInSUB-GeneCoords.pdf --colorMap=Blues; 
+
+computeMatrix scale-regions -S OS-CON1.bw OS-CON2.bw OS-CON3.bw OS-CON4.bw OS-SUB1.bw OS-SUB2.bw OS-SUB3.bw OS-SUB4.bw -R OS-ATAC-DownInSUB-GeaneCOORDS.bed -a 1000 -b 1000 -o OS-ATAC-DownInSUB-GeneCoords.gz; 
+plotProfile -m OS-ATAC-DownInSUB-GeneCoords.gz --startLabel TSS --endLabel TES --samplesLabel CON-1 CON-2 CON-3 CON-4 SUB-1 SUB-2 SUB-3 SUB-4 --color green lightgreen forestgreen darkgreen blue lightblue cyan navy --perGroup --outFileName OS-ATAC-DownInSUB-GeneCoords; 
+plotHeatmap -m OS-ATAC-DownInSUB-GeneCoords.gz --samplesLabel CON-1 CON-2 CON-3 CON-4 SUB-1 SUB-2 SUB-3 SUB-4 --startLabel TSS --endLabel TES -out OS-ATAC-DownInSUB-GeneCoords.pdf --colorMap=Blues; 
+
+
+
+
+computeMatrix scale-regions -S OS-CON1.bw OS-CON2.bw OS-CON3.bw OS-CON4.bw OS-SUB1.bw OS-SUB2.bw OS-SUB3.bw OS-SUB4.bw -R Rice-ERFs.bed -a 1000 -b 1000 -o Rice-ERFs.gz; 
+plotProfile -m Rice-ERFs.gz --startLabel TSS --endLabel TES --samplesLabel CON-1 CON-2 CON-3 CON-4 SUB-1 SUB-2 SUB-3 SUB-4 --color green lightgreen forestgreen darkgreen blue lightblue cyan navy --perGroup --outFileName Rice-ERFs; 
+plotHeatmap -m Rice-ERFs.gz --samplesLabel CON-1 CON-2 CON-3 CON-4 SUB-1 SUB-2 SUB-3 SUB-4 --startLabel TSS --endLabel TES -out Rice-ERFs.pdf --colorMap=Blues; 
+
+
+
+
+
+
+Map the genomic DNA
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Genomic-DNA; 
+bowtie2-build Oryza_sativa.IRGSP-1.0.30.dna.genome.fa IRGSP1; 
+bowtie2 -p 4 -x IRGSP1 -1 OS06_S1_R1_001.fastq.gz -2 OS06_S1_R2_001.fastq.gz -S Rice-1-gDNA.sam; 
+bowtie2 -p 4 -x IRGSP1 -1 Undetermined_S0_R1_001.fastq.gz -2 Undetermined_S0_R2_001.fastq.gz -S Rice-2-gDNA.sam; 
+
+280137 reads; of these:
+  280137 (100.00%) were paired; of these:
+    271183 (96.80%) aligned concordantly 0 times
+    205 (0.07%) aligned concordantly exactly 1 time
+    8749 (3.12%) aligned concordantly >1 times
+    ----
+    271183 pairs aligned concordantly 0 times; of these:
+      13 (0.00%) aligned discordantly 1 time
+    ----
+    271170 pairs aligned 0 times concordantly or discordantly; of these:
+      542340 mates make up the pairs; of these:
+        538496 (99.29%) aligned 0 times
+        199 (0.04%) aligned exactly 1 time
+        3645 (0.67%) aligned >1 times
+3.89% overall alignment rate
+91473576 reads; of these:
+  91473576 (100.00%) were paired; of these:
+    43032395 (47.04%) aligned concordantly 0 times
+    27053763 (29.58%) aligned concordantly exactly 1 time
+    21387418 (23.38%) aligned concordantly >1 times
+    ----
+    43032395 pairs aligned concordantly 0 times; of these:
+      581722 (1.35%) aligned discordantly 1 time
+    ----
+    42450673 pairs aligned 0 times concordantly or discordantly; of these:
+      84901346 mates make up the pairs; of these:
+        80779982 (95.15%) aligned 0 times
+        599879 (0.71%) aligned exactly 1 time
+        3521485 (4.15%) aligned >1 times
+55.85% overall alignment rate
+
+
+samtools view -o Rice-1-gDNA.bam Rice-1-gDNA.sam; 
+samtools sort Rice-1-gDNA.bam -o Rice-1-gDNA.sorted.bam; 
+samtools index Rice-1-gDNA.sorted.bam; 
+samtools view -q 2 -b Rice-1-gDNA.sorted.bam > Rice-1-gDNA-q2.sorted.bam;
+samtools index Rice-1-gDNA-q2.sorted.bam; 
+samtools view -c Rice-1-gDNA-q2.sorted.bam; 
+
+963
+
+samtools view -o Rice-2-gDNA.bam Rice-2-gDNA.sam; 
+samtools sort Rice-2-gDNA.bam -o Rice-2-gDNA.sorted.bam; 
+samtools index Rice-2-gDNA.sorted.bam; 
+samtools view -q 2 -b Rice-2-gDNA.sorted.bam > Rice-2-gDNA-q2.sorted.bam;
+samtools index Rice-2-gDNA-q2.sorted.bam; 
+samtools view -c Rice-2-gDNA-q2.sorted.bam; 
+
+73964551
+
+
+
+
+
+
+
+
+
+
+
+

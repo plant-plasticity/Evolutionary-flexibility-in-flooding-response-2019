@@ -1,0 +1,436 @@
+Steps and programs for data processing and visualization
+
+Downloading Publically Available Data
+FastQC
+Alignment
+BAM File Processing
+Peak Calling
+Bedtools and peak processing
+Deeptools and Visualization
+SeqPlots as a faster, easier way of visualizing
+R Studios (package installations and utilization)
+Awesome world of awk
+
+Python
+Anaconda/bioconda/conda
+Pathing stuff
+Homebrew
+
+
+
+
+**TextWrangler
+First of all, there is no better way, in my opinion, than TextWrangler for keeping track of your code
+Also, you can take notes in it
+The huge benefit of Text Wrangler is that you will not have issues with " or - or other characters when you type it in Text Wrangler
+This can be a huge problem if you are typing out any commands in another text processor and then going into Command Line or R because the characters can be not recognized and you will end up getting errors all over the place
+Also, Text Wrangler will not replace/correct your words if you misspell them or it think you did, which is pretty common when doing this type of work
+
+Additionally, Text Wrangler has some truly POWERFUL functions. In addition to being able to navigate thousands of lines of code without any slowdown,
+it can also search and process this many lines of code without too much problems
+While you can use commands to process text files, if it is a pretty simple procedure and the file is not insanely big, you can very easily do the processing in Text Wrangler
+
+Some of the powerful things in Text Wrangler are:
+
+1) you can hold the "option" key and then select specific bits of text, for example, below you can hold the option button and then select the inputfile words
+like, select the column. After you select when you start typing it will replace all of the information in the places you selected
+Additionally, you can select and then paste in information
+This is really REALLY useful if you want to do the same type of command on specific files that are present in a directory. If you work from right to left, selecting and replacing, you will have an easy time with selecting what you need to
+
+command inputfile outputfile
+command inputfile outputfile
+command inputfile outputfile
+command inputfile outputfile
+
+2) Find and replace
+This is just one of the most powerful things in Text Wrangler. Besides the fact that you can repeat thousands of lines of code but for a different species or file type by just changing some prefix you built into your naming scheme
+the find and replace is also great for adding in tabs "\t" or new lines "\n" or getting rid of these
+
+3) Under the Text tab at the top of your window, there are two functions worth knowing about
+	Process Duplicate Lines
+	Process Lines Containing
+	
+Again, there are specific uses for these, and you can perform similar functions with awk commands, but if you want to interface with the text document you can do so using Text Wrangler
+
+
+
+
+
+
+**Downloading Publicly Available Data
+
+To download publicly available data, from GEO for example, you just need to know the SRR code
+and you need to have fastq-dump installed and pathed
+You get this by installing the SRA toolkit
+Found here:
+https://trace.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?view=software
+
+Download it, unzip it, put it somewhere... the important thing is that the "bin" file in the unzipped file is added to your terminal path
+So, even though it's a bullet for later, let's just talk about it now
+To add things to the path and have them be on the path even after you restart terminal, do this:
+
+1	Open up Terminal
+2	Run the following command: sudo nano /etc/paths
+3	Enter your password, when prompted
+4	Go to the bottom of the file, and enter the path you wish to add
+5	Hit control-x to quit
+6	Enter “Y” to save the modified buffer
+7	That's it! To test it, in new terminal window, type: echo $PATH
+
+
+#Pro Tip, remember that you can drag files or folders into terminal and it will display the path as to where that file or directory is on your computer
+This is really useful for SOOOOOO many things, and saves you tons of time figuring out where something is. Like, what if it is 100 folders deep, you don't need to write that out manually
+Also, whenever you're looking through your Finder, I STRONGLY prefer the column view so each folder and subfolder is a different column. Much easier navigation
+
+
+Okay, back to the topic
+Once you have fastq-dump pathed the command for downloading an srr file AND at the same time extracting it so you end up with 1 or 2 fastq files is:
+
+fastq-dump -O path/to/where/you/want/to/save/the/extracted/file/NameOfFile SRRFILETODOWNLOAD
+
+
+
+
+
+
+
+***FastQC
+
+FastQC DOES have utilization through the terminal and R, but really, the best/easiest way to use it is to just download the App
+
+Then you simply open the app, import the fastq files you want to analyze and have a look
+The biggest tip is to SAVE your analysis as an html file, otherwise you will have to have FastQC analyze your fastq file agai to get the results. It just saves time in the future
+
+To download fastqc:
+https://www.bioinformatics.babraham.ac.uk/projects/download.html#fastqc
+
+
+
+
+
+
+
+
+
+***Alignment
+
+
+To align non RNA (splicing stuff) reads then you use Bowtie2
+
+Instructions:
+http://bioconda.github.io/recipes/bowtie2/README.html
+
+seems like you need bioconda
+
+
+
+Soooo, to install bioconda, instructions:
+
+https://bioconda.github.io/
+
+
+Notice that in the instructions, to install bioconda you need to have Miniconda AND Python version 3.... so, to get to aligning you need to have 3 other things sorted out
+
+Miniconda link: https://conda.io/miniconda.html
+Python installation: https://wsvincent.com/install-python3-mac/
+
+First, install Python, then Miniconda
+Python instructions say you will need Xcode and Homebrew
+
+Homebrew is AWESOME for configuring your terminal to be EXACTLY what you want it to be, and it makes installing other things very easy, but that is an aside
+
+Sooo, to review
+You'll need
+Xcode and Homebrew
+to install Python
+which you need in addition to Miniconda
+To install Bioconda 
+so you can install bowtie2
+
+jeeeeez
+
+
+
+So, after you have Xcode and Homebrew, and you've installed Python, and you have Miniconda, and Bioconda is installed
+Then go back and install bowtie2
+http://bioconda.github.io/recipes/bowtie2/README.html
+
+
+
+
+
+Now, when dealing with RNA reads, you need to use tophat2, but apparently that's for dinosaurs and everyone is using HISAT2 now
+Information can be found here for installing:
+
+http://ccb.jhu.edu/software/hisat2/index.shtml
+
+
+
+
+
+
+
+
+
+
+
+
+
+*** Aligned Files Processing
+
+When you align your files you will end up with a sam file, which is too big to keep around, so the first thing to do is to convert it to a bam file
+To do this, and MANY other things that process or visualize your aligned data, you need samtools
+
+Samtools installation:
+http://www.htslib.org/download/
+
+
+Things to know you can do with samtools
+
+convert SAM to BAM
+index, sort, and quality filter BAM files
+process BAM files keeping only specific types of reads, or only those that map to specific places
+
+
+
+
+
+
+
+
+
+
+
+
+
+***Peak Calling
+For this you can use several different peak callers
+We use Homer
+
+Homer Installation:
+http://homer.ucsd.edu/homer/introduction/install.html
+
+Skimming indicates you will need what you should already have, which is Python and Bioconda
+Then you will use perl
+
+
+Not much to using Homer
+You will create a tag directory and then do your peak calling
+The details of both really depend on what kind of sequencing you are dealing with
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+***Peak Files
+
+A peak file is a text file, but it gets a special name ending, such as .bed
+You know, even annotation files, such as .gff and .gtf, are just text files
+
+To proces peak files, the bed files, in a mannder of sorting them, merging them, intersecting and subtracting with other peak files you need bedtools
+
+To install bedtools:
+
+https://bedtools.readthedocs.io/en/latest/content/installation.html
+
+
+
+
+
+
+
+
+
+
+
+
+***Peak Annotation
+
+If you want to annotate your peaks, like where they are in the genome or what the nearest gene is you need PeakAnnotator
+
+Installation is just downloading a file
+
+Download the jar file PeakAnnotator.jar
+Can be found here:
+https://www.ebi.ac.uk/research/bertone/software
+
+
+Usage
+java -jar path/to/where/the/jar/file/is/peakAnnotator.jar 
+
+
+
+
+
+
+
+
+
+
+
+
+
+***Deeptools and Visualization
+
+Profile plots, heatmaps, matrices that can be used to make perason correlation coefficient comparisons or PCA plots
+Truly, deeptools is the BOMB for visualizing reads or comparing files to each other
+
+To install:
+https://deeptools.readthedocs.io/en/develop/content/installation.html
+
+
+
+Best thing about deeptools is how well documented sooo much of it is. Google will be a treasure trove, as long as you know what you are asking
+
+
+
+
+
+
+
+
+
+
+
+
+****R and R studios
+
+You can use R from the Terminal
+But for the best Experience download and install R Studios
+
+Some of the quickest of notes is to know how to install packages
+(don't forget to activate them when you need to use them)
+
+Two methods of installing a package:
+1)
+install.packages("NameOfPackageToInstall")
+
+2)
+source("https://bioconductor.org/biocLite.R")
+biocLite("NameOfPackageToInstall")
+
+
+
+
+
+To call up package (load it up):		library("NameOfPackageToLoad")
+
+
+
+You BEST have these installed, ESPECIALLY need to know how to be a pro with "ggplot2" bc it is the epitome of visualizing DATA
+The others, especially when doing RNA stuff:
+
+DESeq2
+kdecopula
+foreign
+ggplot2
+MASS
+pheatmap
+gplots
+RColorBrewer
+
+
+
+
+
+
+
+
+
+
+
+
+
+****MasteryOfText
+
+Ahhhh, the power of awk
+There is SOOO much you can do with it
+And there are certain things other programs and apps do that is not too different than what you can do with awk (awk is just more difficult to set up, but if you know what you're doing you can do so much with text)
+
+Here are some of my favorite awk commands to run in terminal:
+
+#This command will print out any line that has a value smaller than 500 in column 4
+awk -F "\t" '{ if($4 <= 500) { print } }' filein.txt > fileout.txt
+
+#This command removes redundant lines, keeping only one record of such a line
+awk '!x[$0]++' filein.txt > fileout.txt
+
+#This command prints columns 1 2 and 3 but with dashes between them, like 1-2-3
+awk '{print $1"-"$2"-"$3}' filein.txt > fileout.txt
+
+#Same as before but separating by tabs... whatever you put in between the "" is what it will print
+awk '{print $1"\t"$2"\t"$3}' filein.txt > fileout.txt
+
+#This one can be finicky, but lets say you wanted to find a lowercase chr in a file and replace it with a capitalized Chr, use this: (Please note, this has an issue with outputting so you use this to actually manipulate a file)
+grep -e 'chr' -rl . | xargs sed -i '' 's/chr/Chr/g' filein.txt
+
+
+#This command will for values in column 1 of file 1 and if they match it in column 4 (can input a different one if needed) of file 2 it will print the lines of file 2 that matched
+awk 'FNR==NR {a[$1];next} ($4 in a)' file1.txt file2.txt > output file
+
+#This command is same as above but NOTICE the exclamation mark. In this case, the output will be any lines that did NOT match
+awk 'NR==FNR {a[$1];next} !($4 in a)' file1.txt file2.txt > output file
+
+#heh hehe, ummm, this command is kind of insane, but, essentially, what it does is, if you have a file with only one column (haven't worked out how to do this in a more complicated file) it will summarize how many times a value in the column occurs in the file, print the value and then the number of times it occurred
+awk '{a[$1]++}END{for(k in a)print k"\t"a[k]}' filein.txt > fileout.txt
+
+
+#Here you will sort the lines in file by the information found in column 2 (please note, the sorting can be weird with lowercases and numbers... I haven't tested this a whole lot
+sort -t, -nk2 filein.txt > fileout.txt; 
+
+#This one has pipes and is three commands really, but does something awesome. It counts how many times the value in quotes (awesome) occurs in the file and then will print that number, well it will print Marko, then a tab, then the #
+less filein.txt | grep -c "awesome" | awk '{print "MARKO""\t"$1}' > fileout.bed; 
+
+#So here, there are three different files, all with only one column of information. This command combines them into 1 file but each column is the information from one of the files, column 1 is file 1 info. column 2 is file 2...
+paste file1.txt file2.txt file3.txt > outfile.txt
+
+#This time the information is combined BUT file2 info is added BELOW file 1 and file 3 is below file 2
+cat file1.txt file2.txt file3.txt > outfile.txt
+
+#Just a general reminder that mv is move, cp is copy, rm is to remove, and * is a wildcard, so if you want to remove any file that has whateverwhateverwhatever-ThisString-whateverwhateverwhatever then you can do that with:
+rm *-ThisString-*
+
+
+GENERAL
+When you're printing lines, if you want to skip the header, add NR>1 right after the first '
+
+#This command will print only the first 12 rows
+awk 'NR<=12 {print}' filein.txt > fileout.txt
+
+#So, how about the rows 4 (either >3 or =>4) to 12, combo with &&
+awk 'NR>3 && NR<=12 {print}' filein.txt > fileout.txt
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,193 @@
+Roger had already concatanated all the fastq.gz files together
+Have AT and MT gDNA and the two read pairs for each
+
+Take a look at the fastq files with FastQC first, report any concerns and generally useful information (read numbers) here
+Also, save the html report
+	Filename	AT-gDNA_S5_R1_001.fastq.gz
+	Total Sequences	229234322
+	Sequences flagged as poor quality	0
+	Sequence length	19-36
+	%GC	41
+Filename	AT-gDNA_S5_R2_001.fastq.gz
+Total Sequences	229234322
+Sequences flagged as poor quality	0
+Sequence length	18-36
+%GC	41
+	Filename	MT-gDNA_S6_R1_001.fastq.gz
+	Total Sequences	238522346
+	Sequences flagged as poor quality	0
+	Sequence length	20-36
+	%GC	37
+Filename	MT-gDNA_S6_R2_001.fastq.gz
+Total Sequences	238522346
+Sequences flagged as poor quality	0
+Sequence length	16-36
+%GC	37
+
+Mapping:
+bowtie2 -p 8 -x Mt4_JC -1 MT-gDNA_S6_R1_001.fastq.gz -2 MT-gDNA_S6_R2_001.fastq.gz -S Mt_gDNA.sam
+bowtie2 -p 8 -x TAIR10 -1 AT-gDNA_S5_R1_001.fastq.gz -2 AT-gDNA_S5_R2_001.fastq.gz -S At_gDNA.sam
+
+238522346 reads; of these:
+  238522346 (100.00%) were paired; of these:
+    53248620 (22.32%) aligned concordantly 0 times
+    94823944 (39.75%) aligned concordantly exactly 1 time
+    90449782 (37.92%) aligned concordantly >1 times
+    ----
+    53248620 pairs aligned concordantly 0 times; of these:
+      1128163 (2.12%) aligned discordantly 1 time
+    ----
+    52120457 pairs aligned 0 times concordantly or discordantly; of these:
+      104240914 mates make up the pairs; of these:
+        85486348 (82.01%) aligned 0 times
+        9045424 (8.68%) aligned exactly 1 time
+        9709142 (9.31%) aligned >1 times
+82.08% overall alignment rate
+229234322 reads; of these:
+  229234322 (100.00%) were paired; of these:
+    19502858 (8.51%) aligned concordantly 0 times
+    136218712 (59.42%) aligned concordantly exactly 1 time
+    73512752 (32.07%) aligned concordantly >1 times
+    ----
+    19502858 pairs aligned concordantly 0 times; of these:
+      4583681 (23.50%) aligned discordantly 1 time
+    ----
+    14919177 pairs aligned 0 times concordantly or discordantly; of these:
+      29838354 mates make up the pairs; of these:
+        23160395 (77.62%) aligned 0 times
+        1171735 (3.93%) aligned exactly 1 time
+        5506224 (18.45%) aligned >1 times
+94.95% overall alignment rate
+
+samtools view -o Mt_gDNA.bam Mt_gDNA.sam; samtools sort Mt_gDNA.bam -o Mt_gDNA.sorted.bam; samtools index Mt_gDNA.sorted.bam
+samtools view -o At_gDNA.bam At_gDNA.sam; samtools sort At_gDNA.bam -o At_gDNA.sorted.bam; samtools index At_gDNA.sorted.bam
+makeTagDirectory At_gDNA.sorted.homer.tags At_gDNA.sorted.bam;makeTagDirectory Mt_gDNA.sorted.homer.tags Mt_gDNA.sorted.bam -single; findpeaks At_gDNA.sorted.homer.tags/ -o At_gDNA.sorted.homer.tags.region.md150 -minDist 150 -region; pos2bed.pl At_gDNA.sorted.homer.tags.region.md150 | bedtools sort | bedtools merge > At_gDNA.PEAKS.bed; findpeaks Mt_gDNA.sorted.homer.tags/ -o Mt_gDNA.sorted.homer.tags.region.md150 -minDist 150 -region; pos2bed.pl Mt_gDNA.sorted.homer.tags.region.md150 | bedtools sort | bedtools merge > Mt_gDNA.PEAKS.bed
+
+This took ~17 hours for Arabidopsis and 17 hours for Medicago, the sorting that is. So 1.5 days were spent just simply sorting the damn bam files
+
+bamPEFragmentSize -b At_gDNA.sorted.bam -hist At-gDNA.png --maxFragmentLength=1000 -bs=10000 -n=10000 -p=4; bamPEFragmentSize -b Mt_gDNA.sorted.bam -hist Mt-gDNA.png --maxFragmentLength=1000 -bs=10000 -n=10000 -p=4
+
+bamCoverage -b At_gDNA.sorted.bam -o At_gDNA.sorted.bw -bs=1 --normalizeUsingRPKM -p=max; bamCoverage -b Mt_gDNA.sorted.bam -o Mt_gDNA.sorted.bw -bs=1 --normalizeUsingRPKM -p=max
+
+
+
+wellington_footprints.py At_gDNA.PEAKS.bed At_gDNA.sorted.bam At-gDNA-footprints/; wellington_footprints.py Mt_gDNA.PEAKS.bed Mt_gDNA.sorted.bam Mt-gDNA-footprints/
+
+dnase_average_profile.py -A At_gDNA.sorted.bam.At_gDNA.PEAKS.bed.WellingtonFootprints.FDR.0.01.bed At_gDNA.sorted.bam At_gDNA-footprintsaverage; dnase_average_profile.py -A Mt_gDNA.sorted.bam.Mt_gDNA.PEAKS.bed.WellingtonFootprints.FDR.0.01.bed Mt_gDNA.sorted.bam Mt_gDNA-footprintsaverage
+
+Finally, we want the motif sequences represented in the BED files (which actually look like there is still something bound on the gDNA when isolating this data)
+To do this, I am still not exactly clear on what the best analysis is, BUT I do know that we want to use masked genomic data, pull out the corresponding FASTA sequence for the coordinates and see what motifs we find
+This is such not high priority though... 
+
+
+
+
+samtools view -b -q 2 Mt_gDNA.bam > Mt_gDNA.q2.bam; samtools sort Mt_gDNA.q2.bam -o Mt_gDNA.q2.sorted.bam; samtools index Mt_gDNA.q2.sorted.bam; bamcoverage -b Mt_gDNA.q2.sorted.bam -o Mt_gDNA.q2.sorted.bw --normalizeUsingRPKM --binSize 1 -p=max
+
+makeTagDirectory Mt_gDNA.q2.sorted.homer.tags Mt_gDNA.q2.sorted.bam -single; findpeaks Mt_gDNA.q2.sorted.homer.tags/ -o Mt_gDNA.q2.sorted.homer.tags.region.md150 -minDist 150 -region; pos2bed.pl Mt_gDNA.q2.sorted.homer.tags.region.md150 | bedtools sort | bedtools merge > Mt_gDNA.q2.PEAKS.bed
+
+Optimizing tag files...
+	Optimizing single genome.tags.tsv file...
+	Estimated genome size = 409859127
+	Total Tags = 115787866.5
+	Total Positions = 103852484
+	Average tag length = 35.2
+	Median tags per position = 0 (ideal: 1)
+	Average tags per position = 0.760
+	Fragment Length Estimate: 59
+	Peak Width Estimate: 123
+	Autocorrelation quality control metrics:
+		Same strand fold enrichment: 1.2
+		Diff strand fold enrichment: 1.2
+		Same / Diff fold enrichment: 1.0
+
+		Guessing sample is ChIP-Seq - may have low enrichment with lots of background
+
+	Fragment Length = 59
+	!!! Estimated genome size (from tag directory) is smaller than default
+	    genome size.  Using estimate (409859127) [to change specify -gsize]
+	Total Tags = 115787866.5
+	Tags per bp = 0.282506
+	Max tags per bp set automatically to 28.0
+
+	0.10% FDR Threshold set at 58.0 (poisson pvalue ~ 3.26e-05)
+	2406422 peaks passed threshold
+	Stitching together putative peaks into regions
+	Clonal filtering: 350627 of 351492 (99.75% passed)
+	Total Peaks identified = 350627
+
+	Converted 350627 peaks total
+
+
+
+samtools view -b -q 2 At_gDNA.bam > At_gDNA.q2.bam; samtools sort At_gDNA.q2.bam -o At_gDNA.q2.sorted.bam; samtools index At_gDNA.q2.sorted.bam; bamcoverage -b At_gDNA.q2.sorted.bam -o At_gDNA.q2.sorted.bw --normalizeUsingRPKM --binSize 1 -p=max; makeTagDirectory At_gDNA.q2.sorted.homer.tags At_gDNA.q2.sorted.bam; findpeaks At_gDNA.q2.sorted.homer.tags/ -o At_gDNA.q2.sorted.homer.tags.region.md150 -minDist 150 -region; pos2bed.pl At_gDNA.q2.sorted.homer.tags.region.md150 | bedtools sort | bedtools merge > At_gDNA.q2.PEAKS.bed
+
+Optimizing tag files...
+	Estimated genome size = 119665626
+	Estimated average read density = 1.314725 per bp
+	Total Tags = 157327343.5
+	Total Positions = 75674192
+	Average tag length = 35.5
+	Median tags per position = 1 (ideal: 3)
+	Average tags per position = 1.764
+	Fragment Length Estimate: 48
+	Peak Width Estimate: 208
+	Autocorrelation quality control metrics:
+		Same strand fold enrichment: 1.0
+		Diff strand fold enrichment: 1.0
+		Same / Diff fold enrichment: 1.0
+
+		Guessing sample is ChIP-Seq - may have low enrichment with lots of background
+
+	Fragment Length = 48
+	!!! Estimated genome size (from tag directory) is smaller than default
+	    genome size.  Using estimate (119665626) [to change specify -gsize]
+	Total Tags = 157327343.5
+	Tags per bp = 1.314725
+	Max tags per bp set automatically to 131.0
+
+0.10% FDR Threshold set at 309.0 (poisson pvalue ~ 3.17e-05)
+	310893 peaks passed threshold
+	Stitching together putative peaks into regions
+	Clonal filtering: 87333 of 87410 (99.91% passed)
+	Total Peaks identified = 87333
+
+	Converted 87333 peaks total
+
+
+Get me some counts
+
+featureCounts -p -t exon -g gene_id -a At-gDNA-q2-peaks.gff3 -o At-gDNA-featureCounts-q2-counts.txt At_gDNA.q2.sorted.bam; htseq-count -m union -s no -f bam At_gDNA.q2.sorted.bam At-gDNA-q2-peaks.gff3 > At-gDNA-q2-counts.txt
+
+
+
+
+getFocalPeaks.pl At_gDNA.q2.PEAKS-2222.bed -min 0.90 > ERfocalPeaks-At-gDNA.q2.Peaks.bed
+
+
+
+
+
+findpeaks Mt_gDNA.q2.sorted.homer.tags/ -o Mt_gDNA.q2.NOREGION -gsize 4e8
+
+	0.10% FDR Threshold set at 59.0 (poisson pvalue ~ 3.42e-05)
+	368229 peaks passed threshold
+	Local Background Filtering: 28446 of 368229 (7.73% passed)
+	Clonal filtering: 27917 of 28446 (98.14% passed)
+	Total Peaks identified = 27917
+
+
+
+samtools view -c at_gDNA.sorted.bam; 
+samtools view -b at_gDNA.sorted.bam Chr1 Chr2 Chr3 Chr4 Chr5 > at_gDNA.sorted.NoOrganelles.bam; 
+samtools view -c at_gDNA.sorted.NoOrganelles.bam; 
+samtools view -q 2 -b at_gDNA.sorted.NoOrganelles.bam > at_gDNA.sorted.NoOrganelles.Q2.bam; 
+samtools view -c at_gDNA.sorted.NoOrganelles.Q2.bam
+
+458468644
+338256664
+264369677
+
+
+
+

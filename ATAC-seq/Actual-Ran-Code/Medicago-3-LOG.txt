@@ -1,0 +1,572 @@
+samtools view -c Mt_ATAC_C1.sorted.q2.bam; 
+samtools view -c Mt_ATAC_C2.sorted.q2.bam; 
+samtools view -c Mt_ATAC_S1.sorted.q2.bam; 
+samtools view -c Mt_ATAC_S2.sorted.q2.bam; 
+samtools view -c CON-7.sorted.Q2.bam; 
+samtools view -c SUB-7.sorted.Q2.bam; 
+
+44623793
+81590307
+55952592
+78136533
+20970752
+37134856
+
+makeTagDirectory MT_CON3 CON-7.sorted.Q2.bam -single; makeTagDirectory MT_SUB3 SUB-7.sorted.Q2.bam -single; 
+
+findpeaks Mt_ATAC_C1.sorted.q2.homer.tags/ -o MT-CON1-150Rr1-unscaled -minDist 150 -region -regionRes 1; 
+pos2bed.pl MT-CON1-150Rr1-unscaled | bedtools sort | bedtools merge > MT-CON1-mD150Rr1-unscaled.bed; 
+mv MT-CON1-mD150Rr1-unscaled.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Peaks-Unscaled-mD150rR1; 
+
+findpeaks Mt_ATAC_C2.sorted.q2.homer.tags/ -o MT-CON2-150Rr1-unscaled -minDist 150 -region -regionRes 1; 
+pos2bed.pl MT-CON2-150Rr1-unscaled | bedtools sort | bedtools merge > MT-CON2-mD150Rr1-unscaled.bed; 
+mv MT-CON2-mD150Rr1-unscaled.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Peaks-Unscaled-mD150rR1; 
+
+findpeaks Mt_ATAC_S1.sorted.q2.homer.tags/ -o MT-SUB1-150Rr1-unscaled -minDist 150 -region -regionRes 1; 
+pos2bed.pl MT-SUB1-150Rr1-unscaled | bedtools sort | bedtools merge > MT-SUB1-mD150Rr1-unscaled.bed; 
+mv MT-SUB1-mD150Rr1-unscaled.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Peaks-Unscaled-mD150rR1; 
+
+findpeaks Mt_ATAC_S2.sorted.q2.homer.tags/ -o MT-SUB2-150Rr1-unscaled -minDist 150 -region -regionRes 1; 
+pos2bed.pl MT-SUB2-150Rr1-unscaled | bedtools sort | bedtools merge > MT-SUB2-mD150Rr1-unscaled.bed; 
+mv MT-SUB2-mD150Rr1-unscaled.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Peaks-Unscaled-mD150rR1; 
+
+findpeaks MT_CON3/ -o MT-CON3-150Rr1-unscaled -minDist 150 -region -regionRes 1; 
+pos2bed.pl MT-CON3-150Rr1-unscaled | bedtools sort | bedtools merge > MT-CON3-mD150Rr1-unscaled.bed; 
+mv MT-CON3-mD150Rr1-unscaled.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Peaks-Unscaled-mD150rR1; 
+
+findpeaks MT_SUB3/ -o MT-SUB3-150Rr1-unscaled -minDist 150 -region -regionRes 1; 
+pos2bed.pl MT-SUB3-150Rr1-unscaled | bedtools sort | bedtools merge > MT-SUB3-mD150Rr1-unscaled.bed; 
+mv MT-SUB3-mD150Rr1-unscaled.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Peaks-Unscaled-mD150rR1; 
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Peaks-Unscaled-mD150rR1; 
+
+bedtools intersect -wa -a MT-CON1-mD150Rr1-unscaled.bed -b MT-CON2-mD150Rr1-unscaled.bed > MT-CON-1and2-mD150Rr1-unscaled-wa-intersects.bed; 
+bedtools intersect -wa -a MT-CON2-mD150Rr1-unscaled.bed -b MT-CON1-mD150Rr1-unscaled.bed > MT-CON-1and2-mD150Rr1-unscaled-wb-intersects.bed; 
+cat MT-CON-1and2-mD150Rr1-unscaled-wa-intersects.bed MT-CON-1and2-mD150Rr1-unscaled-wb-intersects.bed > MT-CON-1and2-md150-wawb-intersects.bed; 
+bedtools sort -i MT-CON-1and2-md150-wawb-intersects.bed | bedtools merge > MT-CON-1and2.bed; 
+bedtools intersect -wa -a MT-CON2-mD150Rr1-unscaled.bed -b MT-CON3-mD150Rr1-unscaled.bed > MT-CON-2and3-mD150Rr1-unscaled-wa-intersects.bed; 
+bedtools intersect -wa -a MT-CON3-mD150Rr1-unscaled.bed -b MT-CON2-mD150Rr1-unscaled.bed > MT-CON-2and3-mD150Rr1-unscaled-wb-intersects.bed; 
+cat MT-CON-2and3-mD150Rr1-unscaled-wa-intersects.bed MT-CON-2and3-mD150Rr1-unscaled-wb-intersects.bed > MT-CON-2and3-md150-wawb-intersects.bed; 
+bedtools sort -i MT-CON-2and3-md150-wawb-intersects.bed | bedtools merge > MT-CON-2and3.bed; 
+bedtools intersect -wa -a MT-CON1-mD150Rr1-unscaled.bed -b MT-CON3-mD150Rr1-unscaled.bed > MT-CON-1and3-mD150Rr1-unscaled-wa-intersects.bed; 
+bedtools intersect -wa -a MT-CON3-mD150Rr1-unscaled.bed -b MT-CON1-mD150Rr1-unscaled.bed > MT-CON-1and3-mD150Rr1-unscaled-wb-intersects.bed; 
+cat MT-CON-1and3-mD150Rr1-unscaled-wa-intersects.bed MT-CON-1and3-mD150Rr1-unscaled-wb-intersects.bed > MT-CON-1and3-md150-wawb-intersects.bed; 
+bedtools sort -i MT-CON-1and3-md150-wawb-intersects.bed | bedtools merge > MT-CON-1and3.bed; 
+cat MT-CON-1and2.bed MT-CON-2and3.bed MT-CON-1and3.bed > MT-CON-unscaled-all3reps.bed; 
+
+bedtools intersect -wa -a MT-CON1-mD150Rr1-unscaled.bed -b MT-CON2-mD150Rr1-unscaled.bed -f 0.5 -F 0.5 > MT-CON-1and2-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a MT-CON2-mD150Rr1-unscaled.bed -b MT-CON1-mD150Rr1-unscaled.bed -f 0.5 -F 0.5 > MT-CON-1and2-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat MT-CON-1and2-mD150Rr1-unscaled-wa-50pINT-intersects.bed MT-CON-1and2-mD150Rr1-unscaled-wb-50pINT-intersects.bed > MT-CON-1and2-md150-wawb-50pINT-intersects.bed; 
+bedtools sort -i MT-CON-1and2-md150-wawb-50pINT-intersects.bed | bedtools merge > MT-CON-1and2-50pINT.bed; 
+bedtools intersect -wa -a MT-CON2-mD150Rr1-unscaled.bed -b MT-CON3-mD150Rr1-unscaled.bed -f 0.5 -F 0.5 > MT-CON-2and3-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a MT-CON3-mD150Rr1-unscaled.bed -b MT-CON2-mD150Rr1-unscaled.bed -f 0.5 -F 0.5 > MT-CON-2and3-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat MT-CON-2and3-mD150Rr1-unscaled-wa-50pINT-intersects.bed MT-CON-2and3-mD150Rr1-unscaled-wb-50pINT-intersects.bed > MT-CON-2and3-md150-wawb-50pINT-intersects.bed; 
+bedtools sort -i MT-CON-2and3-md150-wawb-50pINT-intersects.bed | bedtools merge > MT-CON-2and3-50pINT.bed; 
+bedtools intersect -wa -a MT-CON1-mD150Rr1-unscaled.bed -b MT-CON3-mD150Rr1-unscaled.bed -f 0.5 -F 0.5 > MT-CON-1and3-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a MT-CON3-mD150Rr1-unscaled.bed -b MT-CON1-mD150Rr1-unscaled.bed -f 0.5 -F 0.5 > MT-CON-1and3-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat MT-CON-1and3-mD150Rr1-unscaled-wa-50pINT-intersects.bed MT-CON-1and3-mD150Rr1-unscaled-wb-50pINT-intersects.bed > MT-CON-1and3-md150-wawb-50pINT-intersects.bed; 
+bedtools sort -i MT-CON-1and3-md150-wawb-50pINT-intersects.bed | bedtools merge > MT-CON-1and3-50pINT.bed; 
+cat MT-CON-1and2-50pINT.bed MT-CON-2and3-50pINT.bed MT-CON-1and3-50pINT.bed > MT-CON-50pINT-unscaled-all3reps.bed; 
+
+bedtools intersect -wa -a MT-SUB1-mD150Rr1-unscaled.bed -b MT-SUB2-mD150Rr1-unscaled.bed -f 0.5 -F 0.5 > MT-SUB-1and2-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a MT-SUB2-mD150Rr1-unscaled.bed -b MT-SUB1-mD150Rr1-unscaled.bed -f 0.5 -F 0.5 > MT-SUB-1and2-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat MT-SUB-1and2-mD150Rr1-unscaled-wa-50pINT-intersects.bed MT-SUB-1and2-mD150Rr1-unscaled-wb-50pINT-intersects.bed > MT-SUB-1and2-md150-wawb-50pINT-intersects.bed; 
+bedtools sort -i MT-SUB-1and2-md150-wawb-50pINT-intersects.bed | bedtools merge > MT-SUB-1and2-50pINT.bed; 
+bedtools intersect -wa -a MT-SUB2-mD150Rr1-unscaled.bed -b MT-SUB3-mD150Rr1-unscaled.bed -f 0.5 -F 0.5 > MT-SUB-2and3-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a MT-SUB3-mD150Rr1-unscaled.bed -b MT-SUB2-mD150Rr1-unscaled.bed -f 0.5 -F 0.5 > MT-SUB-2and3-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat MT-SUB-2and3-mD150Rr1-unscaled-wa-50pINT-intersects.bed MT-SUB-2and3-mD150Rr1-unscaled-wb-50pINT-intersects.bed > MT-SUB-2and3-md150-wawb-50pINT-intersects.bed; 
+bedtools sort -i MT-SUB-2and3-md150-wawb-50pINT-intersects.bed | bedtools merge > MT-SUB-2and3-50pINT.bed; 
+bedtools intersect -wa -a MT-SUB1-mD150Rr1-unscaled.bed -b MT-SUB3-mD150Rr1-unscaled.bed -f 0.5 -F 0.5 > MT-SUB-1and3-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a MT-SUB3-mD150Rr1-unscaled.bed -b MT-SUB1-mD150Rr1-unscaled.bed -f 0.5 -F 0.5 > MT-SUB-1and3-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat MT-SUB-1and3-mD150Rr1-unscaled-wa-50pINT-intersects.bed MT-SUB-1and3-mD150Rr1-unscaled-wb-50pINT-intersects.bed > MT-SUB-1and3-md150-wawb-50pINT-intersects.bed; 
+bedtools sort -i MT-SUB-1and3-md150-wawb-50pINT-intersects.bed | bedtools merge > MT-SUB-1and3-50pINT.bed; 
+cat MT-SUB-1and2-50pINT.bed MT-SUB-2and3-50pINT.bed MT-SUB-1and3-50pINT.bed > MT-SUB-50pINT-unscaled-all3reps.bed; 
+
+cat MT-CON-50pINT-unscaled-all3reps.bed MT-SUB-50pINT-unscaled-all3reps.bed > MT-CON-and-SUB-50pINT-unscaled.bed; 
+bedtools sort -i MT-CON-and-SUB-50pINT-unscaled.bed | bedtools merge > MT-CON-SUB-50pINT-unscaled-all3reps.bed; 
+
+bedtools subtract -A -a MT-CON-SUB-50pINT-unscaled-all3reps.bed -b MT-CON-50pINT-unscaled-all3reps.bed > MT-SUBonly-unscaled-all3reps.bed; 
+bedtools subtract -A -a MT-CON-SUB-50pINT-unscaled-all3reps.bed -b MT-SUB-50pINT-unscaled-all3reps.bed > MT-CONonly-unscaled-all3reps.bed; 
+
+cp MT-CON-and-SUB-50pINT-unscaled.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Peaks-Unscaled-mD150rR1/MAIN; 
+cp MT-SUBonly-unscaled-all3reps.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Peaks-Unscaled-mD150rR1/MAIN; 
+cp MT-CONonly-unscaled-all3reps.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Peaks-Unscaled-mD150rR1/MAIN; 
+
+Remove Duplicate Lines AND any instances where peak start is a 0, it needs to be a 1, otherwise you will have issues later on
+
+
+
+CON only	-
+SUB only	-
+BOTH		-
+
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Genomic-DNA; 
+samtools view -s 0.174053877 -b Mt_gDNA.q2.sorted.bam > Mt-gDNA-scaled.bam; 
+samtools index Mt-gDNA-scaled.bam; 
+samtools view -c Mt-gDNA-scaled.bam; 
+bamCoverage -b Mt-gDNA-scaled.bam -o Mt-gDNA-scaled.bw -bs=1 --normalizeUsingRPKM -p=max; 
+
+44618974
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/BAMs; 
+samtools view -s 1.000000000 -b Mt_ATAC_C1.sorted.q2.bam > CON-1-scaled.bam; 
+samtools view -s 0.546925176 -b Mt_ATAC_C2.sorted.q2.bam > CON-2-scaled.bam; 
+samtools view -s 0.797528611 -b Mt_ATAC_S1.sorted.q2.bam > SUB-1-scaled.bam; 
+samtools view -s 0.571100243 -b Mt_ATAC_S2.sorted.q2.bam > SUB-2-scaled.bam; 
+
+samtools index CON-1-scaled.bam; 
+samtools index CON-2-scaled.bam; 
+samtools index SUB-1-scaled.bam; 
+samtools index SUB-2-scaled.bam; 
+
+samtools view -c CON-1-scaled.bam; 
+samtools view -c CON-2-scaled.bam; 
+samtools view -c SUB-1-scaled.bam; 
+samtools view -c SUB-2-scaled.bam; 
+
+44623793
+44624188
+44625127
+44623838
+
+bamCoverage -b CON-1-scaled.bam -o CON-1-scaled.bw -bs=1 --normalizeUsingRPKM -p=max; 
+bamCoverage -b CON-2-scaled.bam -o CON-2-scaled.bw -bs=1 --normalizeUsingRPKM -p=max; 
+bamCoverage -b SUB-1-scaled.bam -o SUB-1-scaled.bw -bs=1 --normalizeUsingRPKM -p=max; 
+bamCoverage -b SUB-2-scaled.bam -o SUB-2-scaled.bw -bs=1 --normalizeUsingRPKM -p=max; 
+
+mv CON-1-scaled.bw /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/4Scaled-Bigwigs; 
+mv CON-2-scaled.bw /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/4Scaled-Bigwigs; 
+mv SUB-1-scaled.bw /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/4Scaled-Bigwigs; 
+mv SUB-2-scaled.bw /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/4Scaled-Bigwigs; 
+
+
+htseq-count -m union -s no -i gene_id -t exon -f bam Mt_ATAC_C1.sorted.q2.bam Mt-CON-and-SUB-mD150rR1-p50INT-UNSCALED.gff3 > MT-CON-1-unscaled-counts.txt; 
+mv MT-CON-1-unscaled-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Unscaled-DEseq; 
+htseq-count -m union -s no -i gene_id -t exon -f bam Mt_ATAC_C2.sorted.q2.bam Mt-CON-and-SUB-mD150rR1-p50INT-UNSCALED.gff3 > MT-CON-2-unscaled-counts.txt; 
+mv MT-CON-2-unscaled-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Unscaled-DEseq; 
+htseq-count -m union -s no -i gene_id -t exon -f bam CON-7.sorted.Q2.bam Mt-CON-and-SUB-mD150rR1-p50INT-UNSCALED.gff3 > MT-CON-3-unscaled-counts.txt; 
+mv MT-CON-3-unscaled-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Unscaled-DEseq; 
+htseq-count -m union -s no -i gene_id -t exon -f bam Mt_ATAC_S1.sorted.q2.bam Mt-CON-and-SUB-mD150rR1-p50INT-UNSCALED.gff3 > MT-SUB-1-unscaled-counts.txt; 
+mv MT-SUB-1-unscaled-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Unscaled-DEseq; 
+htseq-count -m union -s no -i gene_id -t exon -f bam Mt_ATAC_S2.sorted.q2.bam Mt-CON-and-SUB-mD150rR1-p50INT-UNSCALED.gff3 > MT-SUB-2-unscaled-counts.txt; 
+mv MT-SUB-2-unscaled-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Unscaled-DEseq; 
+htseq-count -m union -s no -i gene_id -t exon -f bam SUB-7.sorted.Q2.bam Mt-CON-and-SUB-mD150rR1-p50INT-UNSCALED.gff3 > MT-SUB-3-unscaled-counts.txt; 
+mv MT-SUB-3-unscaled-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Unscaled-DEseq; 
+
+
+
+
+mkdir UpInSUB-padj; 
+java -jar /Users/markobajic/Documents/Software/PeakAnnotator_Java_1.4/PeakAnnotator.jar -u TSS -p UpInSUB-padj.bed -a MTR4_TSS.col.switch.bed -o UpInSUB-padj;
+cd UpInSUB-padj;
+awk 'NR>1 {print $7}' UpInSUB-padj.tss.bed > UpInSUB-padj-GENES.txt;
+cd ..; 
+
+mkdir UpInSUB-pvalue; 
+java -jar /Users/markobajic/Documents/Software/PeakAnnotator_Java_1.4/PeakAnnotator.jar -u TSS -p UpInSUB-pvalue.bed -a MTR4_TSS.col.switch.bed -o UpInSUB-pvalue;
+cd UpInSUB-pvalue;
+awk 'NR>1 {print $7}' UpInSUB-pvalue.tss.bed > UpInSUB-pvalue-GENES.txt;
+cd ..; 
+
+
+
+computeMatrix reference-point --referencePoint center -S CON-1-scaled.bw CON-2-scaled.bw SUB-1-scaled.bw SUB-2-scaled.bw Mt-gDNA-scaled.bw -R UpInSUB-padj.bed -a 1000 -b 1000 -o UpInSUB-padj.gz; 
+plotProfile -m UpInSUB-padj.gz --samplesLabel CON-1 CON-2 SUB-1 SUB-2 gDNA --refPointLabel THS-center --color green lightgreen blue lightblue gray --perGroup --outFileName UpInSUB-padj.png; 
+plotHeatmap -m UpInSUB-padj.gz --missingDataColor white --samplesLabel CON-1 CON-2 SUB-1 SUB-2 gDNA --refPointLabel THS-center -out UpInSUB-padj.pdf --colorMap=Blues; 
+mkdir UpInSUB-padj; 
+mv UpInSUB-padj.pdf UpInSUB-padj/;
+mv UpInSUB-padj.png UpInSUB-padj/; 
+
+computeMatrix reference-point --referencePoint center -S CON-1-scaled.bw CON-2-scaled.bw SUB-1-scaled.bw SUB-2-scaled.bw Mt-gDNA-scaled.bw -R DownInSUB-padj.bed -a 1000 -b 1000 -o DownInSUB-padj.gz; 
+plotProfile -m DownInSUB-padj.gz --samplesLabel CON-1 CON-2 SUB-1 SUB-2 gDNA --refPointLabel THS-center --color green lightgreen blue lightblue gray --perGroup --outFileName DownInSUB-padj.png; 
+plotHeatmap -m DownInSUB-padj.gz --missingDataColor white --samplesLabel CON-1 CON-2 SUB-1 SUB-2 gDNA --refPointLabel THS-center -out DownInSUB-padj.pdf --colorMap=Blues; 
+mkdir DownInSUB-padj; 
+mv DownInSUB-padj.pdf DownInSUB-padj/;
+
+
+
+
+plotProfile -m UpInSUB-padj.gz --samplesLabel CON-1 CON-2 SUB-1 SUB-2 gDNA --refPointLabel THS-center --color green lightgreen blue lightblue red --perGroup --outFileName UpInSUB-padj.png; 
+mv UpInSUB-padj.png DownOrUpInSUB-padj/; 
+
+computeMatrix reference-point --referencePoint center --maxThreshold 1200 -S CON-1-scaled.bw CON-2-scaled.bw SUB-1-scaled.bw SUB-2-scaled.bw Mt-gDNA-scaled.bw -R DownInSUB-padj.bed -a 1000 -b 1000 -o DownInSUB-padj-MT.gz; 
+plotProfile -m DownInSUB-padj-MT.gz --samplesLabel CON-1 CON-2 SUB-1 SUB-2 gDNA --refPointLabel THS-center --color green lightgreen blue lightblue red --perGroup --outFileName DownInSUB-padj-MT.png; 
+plotHeatmap -m DownInSUB-padj-MT.gz --missingDataColor white --samplesLabel CON-1 CON-2 SUB-1 SUB-2 gDNA --refPointLabel THS-center -out DownInSUB-padj-MT.pdf --colorMap=Blues; 
+mv DownInSUB-padj-MT.pdf DownOrUpInSUB-padj;
+mv DownInSUB-padj-MT.png DownOrUpInSUB-padj;
+
+computeMatrix reference-point --referencePoint center -S CON-1-scaled.bw CON-2-scaled.bw SUB-1-scaled.bw SUB-2-scaled.bw Mt-gDNA-scaled.bw -R UpInSUB-pvalue.bed -a 1000 -b 1000 -o UpInSUB-pvalue.gz; 
+plotProfile -m UpInSUB-pvalue.gz --samplesLabel CON-1 CON-2 SUB-1 SUB-2 gDNA --refPointLabel THS-center --color green lightgreen blue lightblue red --perGroup --outFileName UpInSUB-pvalue.png; 
+plotHeatmap -m UpInSUB-pvalue.gz --missingDataColor white --samplesLabel CON-1 CON-2 SUB-1 SUB-2 gDNA --refPointLabel THS-center -out UpInSUB-pvalue.pdf --colorMap=Blues; 
+mv UpInSUB-pvalue.pdf DownOrUpInSUB-padj/;
+mv UpInSUB-pvalue.png DownOrUpInSUB-padj/; 
+
+computeMatrix reference-point --referencePoint center --maxThreshold 1200 -S CON-1-scaled.bw CON-2-scaled.bw SUB-1-scaled.bw SUB-2-scaled.bw Mt-gDNA-scaled.bw -R DownInSUB-padj.bed -a 1000 -b 1000 -o DownInSUB-padj.gz; 
+plotProfile -m DownInSUB-padj.gz --samplesLabel CON-1 CON-2 SUB-1 SUB-2 gDNA --refPointLabel THS-center --color green lightgreen blue lightblue red --perGroup --outFileName DownInSUB-padj.png; 
+plotHeatmap -m DownInSUB-padj.gz --missingDataColor white --samplesLabel CON-1 CON-2 SUB-1 SUB-2 gDNA --refPointLabel THS-center -out DownInSUB-padj.pdf --colorMap=Blues; 
+mv DownInSUB-padj.pdf DownOrUpInSUB-padj/;
+mv DownInSUB-padj.png DownOrUpInSUB-padj/; 
+
+computeMatrix reference-point --referencePoint center --maxThreshold 1200 -S CON-1-scaled.bw CON-2-scaled.bw SUB-1-scaled.bw SUB-2-scaled.bw Mt-gDNA-scaled.bw -R DownInSUB-pvalue.bed -a 1000 -b 1000 -o DownInSUB-pvalue.gz; 
+plotProfile -m DownInSUB-pvalue.gz --samplesLabel CON-1 CON-2 SUB-1 SUB-2 gDNA --refPointLabel THS-center --color green lightgreen blue lightblue red --perGroup --outFileName DownInSUB-pvalue.png; 
+plotHeatmap -m DownInSUB-pvalue.gz --missingDataColor white --samplesLabel CON-1 CON-2 SUB-1 SUB-2 gDNA --refPointLabel THS-center -out DownInSUB-pvalue.pdf --colorMap=Blues; 
+mv DownInSUB-pvalue.pdf DownOrUpInSUB-padj/;
+mv DownInSUB-pvalue.png DownOrUpInSUB-padj/; 
+
+
+
+
+
+mkdir MT-CON-unscaled-all3reps; 
+java -jar /Users/markobajic/Documents/Software/PeakAnnotator_Java_1.4/PeakAnnotator.jar -u TSS -p MT-CON-unscaled-all3reps.bed -a MTR4_TSS.col.switch.bed -o MT-CON-unscaled-all3reps;
+cd MT-CON-unscaled-all3reps;
+awk 'NR>1 {print $7}' MT-CON-unscaled-all3reps.tss.bed > MT-CON-unscaled-all3reps-GENES.txt;
+cd ..; 
+
+
+mkdir MT-CON-50pINT-unscaled-all3reps; 
+java -jar /Users/markobajic/Documents/Software/PeakAnnotator_Java_1.4/PeakAnnotator.jar -u TSS -p MT-CON-50pINT-unscaled-all3reps.bed -a MTR4_TSS.col.switch.bed -o MT-CON-50pINT-unscaled-all3reps;
+cd MT-CON-50pINT-unscaled-all3reps;
+awk 'NR>1 {print $7}' MT-CON-50pINT-unscaled-all3reps.tss.bed > MT-CON-50pINT-unscaled-all3reps-GENES.txt;
+cd ..; 
+
+
+mkdir MT-SUB-50pINT-unscaled-all3reps; 
+java -jar /Users/markobajic/Documents/Software/PeakAnnotator_Java_1.4/PeakAnnotator.jar -u TSS -p MT-SUB-50pINT-unscaled-all3reps.bed -a MTR4_TSS.col.switch.bed -o MT-SUB-50pINT-unscaled-all3reps;
+cd MT-SUB-50pINT-unscaled-all3reps;
+awk 'NR>1 {print $7}' MT-SUB-50pINT-unscaled-all3reps.tss.bed > MT-SUB-50pINT-unscaled-all3reps-GENES.txt;
+cd ..; 
+
+
+bigWigMerge CON-1-scaled.bw CON-2-scaled.bw MT-CON-scaled.bedgraph;
+bedGraphToBigWig MT-CON-scaled.bedgraph /Volumes/Deal-5TB/SUBEXP-ATAC/GenomeInfo/Mt4-Chrom-sizes.txt MT-CON-scaled.bw;
+
+bigWigMerge SUB-1-scaled.bw SUB-2-scaled.bw MT-SUB-scaled.bedgraph;
+bedGraphToBigWig MT-SUB-scaled.bedgraph /Volumes/Deal-5TB/SUBEXP-ATAC/GenomeInfo/Mt4-Chrom-sizes.txt MT-SUB-scaled.bw;
+
+computeMatrix reference-point --referencePoint center -S CON-1-scaled.bw CON-2-scaled.bw MT-CON-scaled.bw SUB-1-scaled.bw SUB-2-scaled.bw MT-SUB-scaled.bw Mt-gDNA-scaled.bw -R DownInSUB-pvalue.bed -a 1000 -b 1000 -o DownInSUB-pvalue-BWtests.gz; 
+plotProfile -m DownInSUB-pvalue-BWtests.gz --samplesLabel CON-1 CON-2 CONTROL SUB-1 SUB-2 SUBMERGENCE gDNA --refPointLabel THS-center --color darkgreen lightgreen green darkblue lightblue blue red --perGroup --outFileName DownInSUB-pvalue-BWtests.png; 
+plotHeatmap -m DownInSUB-pvalue-BWtests.gz --missingDataColor white --samplesLabel CON-1 CON-2 CONTROL SUB-1 SUB-2 SUBMERGENCE gDNA --refPointLabel THS-center -out DownInSUB-pvalue-BWtests.pdf --colorMap=Blues; 
+mv DownInSUB-pvalue-BWtests.pdf DownOrUpInSUB-padj/;
+mv DownInSUB-pvalue-BWtests.png DownOrUpInSUB-padj/; 
+
+computeMatrix reference-point --referencePoint center -S CON-1-scaled.bw CON-2-scaled.bw MT-CON-scaled.bw SUB-1-scaled.bw SUB-2-scaled.bw MT-SUB-scaled.bw Mt-gDNA-scaled.bw -R UpInSUB-pvalue.bed -a 1000 -b 1000 -o UpInSUB-pvalue-BWtests.gz; 
+plotProfile -m UpInSUB-pvalue-BWtests.gz --samplesLabel CON-1 CON-2 CONTROL SUB-1 SUB-2 SUBMERGENCE gDNA --refPointLabel THS-center --color darkgreen lightgreen green darkblue lightblue blue red --perGroup --outFileName UpInSUB-pvalue-BWtests.png; 
+plotHeatmap -m UpInSUB-pvalue-BWtests.gz --missingDataColor white --samplesLabel CON-1 CON-2 CONTROL SUB-1 SUB-2 SUBMERGENCE gDNA --refPointLabel THS-center -out UpInSUB-pvalue-BWtests.pdf --colorMap=Blues; 
+mv UpInSUB-pvalue-BWtests.pdf DownOrUpInSUB-padj/;
+mv UpInSUB-pvalue-BWtests.png DownOrUpInSUB-padj/; 
+
+
+
+computeMatrix reference-point --referencePoint center -S MT-CON-scaled.bw MT-SUB-scaled.bw Mt-gDNA-scaled.bw -R UpInSUB-padj.bed -a 1000 -b 1000 -o UpInSUB-padj-BWtests.gz; 
+plotProfile -m UpInSUB-padj-BWtests.gz --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel THS-center --color green blue red --perGroup --outFileName UpInSUB-padj-BWtests.png; 
+plotHeatmap -m UpInSUB-padj-BWtests.gz --missingDataColor white --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel THS-center -out UpInSUB-padj-BWtests.pdf --colorMap=Blues; 
+mv UpInSUB-padj-BWtests.pdf DownOrUpInSUB-padj/;
+mv UpInSUB-padj-BWtests.png DownOrUpInSUB-padj/; 
+
+
+plotProfile -m UpInSUB-padj-BWtests.gz --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel THS-center --regionsLabel "THSs Up In SUB" --color green blue red --perGroup --outFileName UpInSUB-padj-BWtests-2.png; 
+mv UpInSUB-padj-BWtests-2.png DownOrUpInSUB-padj/; 
+plotHeatmap -m UpInSUB-padj-BWtests.gz --missingDataColor white --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel THS-center --regionsLabel "THSs Up In SUB" -out UpInSUB-padj-BWtests-2.pdf --colorMap=Blues; 
+mv UpInSUB-padj-BWtests-2.pdf DownOrUpInSUB-padj/;
+
+computeMatrix reference-point --referencePoint center -S MT-CON-scaled.bw MT-SUB-scaled.bw Mt-gDNA-scaled.bw -R DownInSUB-padj.bed -a 1000 -b 1000 -o DownInSUB-padj-BWtests.gz; 
+plotProfile -m DownInSUB-padj-BWtests.gz --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel THS-center --regionsLabel "THSs Up In SUB" --color green blue red --perGroup --outFileName DownInSUB-padj-BWtests.png; 
+mv DownInSUB-padj-BWtests.png DownOrUpInSUB-padj/; 
+plotHeatmap -m DownInSUB-padj-BWtests.gz --missingDataColor white --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel THS-center --regionsLabel "THSs More Accessible during Submergence" --xAxisLabel "THS width (kb)" --startLabel "-1" --endLabel "1" --hclust 1 --legendLocation none -out DownInSUB-padj-BWtests.pdf --colorMap=Blues; 
+mv DownInSUB-padj-BWtests.pdf DownOrUpInSUB-padj/;
+
+
+
+
+computeMatrix reference-point --referencePoint center -S MT-CON-scaled.bw MT-SUB-scaled.bw Mt-gDNA-scaled.bw -R Mtr4-TSS.bed -a 1000 -b 1000 -o Mtr4-TSS.gz; 
+plotProfile -m Mtr4-TSS.gz --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel TSS --regionsLabel "MTR4 Genes" --color green blue red --perGroup --outFileName Mtr4-TSS.png; 
+plotHeatmap -m Mtr4-TSS.gz --missingDataColor white --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel TSS --regionsLabel "MTR4 Genes" --xAxisLabel "Distance from TSS (kb)" --startLabel "-1" --endLabel "1" --legendLocation none -out Mtr4-TSS.pdf --colorMap=Blues; 
+mv Mtr4-TSS.pdf Mtr4-TSS-Plots/;
+mv Mtr4-TSS.png Mtr4-TSS-Plots/; 
+
+computeMatrix reference-point --referencePoint center --maxThreshold 600 -S MT-CON-scaled.bw MT-SUB-scaled.bw Mt-gDNA-scaled.bw -R Mtr4-TSS.bed -a 1000 -b 1000 -o Mtr4-TSS-MT600.gz; 
+plotProfile -m Mtr4-TSS-MT600.gz --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel TSS-MT600 --regionsLabel "MTR4 Genes" --color green blue red --perGroup --outFileName Mtr4-TSS-MT600.png; 
+plotHeatmap -m Mtr4-TSS-MT600.gz --missingDataColor white --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel TSS-MT600 --regionsLabel "MTR4 Genes" --xAxisLabel "Distance from TSS-MT600 (kb)" --startLabel "-1" --endLabel "1" --legendLocation none -out Mtr4-TSS-MT600.pdf --colorMap=Blues; 
+mv Mtr4-TSS-MT600.pdf Mtr4-TSS-Plots/;
+mv Mtr4-TSS-MT600.png Mtr4-TSS-Plots/; 
+
+
+computeMatrix scale-regions -S MT-CON-scaled.bw MT-SUB-scaled.bw Mt-gDNA-scaled.bw -R MTR4-Gene-Coords.bed -a 1000 -b 1000 -o MTR4-Genes.gz; 
+plotProfile -m MTR4-Genes.gz --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel TSS-MT600 --regionsLabel "MTR4 Genes" --startLabel "TSS" --endLabel "TTS" --color green blue red --perGroup --outFileName Mtr4-TSS.png; 
+plotHeatmap -m MTR4-Genes.gz --missingDataColor white --samplesLabel CONTROL SUBMERGENCE gDNA --regionsLabel "MTR4 Genes" --xAxisLabel "Gene Distance (kb)" --startLabel "TSS" --endLabel "TTS" --legendLocation none -out Mtr4-TSS.pdf --colorMap=Blues; 
+mv Mtr4-TSS.pdf Mtr4-TSS-Plots/; 
+mv MTR4-TSS.png Mtr4-TSS-Plots/; 
+
+
+
+computeMatrix scale-regions --maxThreshold 400 -S MT-CON-scaled.bw MT-SUB-scaled.bw Mt-gDNA-scaled.bw -R MTR4-Gene-Coords.bed -a 1000 -b 1000 -o MTR4-Genes-MT400.gz; 
+plotProfile -m MTR4-Genes-MT400.gz --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel TSS-MT600 --regionsLabel "MTR4 Genes" --startLabel "TSS" --endLabel "TTS" --color green blue red --perGroup --outFileName Mtr4-Genes-MT400.png; 
+plotHeatmap -m MTR4-Genes-MT400.gz --missingDataColor white --samplesLabel CONTROL SUBMERGENCE gDNA --regionsLabel "MTR4 Genes" --xAxisLabel "Gene Distance (kb)" --startLabel "TSS" --endLabel "TTS" --legendLocation none -out Mtr4-Genes-MT400.pdf --colorMap=Blues; 
+mv Mtr4-Genes-MT400.pdf Mtr4-TSS-Plots/; 
+mv MTR4-Genes-MT400.png Mtr4-TSS-Plots/; 
+
+
+
+
+
+
+
+
+Should have checked to make sure that the gff3 file does not have any redundancies... it doesn't do much, but will be annoying later. Don't want this because it takes extra time to count and isn't impactuf
+
+
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/BAMs
+samtools view -q 2 -b CON-7.sorted.bam > CON-7-TESTforQ2-q2.bam; 
+samtools index CON-7-TESTforQ2-q2.bam; 
+samtools view -c CON-7-TESTforQ2-q2.bam; 
+Looks correct
+
+
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam Mt_ATAC_C1.sorted.q2.bam Mt-CON-and-SUB-mD150rR1-p50INT-UNSCALED.gff3 > MT-CON-1-unscaled-nonuniqueall-counts.txt; 
+mv MT-CON-1-unscaled-nonuniqueall-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Unscaled-DEseq; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam Mt_ATAC_C2.sorted.q2.bam Mt-CON-and-SUB-mD150rR1-p50INT-UNSCALED.gff3 > MT-CON-2-unscaled-nonuniqueall-counts.txt; 
+mv MT-CON-2-unscaled-nonuniqueall-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Unscaled-DEseq; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam CON-7.sorted.Q2.bam Mt-CON-and-SUB-mD150rR1-p50INT-UNSCALED.gff3 > MT-CON-3-unscaled-nonuniqueall-counts.txt; 
+mv MT-CON-3-unscaled-nonuniqueall-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Unscaled-DEseq; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam Mt_ATAC_S1.sorted.q2.bam Mt-CON-and-SUB-mD150rR1-p50INT-UNSCALED.gff3 > MT-SUB-1-unscaled-nonuniqueall-counts.txt; 
+mv MT-SUB-1-unscaled-nonuniqueall-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Unscaled-DEseq; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam Mt_ATAC_S2.sorted.q2.bam Mt-CON-and-SUB-mD150rR1-p50INT-UNSCALED.gff3 > MT-SUB-2-unscaled-nonuniqueall-counts.txt; 
+mv MT-SUB-2-unscaled-nonuniqueall-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Unscaled-DEseq; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam SUB-7.sorted.Q2.bam Mt-CON-and-SUB-mD150rR1-p50INT-UNSCALED.gff3 > MT-SUB-3-unscaled-nonuniqueall-counts.txt; 
+mv MT-SUB-3-unscaled-nonuniqueall-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Unscaled-DEseq; 
+
+
+
+mkdir Mtr-CountedOnTHSs; 
+java -jar /Users/markobajic/Documents/Software/PeakAnnotator_Java_1.4/PeakAnnotator.jar -u TSS -p Mtr-CountedOnTHSs.bed -a MTR4_TSS.col.switch.bed -o Mtr-CountedOnTHSs;
+cd Mtr-CountedOnTHSs;
+awk 'NR>1 {print $7}' Mtr-CountedOnTHSs.tss.bed > Mtr-CountedOnTHSs-GENES.txt;
+cd ..; 
+
+
+For DESeq
+0.840877291739965,	1.537463128300010, 0.395166523551919,	1.054353762056740,	1.472381253090480,	0.699758022417180
+
+
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/BAMs; 
+
+samtools view -f 0x40 -b Mt_ATAC_C1.sorted.q2.bam > Mt-CON1-Pair1.bam; 
+samtools view -f 0x40 -b Mt_ATAC_C2.sorted.q2.bam > Mt-CON2-Pair1.bam; 
+samtools view -f 0x40 -b CON-7.sorted.Q2.bam > Mt-CON3-Pair1.bam; 
+samtools view -f 0x40 -b Mt_ATAC_S1.sorted.q2.bam > Mt-SUB1-Pair1.bam; 
+samtools view -f 0x40 -b Mt_ATAC_S2.sorted.q2.bam > Mt-SUB2-Pair1.bam; 
+samtools view -f 0x40 -b SUB-7.sorted.Q2.bam > Mt-SUB3-Pair1.bam; 
+
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam Mt-CON1-Pair1.bam Mt-CON-and-SUB-mD150rR1-p50INT-UNSCALED.gff3 > MT-CON-1-Pair1-counts.txt; 
+mv MT-CON-1-Pair1-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Unscaled-DEseq/UNPAIRED; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam Mt-CON2-Pair1.bam Mt-CON-and-SUB-mD150rR1-p50INT-UNSCALED.gff3 > MT-CON-2-Pair1-counts.txt; 
+mv MT-CON-2-Pair1-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Unscaled-DEseq/UNPAIRED; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam Mt-CON3-Pair1.bam Mt-CON-and-SUB-mD150rR1-p50INT-UNSCALED.gff3 > MT-CON-3-Pair1-counts.txt; 
+mv MT-CON-3-Pair1-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Unscaled-DEseq/UNPAIRED; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam Mt-SUB1-Pair1.bam Mt-CON-and-SUB-mD150rR1-p50INT-UNSCALED.gff3 > MT-SUB-1-Pair1-counts.txt; 
+mv MT-SUB-1-Pair1-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Unscaled-DEseq/UNPAIRED; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam Mt-SUB2-Pair1.bam Mt-CON-and-SUB-mD150rR1-p50INT-UNSCALED.gff3 > MT-SUB-2-Pair1-counts.txt; 
+mv MT-SUB-2-Pair1-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Unscaled-DEseq/UNPAIRED; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam Mt-SUB3-Pair1.bam Mt-CON-and-SUB-mD150rR1-p50INT-UNSCALED.gff3 > MT-SUB-3-Pair1-counts.txt; 
+mv MT-SUB-3-Pair1-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Unscaled-DEseq/UNPAIRED; 
+
+
+
+
+
+samtools view -c Mt-CON1-Pair1.bam; 
+samtools view -c Mt-CON2-Pair1.bam; 
+samtools view -c Mt-CON3-Pair1.bam; 
+samtools view -c Mt-SUB1-Pair1.bam; 
+samtools view -c Mt-SUB2-Pair1.bam; 
+samtools view -c Mt-SUB3-Pair1.bam; 
+
+22450063
+41022318
+10545930
+28165803
+39302662
+18685397
+
+For DESeq
+0.840972413110562,	1.536683338476550,	0.395047274504088,	1.055082264851850,	1.472265556840920,	0.699949189675720
+
+
+
+
+mkdir UpInSUB-unpaired-padj; 
+java -jar /Users/markobajic/Documents/Software/PeakAnnotator_Java_1.4/PeakAnnotator.jar -u TSS -p UpInSUB-unpaired-padj.bed -a MTR4_TSS.col.switch.bed -o UpInSUB-unpaired-padj;
+cd UpInSUB-unpaired-padj;
+awk 'NR>1 {print $7}' UpInSUB-unpaired-padj.tss.bed > UpInSUB-unpaired-padj-GENES.txt;
+cd ..; 
+
+
+
+REMEMBER, YOU CANNOT USE FREAKING DASHES FOR SOME STUPID REASON, so Underscore is a good alt AND you need to use the -single option you idiot _ made a mistake of doing this earlier
+mkdir PairingTest-Results;
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/BAMs; 
+makeTagDirectory PairingTest_MT_CON1_Paired Mt_ATAC_C1.sorted.q2.bam -single; 
+findpeaks PairingTest_MT_CON1_Paired/ -o PairingTest_MT_CON1_Paired_peaks -minDist 150 -region -regionRes 1; 
+pos2bed.pl PairingTest_MT_CON1_Paired_peaks | bedtools sort | bedtools merge > PairingTest_MT_CON1_Paired.bed;  
+cp PairingTest_MT_CON1_Paired.bed PairingTest-Results; 
+samtools index Mt-CON1-Pair1.bam;
+makeTagDirectory PairingTest_MT_CON1_UnPaired Mt-CON1-Pair1.bam -single; 
+findpeaks PairingTest_MT_CON1_UnPaired/ -o PairingTest_MT_CON1_UnPaired_peaks -minDist 150 -region -regionRes 1; 
+pos2bed.pl PairingTest_MT_CON1_UnPaired_peaks | bedtools sort | bedtools merge > PairingTest_MT_CON1_UnPaired.bed; 
+cp PairingTest_MT_CON1_UnPaired.bed PairingTest-Results; 
+makeTagDirectory PairingTest_MT_SUB3_Paired SUB-7.sorted.Q2.bam -single; 
+findpeaks PairingTest_MT_SUB3_Paired/ -o PairingTest_MT_SUB3_Paired_peaks -minDist 150 -region -regionRes 1; 
+pos2bed.pl PairingTest_MT_SUB3_Paired_peaks | bedtools sort | bedtools merge > PairingTest_MT_SUB3_Paired.bed; 
+cp PairingTest_MT_SUB3_Paired.bed PairingTest-Results; 
+samtools index Mt-CON1-Pair1.bam; 
+makeTagDirectory PairingTest_MT_SUB3_UnPaired Mt-SUB3-Pair1.bam -single; 
+findpeaks PairingTest_MT_SUB3_UnPaired/ -o PairingTest_MT_SUB3_UnPaired_peaks -minDist 150 -region -regionRes 1; 
+pos2bed.pl PairingTest_MT_SUB3_UnPaired_peaks | bedtools sort | bedtools merge > PairingTest_MT_SUB3_UnPaired.bed; 
+cp PairingTest_MT_SUB3_UnPaired.bed PairingTest-Results; 
+
+Remove redundancies, if any
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Peaks-Unscaled-mD150rR1; 
+wc -l MT-CON1-mD150Rr1-unscaled.bed; 
+wc -l MT-CON2-mD150Rr1-unscaled.bed; 
+wc -l MT-CON3-mD150Rr1-unscaled.bed; 
+wc -l MT-SUB1-mD150Rr1-unscaled.bed; 
+wc -l MT-SUB2-mD150Rr1-unscaled.bed; 
+wc -l MT-SUB3-mD150Rr1-unscaled.bed; 
+
+48588 MT-CON1-mD150Rr1-unscaled.bed
+57960 MT-CON2-mD150Rr1-unscaled.bed
+30714 MT-CON3-mD150Rr1-unscaled.bed
+59479 MT-SUB1-mD150Rr1-unscaled.bed
+105046 MT-SUB2-mD150Rr1-unscaled.bed
+71865 MT-SUB3-mD150Rr1-unscaled.bed
+
+
+Unscaled-DESeq-MTr-ButCORRECT
+
+
+bedtools sort -i MT-CON-and-SUB-50pINT-unscaled.bed > MT-CON-and-SUB-50pINT-unscaled-sorted.bed; 
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/BAMs; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam Mt_ATAC_C1.sorted.q2.bam Mt-CON-and-SUB-mD150rR1-p50INT-UNSCALED-butCorrect.gff3 > MT-CON-1-unscaled-nonuniqueall-counts-Correct.txt; 
+cp MT-CON-1-unscaled-nonuniqueall-counts-Correct.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Unscaled-DESeq-MTr-ButCORRECT; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam Mt_ATAC_C2.sorted.q2.bam Mt-CON-and-SUB-mD150rR1-p50INT-UNSCALED-butCorrect.gff3 > MT-CON-2-unscaled-nonuniqueall-counts-Correct.txt; 
+cp MT-CON-2-unscaled-nonuniqueall-counts-Correct.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Unscaled-DESeq-MTr-ButCORRECT; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam CON-7.sorted.Q2.bam Mt-CON-and-SUB-mD150rR1-p50INT-UNSCALED-butCorrect.gff3 > MT-CON-3-unscaled-nonuniqueall-counts-Correct.txt; 
+cp MT-CON-3-unscaled-nonuniqueall-counts-Correct.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Unscaled-DESeq-MTr-ButCORRECT; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam Mt_ATAC_S1.sorted.q2.bam Mt-CON-and-SUB-mD150rR1-p50INT-UNSCALED-butCorrect.gff3 > MT-SUB-1-unscaled-nonuniqueall-counts-Correct.txt; 
+cp MT-SUB-1-unscaled-nonuniqueall-counts-Correct.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Unscaled-DESeq-MTr-ButCORRECT; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam Mt_ATAC_S2.sorted.q2.bam Mt-CON-and-SUB-mD150rR1-p50INT-UNSCALED-butCorrect.gff3 > MT-SUB-2-unscaled-nonuniqueall-counts-Correct.txt; 
+cp MT-SUB-2-unscaled-nonuniqueall-counts-Correct.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Unscaled-DESeq-MTr-ButCORRECT; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam SUB-7.sorted.Q2.bam Mt-CON-and-SUB-mD150rR1-p50INT-UNSCALED-butCorrect.gff3 > MT-SUB-3-unscaled-nonuniqueall-counts-Correct.txt; 
+cp MT-SUB-3-unscaled-nonuniqueall-counts-Correct.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Unscaled-DESeq-MTr-ButCORRECT; 
+
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam Mt-CON1-Pair1.bam Mt-CON-and-SUB-mD150rR1-p50INT-UNSCALED-butCorrect.gff3 > MT-CON-1-Pair1-counts-Correct.txt; 
+cp MT-CON-1-Pair1-counts-Correct.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Unscaled-DESeq-MTr-ButCORRECT/UNPAIRED; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam Mt-CON2-Pair1.bam Mt-CON-and-SUB-mD150rR1-p50INT-UNSCALED-butCorrect.gff3 > MT-CON-2-Pair1-counts-Correct.txt; 
+cp MT-CON-2-Pair1-counts-Correct.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Unscaled-DESeq-MTr-ButCORRECT/UNPAIRED; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam Mt-CON3-Pair1.bam Mt-CON-and-SUB-mD150rR1-p50INT-UNSCALED-butCorrect.gff3 > MT-CON-3-Pair1-counts-Correct.txt; 
+cp MT-CON-3-Pair1-counts-Correct.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Unscaled-DESeq-MTr-ButCORRECT/UNPAIRED; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam Mt-SUB1-Pair1.bam Mt-CON-and-SUB-mD150rR1-p50INT-UNSCALED-butCorrect.gff3 > MT-SUB-1-Pair1-counts-Correct.txt; 
+cp MT-SUB-1-Pair1-counts-Correct.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Unscaled-DESeq-MTr-ButCORRECT/UNPAIRED; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam Mt-SUB2-Pair1.bam Mt-CON-and-SUB-mD150rR1-p50INT-UNSCALED-butCorrect.gff3 > MT-SUB-2-Pair1-counts-Correct.txt; 
+cp MT-SUB-2-Pair1-counts-Correct.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Unscaled-DESeq-MTr-ButCORRECT/UNPAIRED; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam Mt-SUB3-Pair1.bam Mt-CON-and-SUB-mD150rR1-p50INT-UNSCALED-butCorrect.gff3 > MT-SUB-3-Pair1-counts-Correct.txt; 
+cp MT-SUB-3-Pair1-counts-Correct.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Unscaled-DESeq-MTr-ButCORRECT/UNPAIRED; 
+
+
+bedtools sort -i MT-CONonly-unscaled-all3reps.bed > MT-CONonly-unscaled-all3reps-sorted.bed; 
+bedtools sort -i MT-SUBonly-unscaled-all3reps.bed > MT-SUBonly-unscaled-all3reps-sorted.bed;
+
+
+
+Because of --nonunique all getting the fix, I was able to count across UNmerged THSs, therefore the numbers are across all unmerged ones
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Peaks-Unscaled-mD150rR1/MAIN; 
+wc -l MT-CON-and-SUB-50pINT-unscaled-sorted.bed; 
+wc -l MT-SUBonly-unscaled-all3reps-sorted.bed; 
+wc -l MT-CONonly-unscaled-all3reps-sorted.bed; 
+
+183993 MT-CON-and-SUB-50pINT-unscaled-sorted.bed
+26034 MT-SUBonly-unscaled-all3reps-sorted.bed
+2773 MT-CONonly-unscaled-all3reps-sorted.bed
+
+
+
+
+To calculate chromosome size
+samtools faidx /Volumes/Deal-5TB/SUBEXP-ATAC/GenomeInfo/MEDICAGO/Mt4_JC.fa; 
+cut -f1,2 /Volumes/Deal-5TB/SUBEXP-ATAC/GenomeInfo/MEDICAGO/Mt4_JC.fa.fai > /Volumes/Deal-5TB/SUBEXP-ATAC/GenomeInfo/MEDICAGO/Mt4_JC-ChrSizestest.txt; 
+
+This cut command, is this really this easy, can I use this for bed files instead of the awkward awk commands????
+cut -f1,2,3 /Volumes/Deal-5TB/SUBEXP-ATAC/ANNOTATION/MT-UpInSUB-PAIRED.bed > /Volumes/Deal-5TB/SUBEXP-ATAC/ANNOTATION/MT-UpInSUB-PAIRED-BackToJust3Columns.bed; 
+
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/4Scaled-Bigwigs; 
+bigWigMerge CON-1-scaled.bw CON-2-scaled.bw CON-1and2-merged-scaled.bedGraph; 
+bedGraphToBigWig CON-1and2-merged-scaled.bedGraph /Volumes/Deal-5TB/SUBEXP-ATAC/GenomeInfo/MEDICAGO/Mt4-Chrom-sizes.txt CON-1and2-merged-scaled.bw; 
+
+bigWigMerge SUB-1-scaled.bw SUB-2-scaled.bw SUB-1and2-merged-scaled.bedGraph; 
+bedGraphToBigWig SUB-1and2-merged-scaled.bedGraph /Volumes/Deal-5TB/SUBEXP-ATAC/GenomeInfo/MEDICAGO/Mt4-Chrom-sizes.txt SUB-1and2-merged-scaled.bw; 
+
+
+
+
+When combining 2 bigwig files you actually increase the signal as a sum, It Does NOT average the two
+Therefore, the gDNA sample needs to be treated the same to account for this, Or to say it another way, if scaling down to 10 mill read samples the gDNA sample needs to be scaled down to 20 mill (the sum of the other two)
+
+
+From previous work I know:
+samtools view -c CON-1-SCALED.bam; 
+samtools view -c CON-2-SCALED.bam; 
+samtools view -c SUB-1-SCALED.bam; 
+samtools view -c SUB-2-SCALED.bam; 
+
+20,973,384
+20,973,135
+20,971,635
+20,967,371
+
+
+So, I want gDNA to be 41942763
+
+And the file I have is:
+
+samtools view -c /Volumes/Deal-5TB/SUBEXP-ATAC/Genomic-DNA/Mt_gDNA.q2.sorted.bam; 
+256379196
+
+samtools view -s 0.163596593 -b /Volumes/Deal-5TB/SUBEXP-ATAC/Genomic-DNA/Mt_gDNA.q2.sorted.bam > /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/4Scaled-Bigwigs/Mt-gDNA-ScaledForDoubleBigwig.bam; 
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/4Scaled-Bigwigs; 
+samtools index Mt-gDNA-ScaledForDoubleBigwig.bam; 
+bamCoverage -b Mt-gDNA-ScaledForDoubleBigwig.bam -o Mt-gDNA-ScaledForDoubleBigwig.bw -bs=1 --normalizeUsingRPKM -p=max; 
+
+samtools view -c Mt-gDNA-ScaledForDoubleBigwig.bam; 
+41936065
+
+Checks out
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

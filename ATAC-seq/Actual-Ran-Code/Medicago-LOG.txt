@@ -1,0 +1,285 @@
+samtools view -c CON-1-SCALED.bam; 
+samtools view -c CON-2-SCALED.bam; 
+samtools view -c CON-7.sorted.Q2.bam; 
+samtools view -c SUB-1-SCALED.bam; 
+samtools view -c SUB-2-SCALED.bam; 
+samtools view -c SUB-7-SCALED.bam; 
+
+20,973,384
+20,973,135
+20,970,752
+20,971,635
+20,967,371
+20,970,543
+
+
+multiBamSummary bins -b CON-1-SCALED.bam CON-2-SCALED.bam CON-7.sorted.Q2.bam SUB-1-SCALED.bam SUB-2-SCALED.bam SUB-7-SCALED.bam -out MT-CON-SUB.npz -bs=5000 -p=max; 
+plotPCA -T=MT-CON-SUB -in MT-CON-SUB.npz -o MT-CON-SUB.pdf --labels MT-CON-1 MT-CON-2 MT-CON-3 MT-SUB-1 MT-SUB-2 MT-SUB-3; 
+
+
+findpeaks CON-1-tags/ -o MT-CON1-150Rr1 -minDist 150 -region -regionRes 1; pos2bed.pl MT-CON1-150Rr1 | bedtools sort | bedtools merge > MT-CON1-mD150Rr1.bed; mv MT-CON1-mD150Rr1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Peaks/150rR1; 
+findpeaks CON-2-tags/ -o MT-CON2-150Rr1 -minDist 150 -region -regionRes 1; pos2bed.pl MT-CON2-150Rr1 | bedtools sort | bedtools merge > MT-CON2-mD150Rr1.bed; mv MT-CON2-mD150Rr1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Peaks/150rR1;
+findpeaks CON-3-tags/ -o MT-CON3-150Rr1 -minDist 150 -region -regionRes 1; pos2bed.pl MT-CON3-150Rr1 | bedtools sort | bedtools merge > MT-CON3-mD150Rr1.bed; mv MT-CON3-mD150Rr1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Peaks/150rR1;
+findpeaks SUB-1-tags/ -o MT-SUB1-150Rr1 -minDist 150 -region -regionRes 1; pos2bed.pl MT-SUB1-150Rr1 | bedtools sort | bedtools merge > MT-SUB1-mD150Rr1.bed; mv MT-SUB1-mD150Rr1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Peaks/150rR1; 
+findpeaks SUB-2-tags/ -o MT-SUB2-150Rr1 -minDist 150 -region -regionRes 1; pos2bed.pl MT-SUB2-150Rr1 | bedtools sort | bedtools merge > MT-SUB2-mD150Rr1.bed; mv MT-SUB2-mD150Rr1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Peaks/150rR1;
+findpeaks SUB-3-tags/ -o MT-SUB3-150Rr1 -minDist 150 -region -regionRes 1; pos2bed.pl MT-SUB3-150Rr1 | bedtools sort | bedtools merge > MT-SUB3-mD150Rr1.bed; mv MT-SUB3-mD150Rr1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Peaks/150rR1;
+
+25462
+11188
+30714
+30295
+40364
+48394
+
+
+
+
+
+
+bedtools intersect -a MT-CON1-mD150Rr1.bed -b MT-CON2-mD150Rr1.bed MT-CON3-mD150Rr1.bed > MT-CON-md150rR1-intersects.bed; 
+bedtools intersect -a MT-SUB1-mD150Rr1.bed -b MT-SUB2-mD150Rr1.bed MT-SUB3-mD150Rr1.bed > MT-SUB-md150rR1-intersects.bed; 
+
+30603
+61223
+
+cat or combine the two files by hand MT-CON-md150rR1-intersects.bed MT-SUB-md150rR1-intersects.bed
+bedtools sort -i MT-CON-md150rR1-intersects.bed | bedtools merge > MT-CON-SUB-md150rR1.bed; 
+
+
+bedtools subtract -A -a MT-CON-SUB-md150rR1.bed -b MT-SUB-md150rR1-intersects.bed > MT-CONonly.bed; 
+bedtools subtract -A -a MT-CON-SUB-md150rR1.bed -b MT-CON-md150rR1-intersects.bed > MT-SUBonly.bed; 
+
+31,899		OS-CON-SUB-md150rR1.bed
+3,503		OS-CONonly-ACTUAL.bed
+13,453 		OS-SUBonly-ACTUAL.bed
+Therefore 31,899-3,503-13,453 = 14,943		In Common
+
+
+
+
+MT-CON-SUB-md150rR1.bed
+
+htseq-count -m union -s no -i gene_id -t exon -f bam CON-1-SCALED.bam MT-CON-SUB-COUNTING.gff3 > MT-CON-1-counts.txt; mv MT-CON-1-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/DESeq; 
+htseq-count -m union -s no -i gene_id -t exon -f bam CON-2-SCALED.bam MT-CON-SUB-COUNTING.gff3 > MT-CON-2-counts.txt; mv MT-CON-2-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/DESeq; 
+htseq-count -m union -s no -i gene_id -t exon -f bam CON-7.sorted.Q2.bam MT-CON-SUB-COUNTING.gff3 > MT-CON-3-counts.txt; mv MT-CON-3-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/DESeq; 
+htseq-count -m union -s no -i gene_id -t exon -f bam SUB-1-SCALED.bam MT-CON-SUB-COUNTING.gff3 > MT-SUB-1-counts.txt; mv MT-SUB-1-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/DESeq; 
+htseq-count -m union -s no -i gene_id -t exon -f bam SUB-2-SCALED.bam MT-CON-SUB-COUNTING.gff3 > MT-SUB-2-counts.txt; mv MT-SUB-2-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/DESeq; 
+htseq-count -m union -s no -i gene_id -t exon -f bam SUB-7-SCALED.bam MT-CON-SUB-COUNTING.gff3 > MT-SUB-3-counts.txt; mv MT-SUB-3-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/DESeq; 
+
+
+
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+MEDIOCRE!!!! IT REALLY DOES MATTER WHAT THE FIRST BED FILE IS IN INTERSECT STRING WHEN COMPARING TO OTHER BED FILES. ALSO WHY HAVING MORE REPLICATES WOULD HELP
+BLEEERRRRRGGGG!!!!!!!!!!
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+multiBamSummary bins -b SUB-1-SCALED.bam SUB-2-SCALED.bam SUB-7-SCALED.bam -out MT-SUBsamples.npz -bs=5000 -p=max; 
+plotPCA -T=MT-SUBsamples -in MT-SUBsamples.npz -o MT-SUBsamples.pdf --labels MT-SUB-1 MT-SUB-2 MT-SUB-3; 
+
+multiBamSummary bins -b CON-1-SCALED.bam CON-2-SCALED.bam CON-7.sorted.Q2.bam -out MT-CONsamples.npz -bs=5000 -p=max; 
+plotPCA -T=MT-CONsamples -in MT-CONsamples.npz -o MT-CONsamples.pdf --labels MT-CON-1 MT-CON-2 MT-CON-3; 
+
+
+bedtools intersect -a MT-CON3-mD150Rr1.bed -b MT-CON1-mD150Rr1.bed MT-CON2-mD150Rr1.bed > MT-CON-md150rR1-intersects.bed; 
+bedtools intersect -a MT-SUB3-mD150Rr1.bed -b MT-SUB1-mD150Rr1.bed MT-SUB2-mD150Rr1.bed > MT-SUB-md150rR1-intersects.bed; 
+
+
+cat or combine the two files by hand MT-CON-md150rR1-intersects.bed MT-SUB-md150rR1-intersects.bed
+bedtools sort -i MT-CON-md150rR1-intersects.bed | bedtools merge > MT-CON-SUB-md150rR1.bed; 
+
+
+bedtools subtract -A -a MT-CON-SUB-md150rR1.bed -b MT-SUB-md150rR1-intersects.bed > MT-CONonly.bed;
+bedtools subtract -A -a MT-CON-SUB-md150rR1.bed -b MT-CON-md150rR1-intersects.bed > MT-SUBonly.bed; 
+
+37,039		OS-CON-SUB-md150rR1.bed
+2,791		OS-CONonly-ACTUAL.bed
+17,832 		OS-SUBonly-ACTUAL.bed
+Therefore 37,039-2,791-17,832 = 16,416		In Common
+
+
+
+
+MT-CON-SUB-md150rR1.bed
+
+htseq-count -m union -s no -i gene_id -t exon -f bam CON-1-SCALED.bam MT-CON-SUB-COUNTING.gff3 > MT-CON-1-counts.txt; mv MT-CON-1-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/DESeq-BETTER; 
+htseq-count -m union -s no -i gene_id -t exon -f bam CON-2-SCALED.bam MT-CON-SUB-COUNTING.gff3 > MT-CON-2-counts.txt; mv MT-CON-2-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/DESeq-BETTER; 
+htseq-count -m union -s no -i gene_id -t exon -f bam CON-7.sorted.Q2.bam MT-CON-SUB-COUNTING.gff3 > MT-CON-3-counts.txt; mv MT-CON-3-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/DESeq-BETTER; 
+htseq-count -m union -s no -i gene_id -t exon -f bam SUB-1-SCALED.bam MT-CON-SUB-COUNTING.gff3 > MT-SUB-1-counts.txt; mv MT-SUB-1-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/DESeq-BETTER; 
+htseq-count -m union -s no -i gene_id -t exon -f bam SUB-2-SCALED.bam MT-CON-SUB-COUNTING.gff3 > MT-SUB-2-counts.txt; mv MT-SUB-2-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/DESeq-BETTER; 
+htseq-count -m union -s no -i gene_id -t exon -f bam SUB-7-SCALED.bam MT-CON-SUB-COUNTING.gff3 > MT-SUB-3-counts.txt; mv MT-SUB-3-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/DESeq-BETTER; 
+
+
+
+computeMatrix reference-point -S CON-1-SCALED.bw CON-2-SCALED.bw CON-3-SCALED.bw SUB-1-SCALED.bw SUB-2-SCALED.bw SUB-3-SCALED.bw -R MT-DownInSUB.bed -a 1000 -b 1000 -o MT-ATAC-DownInSUB.gz; 
+plotProfile -m MT-ATAC-DownInSUB.gz --samplesLabel CON-1 CON-2 CON-3 SUB-1 SUB-2 SUB-3 --refPointLabel THS-center --color green lightgreen forestgreen blue lightblue cyan --perGroup --outFileName MT-ATAC-DownInSUB; 
+plotHeatmap -m MT-ATAC-DownInSUB.gz --samplesLabel CON-1 CON-2 CON-3 SUB-1 SUB-2 SUB-3 --refPointLabel THS-center -out MT-ATAC-DownInSUB.pdf --colorMap=Blues; 
+
+computeMatrix reference-point -S CON-1-SCALED.bw CON-2-SCALED.bw CON-3-SCALED.bw SUB-1-SCALED.bw SUB-2-SCALED.bw SUB-3-SCALED.bw -R MT-UpInSUB.bed -a 1000 -b 1000 -o MT-ATAC-UpInSUB.gz; 
+plotProfile -m MT-ATAC-UpInSUB.gz --samplesLabel CON-1 CON-2 CON-3 SUB-1 SUB-2 SUB-3 --refPointLabel THS-center --color green lightgreen forestgreen blue lightblue cyan --perGroup --outFileName MT-ATAC-UpInSUB; 
+plotHeatmap -m MT-ATAC-UpInSUB.gz --samplesLabel CON-1 CON-2 CON-3 SUB-1 SUB-2 SUB-3 --refPointLabel THS-center -out MT-ATAC-UpInSUB.pdf --colorMap=Blues; 
+
+
+mkdir Up-In-SUB; 
+java -jar -Xmx512m /Users/deallabuser/Documents/Software/PeakAnnotator_Java_1.4/PeakAnnotator.jar -u TSS -p MT-UpInSUB.bed -a M-truncatula-Gene-TSS.bed -o Up-In-SUB;
+cd Up-In-SUB/; 
+awk 'NR>1 {print $7}' MT-UpInSUB.tss.bed > MT-ATAC-UpInSUB-GENES.bed; 
+cd ..;
+
+mkdir Down-In-SUB; 
+java -jar -Xmx512m /Users/deallabuser/Documents/Software/PeakAnnotator_Java_1.4/PeakAnnotator.jar -u TSS -p MT-DownInSUB.bed -a M-truncatula-Gene-TSS.bed -o Down-In-SUB;
+cd Down-In-SUB/; 
+awk 'NR>1 {print $7}' MT-DownInSUB.tss.bed > MT-ATAC-DownInSUB-GENES.bed; 
+cd ..;
+
+
+
+
+computeMatrix scale-regions -S CON-1-SCALED.bw CON-2-SCALED.bw CON-3-SCALED.bw SUB-1-SCALED.bw SUB-2-SCALED.bw SUB-3-SCALED.bw -R MT-ATAC-UpInSUB-GeneCoords.bed -a 1000 -b 1000 -o MT-ATAC-UpInSUB-GeneCoords.gz; 
+plotProfile -m MT-ATAC-UpInSUB-GeneCoords.gz --startLabel TSS --endLabel TES --samplesLabel CON-1 CON-2 CON-3 SUB-1 SUB-2 SUB-3 --color green lightgreen forestgreen blue lightblue cyan --perGroup --outFileName MT-ATAC-UpInSUB-GeneCoords; 
+plotHeatmap -m MT-ATAC-UpInSUB-GeneCoords.gz --samplesLabel CON-1 CON-2 CON-3 SUB-1 SUB-2 SUB-3 --startLabel TSS --endLabel TES -out MT-ATAC-UpInSUB-GeneCoords.pdf --colorMap=Blues; 
+
+computeMatrix scale-regions -S CON-1-SCALED.bw CON-2-SCALED.bw CON-3-SCALED.bw SUB-1-SCALED.bw SUB-2-SCALED.bw SUB-3-SCALED.bw -R MT-ATAC-DownInSUB-GeneCoords.bed -a 1000 -b 1000 -o MT-ATAC-DownInSUB-GeneCoords.gz; 
+plotProfile -m MT-ATAC-DownInSUB-GeneCoords.gz --startLabel TSS --endLabel TES --samplesLabel CON-1 CON-2 CON-3 SUB-1 SUB-2 SUB-3 --color green lightgreen forestgreen blue lightblue cyan --perGroup --outFileName MT-ATAC-DownInSUB-GeneCoords; 
+plotHeatmap -m MT-ATAC-DownInSUB-GeneCoords.gz --samplesLabel CON-1 CON-2 CON-3 SUB-1 SUB-2 SUB-3 --startLabel TSS --endLabel TES -out MT-ATAC-DownInSUB-GeneCoords.pdf --colorMap=Blues; 
+
+
+
+
+
+RESULTS ARE DISAPPOINTING
+
+NO rR1 This time 
+HRMMMMmm
+
+findpeaks CON-1-tags/ -o MT-CON1-150 -minDist 150 -region; pos2bed.pl MT-CON1-150 | bedtools sort | bedtools merge > MT-CON1-mD150.bed; mv MT-CON1-mD150.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Peaks; 
+findpeaks CON-2-tags/ -o MT-CON2-150 -minDist 150 -region; pos2bed.pl MT-CON2-150 | bedtools sort | bedtools merge > MT-CON2-mD150.bed; mv MT-CON2-mD150.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Peaks;
+findpeaks CON-3-tags/ -o MT-CON3-150 -minDist 150 -region; pos2bed.pl MT-CON3-150 | bedtools sort | bedtools merge > MT-CON3-mD150.bed; mv MT-CON3-mD150.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Peaks;
+findpeaks SUB-1-tags/ -o MT-SUB1-150 -minDist 150 -region; pos2bed.pl MT-SUB1-150 | bedtools sort | bedtools merge > MT-SUB1-mD150.bed; mv MT-SUB1-mD150.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Peaks; 
+findpeaks SUB-2-tags/ -o MT-SUB2-150 -minDist 150 -region; pos2bed.pl MT-SUB2-150 | bedtools sort | bedtools merge > MT-SUB2-mD150.bed; mv MT-SUB2-mD150.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Peaks;
+findpeaks SUB-3-tags/ -o MT-SUB3-150 -minDist 150 -region; pos2bed.pl MT-SUB3-150 | bedtools sort | bedtools merge > MT-SUB3-mD150.bed; mv MT-SUB3-mD150.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/Peaks;
+
+20161
+7480
+25811
+19817
+29592
+37862
+
+bedtools intersect -a MT-CON3-mD150.bed -b MT-CON1-mD150.bed MT-CON2-mD150.bed > MT-CON-md150-intersects.bed; 
+bedtools intersect -a MT-SUB3-mD150.bed -b MT-SUB1-mD150.bed MT-SUB2-mD150.bed > MT-SUB-md150-intersects.bed; 
+
+
+cat or combine the two files by hand MT-CON-md150-intersects.bed MT-SUB-md150-intersects.bed
+bedtools sort -i MT-CON-md150-intersects.bed | bedtools merge > MT-CON-SUB-md150.bed; 
+
+
+bedtools subtract -A -a MT-CON-SUB-md150.bed -b MT-SUB-md150-intersects.bed > MT-CONonly.bed; 
+bedtools subtract -A -a MT-CON-SUB-md150.bed -b MT-CON-md150-intersects.bed > MT-SUBonly.bed; 
+
+28,047		OS-CON-SUB-md150.bed
+1,904		OS-CONonly.bed
+12,375 		OS-SUBonly.bed
+Therefore 28,047 - 1,904 - 12,375 = 13,768		In Common
+
+
+
+
+htseq-count -m union -s no -i gene_id -t exon -f bam CON-1-SCALED.bam MT-CON-SUB-COUNTING.gff3 > MT-CON-1-counts.txt; mv MT-CON-1-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/DESeq; 
+htseq-count -m union -s no -i gene_id -t exon -f bam CON-2-SCALED.bam MT-CON-SUB-COUNTING.gff3 > MT-CON-2-counts.txt; mv MT-CON-2-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/DESeq; 
+htseq-count -m union -s no -i gene_id -t exon -f bam CON-7.sorted.Q2.bam MT-CON-SUB-COUNTING.gff3 > MT-CON-3-counts.txt; mv MT-CON-3-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/DESeq; 
+htseq-count -m union -s no -i gene_id -t exon -f bam SUB-1-SCALED.bam MT-CON-SUB-COUNTING.gff3 > MT-SUB-1-counts.txt; mv MT-SUB-1-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/DESeq; 
+htseq-count -m union -s no -i gene_id -t exon -f bam SUB-2-SCALED.bam MT-CON-SUB-COUNTING.gff3 > MT-SUB-2-counts.txt; mv MT-SUB-2-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/DESeq; 
+htseq-count -m union -s no -i gene_id -t exon -f bam SUB-7-SCALED.bam MT-CON-SUB-COUNTING.gff3 > MT-SUB-3-counts.txt; mv MT-SUB-3-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/DESeq; 
+
+
+
+
+mkdir Up-In-SUB-LeastStringent; 
+java -jar -Xmx512m /Users/deallabuser/Documents/Software/PeakAnnotator_Java_1.4/PeakAnnotator.jar -u TSS -p MT-UpINSUB-LeastStringent.bed -a M-truncatula-Gene-TSS.bed -o Up-In-SUB-LeastStringent;
+cd Up-In-SUB-LeastStringent/; 
+awk 'NR>1 {print $7}' MT-UpINSUB-LeastStringent.tss.bed > MT-ATAC-UpInSUB-LEASTstringent-GENES.bed; 
+cd ..;
+
+mkdir Down-In-SUB-LeastStringent; 
+java -jar -Xmx512m /Users/deallabuser/Documents/Software/PeakAnnotator_Java_1.4/PeakAnnotator.jar -u TSS -p MT-DownINSUB-LeastStringent.bed -a M-truncatula-Gene-TSS.bed -o Down-In-SUB-LeastStringent;
+cd Down-In-SUB-LeastStringent/; 
+awk 'NR>1 {print $7}' MT-DownINSUB-LeastStringent.tss.bed > MT-ATAC-DownINSUB-LEASTstringent-GENES.bed; 
+cd ..;
+
+
+
+
+
+computeMatrix reference-point -S CON-1-SCALED.bw CON-2-SCALED.bw CON-3-SCALED.bw SUB-1-SCALED.bw SUB-2-SCALED.bw SUB-3-SCALED.bw -R MT-DownInSUB.bed -a 1000 -b 1000 -o MT-ATAC-DownInSUB.gz; 
+plotProfile -m MT-ATAC-DownInSUB.gz --samplesLabel CON-1 CON-2 CON-3 SUB-1 SUB-2 SUB-3 --refPointLabel THS-center --color green lightgreen forestgreen blue lightblue cyan --perGroup --outFileName MT-ATAC-DownInSUB; 
+plotHeatmap -m MT-ATAC-DownInSUB.gz --samplesLabel CON-1 CON-2 CON-3 SUB-1 SUB-2 SUB-3 --refPointLabel THS-center -out MT-ATAC-DownInSUB.pdf --colorMap=Blues; 
+
+computeMatrix reference-point -S CON-1-SCALED.bw CON-2-SCALED.bw CON-3-SCALED.bw SUB-1-SCALED.bw SUB-2-SCALED.bw SUB-3-SCALED.bw -R MT-UpInSUB.bed -a 1000 -b 1000 -o MT-ATAC-UpInSUB.gz; 
+plotProfile -m MT-ATAC-UpInSUB.gz --samplesLabel CON-1 CON-2 CON-3 SUB-1 SUB-2 SUB-3 --refPointLabel THS-center --color green lightgreen forestgreen blue lightblue cyan --perGroup --outFileName MT-ATAC-UpInSUB; 
+plotHeatmap -m MT-ATAC-UpInSUB.gz --samplesLabel CON-1 CON-2 CON-3 SUB-1 SUB-2 SUB-3 --refPointLabel THS-center -out MT-ATAC-UpInSUB.pdf --colorMap=Blues; 
+
+
+mkdir Up-In-SUB; 
+java -jar -Xmx512m /Users/deallabuser/Documents/Software/PeakAnnotator_Java_1.4/PeakAnnotator.jar -u TSS -p MT-UpInSUB.bed -a M-truncatula-Gene-TSS.bed -o Up-In-SUB;
+cd Up-In-SUB/; 
+awk 'NR>1 {print $7}' MT-UpInSUB.tss.bed > MT-ATAC-UpInSUB-GENES.bed; 
+cd ..;
+
+mkdir Down-In-SUB; 
+java -jar -Xmx512m /Users/deallabuser/Documents/Software/PeakAnnotator_Java_1.4/PeakAnnotator.jar -u TSS -p MT-DownInSUB.bed -a M-truncatula-Gene-TSS.bed -o Down-In-SUB;
+cd Down-In-SUB/; 
+awk 'NR>1 {print $7}' MT-DownInSUB.tss.bed > MT-ATAC-DownInSUB-GENES.bed; 
+cd ..;
+
+
+
+
+computeMatrix scale-regions -S CON-1-SCALED.bw CON-2-SCALED.bw CON-3-SCALED.bw SUB-1-SCALED.bw SUB-2-SCALED.bw SUB-3-SCALED.bw -R MT-ATAC-UpInSUB-GeneCoords.bed -a 1000 -b 1000 -o MT-ATAC-UpInSUB-GeneCoords.gz; 
+plotProfile -m MT-ATAC-UpInSUB-GeneCoords.gz --startLabel TSS --endLabel TES --samplesLabel CON-1 CON-2 CON-3 SUB-1 SUB-2 SUB-3 --color green lightgreen forestgreen blue lightblue cyan --perGroup --outFileName MT-ATAC-UpInSUB-GeneCoords; 
+plotHeatmap -m MT-ATAC-UpInSUB-GeneCoords.gz --samplesLabel CON-1 CON-2 CON-3 SUB-1 SUB-2 SUB-3 --startLabel TSS --endLabel TES -out MT-ATAC-UpInSUB-GeneCoords.pdf --colorMap=Blues; 
+
+computeMatrix scale-regions -S CON-1-SCALED.bw CON-2-SCALED.bw CON-3-SCALED.bw SUB-1-SCALED.bw SUB-2-SCALED.bw SUB-3-SCALED.bw -R MT-ATAC-DownInSUB-GeneCoords.bed -a 1000 -b 1000 -o MT-ATAC-DownInSUB-GeneCoords.gz; 
+plotProfile -m MT-ATAC-DownInSUB-GeneCoords.gz --startLabel TSS --endLabel TES --samplesLabel CON-1 CON-2 CON-3 SUB-1 SUB-2 SUB-3 --color green lightgreen forestgreen blue lightblue cyan --perGroup --outFileName MT-ATAC-DownInSUB-GeneCoords; 
+plotHeatmap -m MT-ATAC-DownInSUB-GeneCoords.gz --samplesLabel CON-1 CON-2 CON-3 SUB-1 SUB-2 SUB-3 --startLabel TSS --endLabel TES -out MT-ATAC-DownInSUB-GeneCoords.pdf --colorMap=Blues; 
+
+
+
+
+computeMatrix scale-regions -S CON-1-SCALED.bw CON-2-SCALED.bw CON-3-SCALED.bw SUB-1-SCALED.bw SUB-2-SCALED.bw SUB-3-SCALED.bw -R Medicago-ERFs.bed -a 1000 -b 1000 -o Medicago-ERFs.gz; 
+plotProfile -m Medicago-ERFs.gz --startLabel TSS --endLabel TES --samplesLabel CON-1 CON-2 CON-3 SUB-1 SUB-2 SUB-3 --color green lightgreen forestgreen blue lightblue cyan --perGroup --outFileName Medicago-ERFs; 
+plotHeatmap -m Medicago-ERFs.gz --samplesLabel CON-1 CON-2 CON-3 SUB-1 SUB-2 SUB-3 --startLabel TSS --endLabel TES -out Medicago-ERFs.pdf --colorMap=Blues; 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

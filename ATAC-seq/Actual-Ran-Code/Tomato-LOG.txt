@@ -1,0 +1,2495 @@
+samtools view -c OS-CON1.bam; 
+samtools view -c OS-CON2.bam; 
+samtools view -c OS-CON3.bam; 
+samtools view -c OS-CON4.bam; 
+samtools view -c OS-SUB1.bam;
+samtools view -c OS-SUB2.bam;
+samtools view -c OS-SUB3.bam; 
+samtools view -c OS-SUB4.bam; 
+
+samtools index B13.bam; 
+samtools index B14.bam; 
+samtools index C13.bam; 
+samtools index C103.bam; 
+samtools index D14.bam; 
+samtools index E13.bam; 
+samtools index E14.bam; 
+
+samtools view -c B13.bam; 
+samtools view -c B14.bam; 
+samtools view -c C13.bam; 
+samtools view -c C103.bam; 
+samtools view -c D14.bam; 
+samtools view -c E13.bam; 
+samtools view -c E14.bam; 
+
+1687516
+1322098
+34414072
+8984710
+658890
+16739920
+175782708
+
+multiBamSummary bins -b B13.bam B14.bam C13.bam C103.bam D14.bam E13.bam E14.bam -out SL-CON-SUB.npz -bs=5000 -p=max; 
+plotPCA -T=SL-CON-SUB -in SL-CON-SUB.npz -o SL-CON-SUB.pdf --labels SL-CON-1 SL-SUB-1 SL-SUB-2 SL-CON-2 SL-SUB-3 SL-CON-3- SL-SUB-4; 
+
+
+
+
+samtools view -s 0.7834580531384590 -b B13.bam > SL-CON-1.bam; 
+samtools view -s 1.0000000000000000 -b B14.bam > SL-SUB-1.bam; 
+samtools view -s 0.0384173660123684 -b C13.bam > SL-SUB-2.bam; 
+samtools view -s 0.1471497688851390 -b C103.bam > SL-CON-2.bam; 
+samtools view -s 0.0789787525866312 -b E13.bam > SL-CON-3.bam; 
+samtools view -s 0.0075212062383292 -b E14.bam > SL-SUB-3.bam; 
+
+samtools index SL-CON-1.bam; 
+samtools index SL-SUB-1.bam; 
+samtools index SL-SUB-2.bam; 
+samtools index SL-CON-2.bam; 
+samtools index SL-CON-3.bam; 
+samtools index SL-SUB-3.bam; 
+
+samtools view -c SL-CON-1.bam; 
+samtools view -c SL-SUB-1.bam; 
+samtools view -c SL-SUB-2.bam; 
+samtools view -c SL-CON-2.bam; 
+samtools view -c SL-CON-3.bam; 
+samtools view -c SL-SUB-3.bam; 
+
+1323094
+1322098
+1321662
+1321944
+1323014
+1321660
+
+
+multiBamSummary bins -b SL-CON-1.bam SL-CON-2.bam SL-CON-3.bam SL-SUB-1.bam SL-SUB-2.bam SL-SUB-3.bam -out SL-CON-SUB-scaled.npz -bs=5000 -p=max; 
+plotPCA -T=SL-CON-SUB -in SL-CON-SUB-scaled.npz -o SL-CON-SUB-scaled.pdf --labels SL-CON-1 SL-CON-2 SL-CON-3 SL-SUB-1 SL-SUB-2 SL-SUB-3; 
+
+
+bamCoverage -b SL-CON-1.bam -o SL-CON-1.bw -bs=1 --normalizeUsingRPKM -p=max; 
+bamCoverage -b SL-CON-2.bam -o SL-CON-2.bw -bs=1 --normalizeUsingRPKM -p=max; 
+bamCoverage -b SL-CON-3.bam -o SL-CON-3.bw -bs=1 --normalizeUsingRPKM -p=max; 
+bamCoverage -b SL-SUB-1.bam -o SL-SUB-1.bw -bs=1 --normalizeUsingRPKM -p=max; 
+bamCoverage -b SL-SUB-2.bam -o SL-SUB-2.bw -bs=1 --normalizeUsingRPKM -p=max; 
+bamCoverage -b SL-SUB-3.bam -o SL-SUB-3.bw -bs=1 --normalizeUsingRPKM -p=max; 
+
+makeTagDirectory SLCON1 SL-CON-1.bam; 
+makeTagDirectory SLCON2 SL-CON-2.bam; 
+makeTagDirectory SLCON3 SL-CON-3.bam; 
+makeTagDirectory SLSUB1 SL-SUB-1.bam; 
+makeTagDirectory SLSUB2 SL-SUB-2.bam; 
+makeTagDirectory SLSUB3 SL-SUB-3.bam; 
+
+findpeaks SLCON1/ -o SL-CON-1-150rR1 -minDist 150 -region -regionRes 1; pos2bed.pl SL-CON-1-150rR1 | bedtools sort | bedtools merge > SL-CON-1-mD150Rr1.bed; mv SL-CON-1-mD150Rr1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/M82/ROOT/PEAKS; 
+findpeaks SLCON2/ -o SL-CON-2-150rR1 -minDist 150 -region -regionRes 1; pos2bed.pl SL-CON-2-150rR1 | bedtools sort | bedtools merge > SL-CON-2-mD150Rr1.bed; mv SL-CON-2-mD150Rr1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/M82/ROOT/PEAKS; 
+findpeaks SLCON3/ -o SL-CON-3-150rR1 -minDist 150 -region -regionRes 1; pos2bed.pl SL-CON-3-150rR1 | bedtools sort | bedtools merge > SL-CON-3-mD150Rr1.bed; mv SL-CON-3-mD150Rr1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/M82/ROOT/PEAKS; 
+findpeaks SLSUB1/ -o SL-SUB-1-150rR1 -minDist 150 -region -regionRes 1; pos2bed.pl SL-SUB-1-150rR1 | bedtools sort | bedtools merge > SL-SUB-1-mD150Rr1.bed; mv SL-SUB-1-mD150Rr1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/M82/ROOT/PEAKS; 
+findpeaks SLSUB2/ -o SL-SUB-2-150rR1 -minDist 150 -region -regionRes 1; pos2bed.pl SL-SUB-2-150rR1 | bedtools sort | bedtools merge > SL-SUB-2-mD150Rr1.bed; mv SL-SUB-2-mD150Rr1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/M82/ROOT/PEAKS; 
+findpeaks SLSUB3/ -o SL-SUB-3-150rR1 -minDist 150 -region -regionRes 1; pos2bed.pl SL-SUB-3-150rR1 | bedtools sort | bedtools merge > SL-SUB-3-mD150Rr1.bed; mv SL-SUB-3-mD150Rr1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/M82/ROOT/PEAKS; 
+
+
+
+
+bedtools intersect -a SL-CON-1-mD150Rr1.bed -b SL-CON-2-mD150Rr1.bed SL-CON-3-mD150Rr1.bed > SL-CON-md150-intersects.bed; 
+bedtools intersect -a SL-SUB-1-mD150Rr1.bed -b SL-SUB-2-mD150Rr1.bed SL-SUB-3-mD150Rr1.bed > SL-SUB-md150-intersects.bed;
+
+
+cat or combine the two files by hand SL-CON-md150-intersects.bed SL-SUB-md150-intersects.bed
+bedtools sort -i SL-CON-md150-intersects.bed | bedtools merge > SL-CON-SUB-md150.bed; 
+
+
+bedtools subtract -A -a SL-CON-SUB-md150.bed -b SL-SUB-md150-intersects.bed > SL-CONonly.bed; 
+bedtools subtract -A -a SL-CON-SUB-md150.bed -b SL-CON-md150-intersects.bed > SL-SUBonly.bed; 
+
+2,074		SL-CON-SUB-md150.bed
+59			SL-CONonly.bed
+1,295		SL-SUBonly.bed
+Therefore 2,074 - 59 - 1,295 = 721		In Common
+
+
+
+htseq-count -m union -s no -i gene_id -t exon -f bam SL-CON-1.bam SL-CON-SUB-COUNTING.gff3 > SL-CON-1-counts.txt; mv SL-CON-1-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/M82/ROOT/DESeq; 
+htseq-count -m union -s no -i gene_id -t exon -f bam SL-CON-2.bam SL-CON-SUB-COUNTING.gff3 > SL-CON-2-counts.txt; mv SL-CON-2-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/M82/ROOT/DESeq; 
+htseq-count -m union -s no -i gene_id -t exon -f bam SL-CON-3.bam SL-CON-SUB-COUNTING.gff3 > SL-CON-3-counts.txt; mv SL-CON-3-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/M82/ROOT/DESeq; 
+htseq-count -m union -s no -i gene_id -t exon -f bam SL-SUB-1.bam SL-CON-SUB-COUNTING.gff3 > SL-SUB-1-counts.txt; mv SL-SUB-1-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/M82/ROOT/DESeq; 
+htseq-count -m union -s no -i gene_id -t exon -f bam SL-SUB-2.bam SL-CON-SUB-COUNTING.gff3 > SL-SUB-2-counts.txt; mv SL-SUB-2-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/M82/ROOT/DESeq; 
+htseq-count -m union -s no -i gene_id -t exon -f bam SL-SUB-3.bam SL-CON-SUB-COUNTING.gff3 > SL-SUB-3-counts.txt; mv SL-SUB-3-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/M82/ROOT/DESeq; 
+
+
+
+
+mkdir Up-In-SUB-LeastStringent; 
+java -jar -Xmx512m /Users/deallabuser/Documents/Software/PeakAnnotator_Java_1.4/PeakAnnotator.jar -u TSS -p MT-UpINSUB-LeastStringent.bed -a M-truncatula-Gene-TSS.bed -o Up-In-SUB-LeastStringent;
+cd Up-In-SUB-LeastStringent/; 
+awk 'NR>1 {print $7}' MT-UpINSUB-LeastStringent.tss.bed > MT-ATAC-UpInSUB-LEASTstringent-GENES.bed; 
+cd ..;
+
+mkdir Down-In-SUB-LeastStringent; 
+java -jar -Xmx512m /Users/deallabuser/Documents/Software/PeakAnnotator_Java_1.4/PeakAnnotator.jar -u TSS -p MT-DownINSUB-LeastStringent.bed -a M-truncatula-Gene-TSS.bed -o Down-In-SUB-LeastStringent;
+cd Down-In-SUB-LeastStringent/; 
+awk 'NR>1 {print $7}' MT-DownINSUB-LeastStringent.tss.bed > MT-ATAC-DownINSUB-LEASTstringent-GENES.bed; 
+cd ..;
+
+
+
+computeMatrix reference-point -S SL-CON-2.bw SL-CON-3.bw SL-SUB-2.bw SL-SUB-3.bw -R UpInSUB.bed -a 1000 -b 1000 -o SL-ATAC-UpInSUB.gz; 
+plotProfile -m SL-ATAC-UpInSUB.gz --samplesLabel CON-2 CON-3 SUB-2 SUB-3 --refPointLabel THS-center --color green lightgreen blue cyan --perGroup --outFileName SL-ATAC-UpInSUB; 
+plotHeatmap -m SL-ATAC-UpInSUB.gz --samplesLabel CON-2 CON-3 SUB-2 SUB-3 --refPointLabel THS-center -out SL-ATAC-UpInSUB.pdf --colorMap=Blues; 
+
+computeMatrix reference-point -S SL-CON-2.bw SL-CON-3.bw SL-SUB-2.bw SL-SUB-3.bw -R DownInSUB.bed -a 1000 -b 1000 -o SL-ATAC-DownInSUB.gz; 
+plotProfile -m SL-ATAC-DownInSUB.gz --samplesLabel CON-2 CON-3 SUB-2 SUB-3 --refPointLabel THS-center --color green lightgreen blue cyan --perGroup --outFileName SL-ATAC-DownInSUB; 
+plotHeatmap -m SL-ATAC-DownInSUB.gz --samplesLabel CON-2 CON-3 SUB-2 SUB-3 --refPointLabel THS-center -out SL-ATAC-DownInSUB.pdf --colorMap=Blues; 
+
+
+computeMatrix scale-regions -S SL-CON-2.bw SL-CON-3.bw SL-SUB-2.bw SL-SUB-3.bw -R Tomato-ERFs.bed -a 1000 -b 1000 -o SL-ERFs.gz; 
+plotProfile -m SL-ERFs.gz --startLabel TSS --endLabel TES --samplesLabel CON-2 CON-3 SUB-2 SUB-3 --refPointLabel THS-center --color green lightgreen blue cyan --perGroup --outFileName SL-ERFs; 
+plotHeatmap -m SL-ERFs.gz --startLabel TSS --endLabel TES --samplesLabel CON-2 CON-3 SUB-2 SUB-3 --refPointLabel THS-center -out SL-ERFs.pdf --colorMap=Blues; 
+
+
+computeMatrix scale-regions -S C13.bam E14.bam -R Tomato-ERFs.bed -a 1000 -b 1000 -o SL-ERFs.gz; 
+plotProfile -m SL-ERFs.gz --startLabel TSS --endLabel TES --samplesLabel CON-3 SUB-3 --refPointLabel THS-center --color green blue --perGroup --outFileName SL-ERFs; 
+plotHeatmap -m SL-ERFs.gz --startLabel TSS --endLabel TES --samplesLabel CON-3 SUB-3 --refPointLabel THS-center -out SL-ERFs.pdf --colorMap=Blues; 
+
+
+
+computeMatrix scale-regions -S SL-CON-2.bw SL-CON-3.bw SL-SUB-2.bw SL-SUB-3.bw -R Test.bed -a 1000 -b 1000 -o Test.gz; 
+plotProfile -m Test.gz --startLabel TSS --endLabel TTS --samplesLabel CON-2 CON-3 SUB-2 SUB-3 --color green lightgreen blue darkblue --perGroup --outFileName Test; 
+plotHeatmap -m Test.gz --samplesLabel CON-2 CON-3 SUB-2 SUB-3 --startLabel TSS --endLabel TTS -out Test.pdf --colorMap=Blues;
+
+computeMatrix scale-regions -S SL-CON-2.bw SL-CON-3.bw SL-SUB-2.bw SL-SUB-3.bw -R Test.bed -a 10000 -b 10000 -o Test2.gz; 
+plotProfile -m Test2.gz --startLabel TSS --endLabel TTS --samplesLabel CON-2 CON-3 SUB-2 SUB-3 --color green lightgreen blue darkblue --perGroup --outFileName Test2; 
+plotHeatmap -m Test2.gz --samplesLabel CON-2 CON-3 SUB-2 SUB-3 --startLabel TSS --endLabel TTS -out Test2.pdf --colorMap=Blues;
+
+
+computeMatrix scale-regions -S SL-CON-2.bw SL-CON-3.bw SL-SUB-2.bw SL-SUB-3.bw -R ITAG3p2-Genes.bed -a 1000 -b 1000 -o ITAG3p2-Genes.gz; 
+plotProfile -m ITAG3p2-Genes.gz --samplesLabel CON-2 CON-3 SUB-2 SUB-3 --startLabel TSS --endLabel TTS --color green lightgreen blue darkblue --perGroup --outFileName ITAG3p2-Genes; 
+plotHeatmap -m ITAG3p2-Genes.gz --samplesLabel CON-2 CON-3 SUB-2 SUB-3 --startLabel TSS --endLabel TTS -out ITAG3p2-Genes.pdf --colorMap=Blues;
+
+
+
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/M82/SHOOT; 
+samtools index AT2-B06_S3_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+samtools index AT2-E05_S18_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+samtools index Merged_C05.sorted.clean.q2.bam; 
+samtools index Merged_D06.sorted.clean.q2.bam; 
+samtools index SUBEX-C06_S7_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+
+samtools view -c AT2-B06_S3_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+samtools view -c AT2-E05_S18_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+samtools view -c Merged_C05.sorted.clean.q2.bam; 
+samtools view -c Merged_D06.sorted.clean.q2.bam; 
+samtools view -c SUBEX-C06_S7_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+
+SL-SHOOT-SUB - 14836170
+SL-SHOOT-CON - 15079964
+SL-SHOOT-CON - 39014906
+SL-SHOOT-SUB - 25677800
+SL-SHOOT-SUB - 194 - HELL NO
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/HAIRY; 
+samtools index AT2-B23_S7_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+samtools index Merged_A21.sorted.clean.q2.bam; 
+samtools index Merged_A22.sorted.clean.q2.bam; 
+samtools index Merged_B22.sorted.clean.q2.bam; 
+samtools index Merged_C21.sorted.clean.q2.bam; 
+samtools index Merged_C22.sorted.clean.q2.bam; 
+samtools index SUBEX-B21_S5_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+samtools index SUBEX-D19_S18_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+
+samtools view -c AT2-B23_S7_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+samtools view -c Merged_A21.sorted.clean.q2.bam; 
+samtools view -c Merged_A22.sorted.clean.q2.bam; 
+samtools view -c Merged_B22.sorted.clean.q2.bam; 
+samtools view -c Merged_C21.sorted.clean.q2.bam; 
+samtools view -c Merged_C22.sorted.clean.q2.bam; 
+samtools view -c SUBEX-B21_S5_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+samtools view -c SUBEX-D19_S18_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+
+B23-SL-HAIRY-CON - 12434252
+A21-SL-HAIRY-CON - 49173942
+A22-SL-HAIRY-SUB - 77829880
+B22-SL-HAIRY-SUB - 128842342
+C21-SL-HAIRY-CON - 104342890
+C22-SL-HAIRY-SUB - 43178514
+B21-SL-HAIRY-CON - 4591138 - no
+D19-SL-HAIRY-CON - 5948912 - no
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/PENN/ROOT; 
+samtools index AT2-B15_S5_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+samtools index AT2-D16_S16_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+samtools index AT2-D21_S17_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+samtools index Merged_E15.sorted.clean.q2.bam; 
+samtools index SUBEX-C16_S10_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+samtools index SUBEX-D15_S17_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+
+samtools view -c AT2-B15_S5_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+samtools view -c AT2-D16_S16_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+samtools view -c AT2-D21_S17_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+samtools view -c Merged_E15.sorted.clean.q2.bam; 
+samtools view -c SUBEX-C16_S10_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+samtools view -c SUBEX-D15_S17_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+
+PENN-ROOT-CON - 21294110
+PENN-ROOT-SUB - 12208080
+PENN-ROOT-SUB - 17002498
+PENN-ROOT-CON - 59169516
+PENN-ROOT-SUB - 2674724 - no
+PENN-ROOT-CON - 1758596 - no
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/PENN/SHOOT; 
+samtools index AT2-B07_S4_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+samtools index Merged_C08.sorted.clean.q2.bam; 
+samtools index Merged_D07.sorted.clean.q2.bam; 
+samtools index Merged_E08.sorted.clean.q2.bam; 
+samtools index SUBEX-E06_S20_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+
+samtools view -c AT2-B07_S4_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+samtools view -c Merged_C08.sorted.clean.q2.bam; 
+samtools view -c Merged_D07.sorted.clean.q2.bam; 
+samtools view -c Merged_E08.sorted.clean.q2.bam; 
+samtools view -c SUBEX-E06_S20_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+
+PENN-SHOOT-CON - 19568732
+PENN-SHOOT-SUB - 32109664
+PENN-SHOOT-CON - 20876310
+PENN-SHOOT-SUB - 96784618
+E06 is SL-SHOOT-SUB - 7608570 - NOPE
+
+
+samtools view -s 0.0075212062383292 -b E14.bam > SL-SUB-3.bam; 
+samtools index SL-SUB-3.bam; 
+samtools view -c SL-CON-1.bam;
+
+multiBamSummary bins -b SL-CON-1.bam SL-CON-2.bam SL-CON-3.bam SL-SUB-1.bam SL-SUB-2.bam SL-SUB-3.bam -out SL-CON-SUB-scaled.npz -bs=5000 -p=max; 
+plotPCA -T=SL-CON-SUB -in SL-CON-SUB-scaled.npz -o SL-CON-SUB-scaled.pdf --labels SL-CON-1 SL-CON-2 SL-CON-3 SL-SUB-1 SL-SUB-2 SL-SUB-3; 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+GENOMIC DNA
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Genomic-DNA; 
+bowtie2-build S_lycopersicum_chromosomes.3.00.fa SL3; 
+bowtie2-build Spenn.fasta SP; 
+
+bowtie2 -p 4 -x SL3 -1 SL12_S2_R1_001.fastq.gz -2 SL12_S2_R2_001.fastq.gz -S SL-gDNA.sam; 
+
+129294195 reads; of these:
+  129294195 (100.00%) were paired; of these:
+    10118532 (7.83%) aligned concordantly 0 times
+    59276030 (45.85%) aligned concordantly exactly 1 time
+    59899633 (46.33%) aligned concordantly >1 times
+    ----
+    10118532 pairs aligned concordantly 0 times; of these:
+      1587326 (15.69%) aligned discordantly 1 time
+    ----
+    8531206 pairs aligned 0 times concordantly or discordantly; of these:
+      17062412 mates make up the pairs; of these:
+        11048627 (64.75%) aligned 0 times
+        1314352 (7.70%) aligned exactly 1 time
+        4699433 (27.54%) aligned >1 times
+95.73% overall alignment rate
+
+samtools view -o SL-gDNA.bam SL-gDNA.sam; 
+samtools sort SL-gDNA.bam -o SL-gDNA.sorted.bam; 
+samtools index SL-gDNA.sorted.bam; 
+samtools view -q 2 -b SL-gDNA.sorted.bam > SL-gDNA-q2.sorted.bam;
+samtools index SL-gDNA-q2.sorted.bam; 
+samtools view -c SL-gDNA-q2.sorted.bam; 
+
+196918976
+
+bowtie2 -p 4 -x SP -1 SP11_S1_R1_001.fastq.gz -2 SP11_S1_R2_001.fastq.gz -S SP-gDNA.sam; 
+
+172327145 reads; of these:
+  172327145 (100.00%) were paired; of these:
+    6765992 (3.93%) aligned concordantly 0 times
+    61148129 (35.48%) aligned concordantly exactly 1 time
+    104413024 (60.59%) aligned concordantly >1 times
+    ----
+    6765992 pairs aligned concordantly 0 times; of these:
+      769705 (11.38%) aligned discordantly 1 time
+    ----
+    5996287 pairs aligned 0 times concordantly or discordantly; of these:
+      11992574 mates make up the pairs; of these:
+        7057703 (58.85%) aligned 0 times
+        909009 (7.58%) aligned exactly 1 time
+        4025862 (33.57%) aligned >1 times
+97.95% overall alignment rate
+
+samtools view -o SP-gDNA.bam SP-gDNA.sam; 
+samtools sort SP-gDNA.bam -o SP-gDNA.sorted.bam; 
+samtools index SP-gDNA.sorted.bam; 
+samtools view -q 2 -b SP-gDNA.sorted.bam > SP-gDNA-q2.sorted.bam;
+samtools index SP-gDNA-q2.sorted.bam; 
+samtools view -c SP-gDNA-q2.sorted.bam; 
+
+
+
+
+samtools view -c AT2-B23_S7_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+
+samtools view -c Merged_A22.sorted.clean.q2.bam; 
+samtools view -c Merged_B22.sorted.clean.q2.bam; 
+samtools view -c Merged_C21.sorted.clean.q2.bam; 
+samtools view -c Merged_C22.sorted.clean.q2.bam; 
+samtools view -c SUBEX-B21_S5_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+samtools view -c SUBEX-D19_S18_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+
+
+
+makeTagDirectory SL-HAIRY-CON-1-unscaled Merged_A21.sorted.clean.q2.bam; 
+findpeaks SL-HAIRY-CON-1-unscaled/ -o SL-HAIRY-CON-1-unscaled-150mDrR1 -minDist 150 -region -regionRes 1; 
+pos2bed.pl SL-HAIRY-CON-1-unscaled-150mDrR1 | bedtools sort | bedtools merge > MB-SL-HAIRY-CON-1-unscaled-150mDrR1.bed; 
+mv MB-SL-HAIRY-CON-1-unscaled-150mDrR1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/THS_bed_files; 
+Renamed to not have MB- and the rest will look like that:
+mv SL-HAIRY-CON-1-unscaled-150mDrR1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledBeds; 
+
+
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/M82/ROOT/StartingFiles; 
+makeTagDirectory SL-ROOT-CON-1 B13.bam; 
+findpeaks SL-ROOT-CON-1/ -o SL-ROOT-CON-1-unscaled-150mDrR1 -minDist 150 -region -regionRes 1; 
+pos2bed.pl SL-ROOT-CON-1-unscaled-150mDrR1 | bedtools sort | bedtools merge > SL-ROOT-CON-1-unscaled-150mDrR1.bed; 
+mv SL-ROOT-CON-1-unscaled-150mDrR1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledBeds; 
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/M82/ROOT/StartingFiles; 
+
+makeTagDirectory SL-ROOT-SUB-1 B14.bam; 
+findpeaks SL-ROOT-SUB-1/ -o SL-ROOT-SUB-1-unscaled-150mDrR1 -minDist 150 -region -regionRes 1; 
+pos2bed.pl SL-ROOT-SUB-1-unscaled-150mDrR1 | bedtools sort | bedtools merge > SL-ROOT-SUB-1-unscaled-150mDrR1.bed; 
+mv SL-ROOT-SUB-1-unscaled-150mDrR1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledBeds; 
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/M82/ROOT/StartingFiles; 
+
+makeTagDirectory SL-ROOT-SUB-2 C13.bam; 
+findpeaks SL-ROOT-SUB-2/ -o SL-ROOT-SUB-2-unscaled-150mDrR1 -minDist 150 -region -regionRes 1; 
+pos2bed.pl SL-ROOT-SUB-2-unscaled-150mDrR1 | bedtools sort | bedtools merge > SL-ROOT-SUB-2-unscaled-150mDrR1.bed; 
+mv SL-ROOT-SUB-2-unscaled-150mDrR1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledBeds; 
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/M82/ROOT/StartingFiles; 
+
+makeTagDirectory SL-ROOT-CON-2 C103.bam; 
+findpeaks SL-ROOT-CON-2/ -o SL-ROOT-CON-2-unscaled-150mDrR1 -minDist 150 -region -regionRes 1; 
+pos2bed.pl SL-ROOT-CON-2-unscaled-150mDrR1 | bedtools sort | bedtools merge > SL-ROOT-CON-2-unscaled-150mDrR1.bed; 
+mv SL-ROOT-CON-2-unscaled-150mDrR1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledBeds; 
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/M82/SHOOT; 
+makeTagDirectory SL-SHOOT-CON-1 Merged_C05.sorted.clean.q2.bam; 
+findpeaks SL-SHOOT-CON-1/ -o SL-SHOOT-CON-1-unscaled-150mDrR1 -minDist 150 -region -regionRes 1; 
+pos2bed.pl SL-SHOOT-CON-1-unscaled-150mDrR1 | bedtools sort | bedtools merge > SL-SHOOT-CON-1-unscaled-150mDrR1.bed; 
+mv SL-SHOOT-CON-1-unscaled-150mDrR1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledBeds; 
+
+makeTagDirectory SL-SHOOT-SUB-1 AT2-B06_S3_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+findpeaks SL-SHOOT-SUB-1/ -o SL-SHOOT-SUB-1-unscaled-150mDrR1 -minDist 150 -region -regionRes 1; 
+pos2bed.pl SL-SHOOT-SUB-1-unscaled-150mDrR1 | bedtools sort | bedtools merge > SL-SHOOT-SUB-1-unscaled-150mDrR1.bed; 
+mv SL-SHOOT-SUB-1-unscaled-150mDrR1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledBeds; 
+
+makeTagDirectory SL-SHOOT-CON-2 AT2-E05_S18_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam ; 
+findpeaks SL-SHOOT-CON-2/ -o SL-SHOOT-CON-2-unscaled-150mDrR1 -minDist 150 -region -regionRes 1; 
+pos2bed.pl SL-SHOOT-CON-2-unscaled-150mDrR1 | bedtools sort | bedtools merge > SL-SHOOT-CON-2-unscaled-150mDrR1.bed; 
+mv SL-SHOOT-CON-2-unscaled-150mDrR1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledBeds; 
+
+makeTagDirectory SL-SHOOT-SUB-2 Merged_D06.sorted.clean.q2.bam ; 
+findpeaks SL-SHOOT-SUB-2/ -o SL-SHOOT-SUB-2-unscaled-150mDrR1 -minDist 150 -region -regionRes 1; 
+pos2bed.pl SL-SHOOT-SUB-2-unscaled-150mDrR1 | bedtools sort | bedtools merge > SL-SHOOT-SUB-2-unscaled-150mDrR1.bed; 
+mv SL-SHOOT-SUB-2-unscaled-150mDrR1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledBeds; 
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/HAIRY; 
+makeTagDirectory SL-HAIRY-CON-2-unscaled AT2-B23_S7_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+findpeaks SL-HAIRY-CON-2-unscaled/ -o SL-HAIRY-CON-2-unscaled-150mDrR1 -minDist 150 -region -regionRes 1; 
+pos2bed.pl SL-HAIRY-CON-2-unscaled-150mDrR1 | bedtools sort | bedtools merge > SL-HAIRY-CON-2-unscaled-150mDrR1.bed; 
+mv SL-HAIRY-CON-2-unscaled-150mDrR1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledBeds; 
+
+makeTagDirectory SL-HAIRY-SUB-1-unscaled Merged_A22.sorted.clean.q2.bam ; 
+findpeaks SL-HAIRY-SUB-1-unscaled/ -o SL-HAIRY-SUB-1-unscaled-150mDrR1 -minDist 150 -region -regionRes 1; 
+pos2bed.pl SL-HAIRY-SUB-1-unscaled-150mDrR1 | bedtools sort | bedtools merge > SL-HAIRY-SUB-1-unscaled-150mDrR1.bed; 
+mv SL-HAIRY-SUB-1-unscaled-150mDrR1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledBeds; 
+
+makeTagDirectory SL-HAIRY-SUB-2-unscaled Merged_B22.sorted.clean.q2.bam ; 
+findpeaks SL-HAIRY-SUB-2-unscaled/ -o SL-HAIRY-SUB-2-unscaled-150mDrR1 -minDist 150 -region -regionRes 1; 
+pos2bed.pl SL-HAIRY-SUB-2-unscaled-150mDrR1 | bedtools sort | bedtools merge > SL-HAIRY-SUB-2-unscaled-150mDrR1.bed; 
+mv SL-HAIRY-SUB-2-unscaled-150mDrR1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledBeds; 
+
+makeTagDirectory SL-HAIRY-CON-3-unscaled Merged_C21.sorted.clean.q2.bam ; 
+findpeaks SL-HAIRY-CON-3-unscaled/ -o SL-HAIRY-CON-3-unscaled-150mDrR1 -minDist 150 -region -regionRes 1; 
+pos2bed.pl SL-HAIRY-CON-3-unscaled-150mDrR1 | bedtools sort | bedtools merge > SL-HAIRY-CON-3-unscaled-150mDrR1.bed; 
+mv SL-HAIRY-CON-3-unscaled-150mDrR1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledBeds; 
+
+makeTagDirectory SL-HAIRY-SUB-3-unscaled Merged_C22.sorted.clean.q2.bam ; 
+findpeaks SL-HAIRY-SUB-3-unscaled/ -o SL-HAIRY-SUB-3-unscaled-150mDrR1 -minDist 150 -region -regionRes 1; 
+pos2bed.pl SL-HAIRY-SUB-3-unscaled-150mDrR1 | bedtools sort | bedtools merge > SL-HAIRY-SUB-3-unscaled-150mDrR1.bed; 
+mv SL-HAIRY-SUB-3-unscaled-150mDrR1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledBeds; 
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/PENN/ROOT; 
+makeTagDirectory SP-ROOT-CON-1-unscaled AT2-B15_S5_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+findpeaks SP-ROOT-CON-1-unscaled/ -o SP-ROOT-CON-1-unscaled-150mDrR1 -minDist 150 -region -regionRes 1; 
+pos2bed.pl SP-ROOT-CON-1-unscaled-150mDrR1 | bedtools sort | bedtools merge > SP-ROOT-CON-1-unscaled-150mDrR1.bed; 
+mv SP-ROOT-CON-1-unscaled-150mDrR1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledBeds; 
+
+makeTagDirectory SP-ROOT-SUB-1-unscaled AT2-D16_S16_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+findpeaks SP-ROOT-SUB-1-unscaled/ -o SP-ROOT-SUB-1-unscaled-150mDrR1 -minDist 150 -region -regionRes 1; 
+pos2bed.pl SP-ROOT-SUB-1-unscaled-150mDrR1 | bedtools sort | bedtools merge > SP-ROOT-SUB-1-unscaled-150mDrR1.bed; 
+mv SP-ROOT-SUB-1-unscaled-150mDrR1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledBeds; 
+
+makeTagDirectory SP-ROOT-SUB-2-unscaled AT2-D21_S17_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+findpeaks SP-ROOT-SUB-2-unscaled/ -o SP-ROOT-SUB-2-unscaled-150mDrR1 -minDist 150 -region -regionRes 1; 
+pos2bed.pl SP-ROOT-SUB-2-unscaled-150mDrR1 | bedtools sort | bedtools merge > SP-ROOT-SUB-2-unscaled-150mDrR1.bed; 
+mv SP-ROOT-SUB-2-unscaled-150mDrR1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledBeds; 
+
+makeTagDirectory SP-ROOT-CON-2-unscaled Merged_E15.sorted.clean.q2.bam; 
+findpeaks SP-ROOT-CON-2-unscaled/ -o SP-ROOT-CON-2-unscaled-150mDrR1 -minDist 150 -region -regionRes 1; 
+pos2bed.pl SP-ROOT-CON-2-unscaled-150mDrR1 | bedtools sort | bedtools merge > SP-ROOT-CON-2-unscaled-150mDrR1.bed; 
+mv SP-ROOT-CON-2-unscaled-150mDrR1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledBeds; 
+
+makeTagDirectory SP-ROOT-SUB-3-unscaled SUBEX-C16_S10_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+findpeaks SP-ROOT-SUB-3-unscaled/ -o SP-ROOT-SUB-3-unscaled-150mDrR1 -minDist 150 -region -regionRes 1; 
+pos2bed.pl SP-ROOT-SUB-3-unscaled-150mDrR1 | bedtools sort | bedtools merge > SP-ROOT-SUB-3-unscaled-150mDrR1.bed; 
+mv SP-ROOT-SUB-3-unscaled-150mDrR1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledBeds; 
+
+makeTagDirectory SP-ROOT-CON-3-unscaled SUBEX-D15_S17_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+findpeaks SP-ROOT-CON-3-unscaled/ -o SP-ROOT-CON-3-unscaled-150mDrR1 -minDist 150 -region -regionRes 1; 
+pos2bed.pl SP-ROOT-CON-3-unscaled-150mDrR1 | bedtools sort | bedtools merge > SP-ROOT-CON-3-unscaled-150mDrR1.bed; 
+mv SP-ROOT-CON-3-unscaled-150mDrR1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledBeds; 
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/PENN/SHOOT; 
+makeTagDirectory SP-SHOOT-CON-1-unscaled AT2-B07_S4_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+findpeaks SP-SHOOT-CON-1-unscaled/ -o SP-SHOOT-CON-1-unscaled-150mDrR1 -minDist 150 -region -regionRes 1; 
+pos2bed.pl SP-SHOOT-CON-1-unscaled-150mDrR1 | bedtools sort | bedtools merge > SP-SHOOT-CON-1-unscaled-150mDrR1.bed; 
+mv SP-SHOOT-CON-1-unscaled-150mDrR1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledBeds; 
+
+makeTagDirectory SP-SHOOT-SUB-1-unscaled Merged_C08.sorted.clean.q2.bam; 
+findpeaks SP-SHOOT-SUB-1-unscaled/ -o SP-SHOOT-SUB-1-unscaled-150mDrR1 -minDist 150 -region -regionRes 1; 
+pos2bed.pl SP-SHOOT-SUB-1-unscaled-150mDrR1 | bedtools sort | bedtools merge > SP-SHOOT-SUB-1-unscaled-150mDrR1.bed; 
+mv SP-SHOOT-SUB-1-unscaled-150mDrR1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledBeds; 
+
+makeTagDirectory SP-SHOOT-CON-2-unscaled Merged_D07.sorted.clean.q2.bam; 
+findpeaks SP-SHOOT-CON-2-unscaled/ -o SP-SHOOT-CON-2-unscaled-150mDrR1 -minDist 150 -region -regionRes 1; 
+pos2bed.pl SP-SHOOT-CON-2-unscaled-150mDrR1 | bedtools sort | bedtools merge > SP-SHOOT-CON-2-unscaled-150mDrR1.bed; 
+mv SP-SHOOT-CON-2-unscaled-150mDrR1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledBeds; 
+
+makeTagDirectory SP-SHOOT-SUB-2-unscaled Merged_E08.sorted.clean.q2.bam; 
+findpeaks SP-SHOOT-SUB-2-unscaled/ -o SP-SHOOT-SUB-2-unscaled-150mDrR1 -minDist 150 -region -regionRes 1; 
+pos2bed.pl SP-SHOOT-SUB-2-unscaled-150mDrR1 | bedtools sort | bedtools merge > SP-SHOOT-SUB-2-unscaled-150mDrR1.bed; 
+mv SP-SHOOT-SUB-2-unscaled-150mDrR1.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledBeds; 
+
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledBeds; 
+
+bedtools intersect -wa -a SL-ROOT-CON-1-unscaled-150mDrR1.bed -b SL-ROOT-CON-2-unscaled-150mDrR1.bed > SL-ROOT-CON-1and2--unscaled-150mDrR1-wa-intersects.bed; 
+bedtools intersect -wa -a SL-ROOT-CON-2-unscaled-150mDrR1.bed -b SL-ROOT-CON-1-unscaled-150mDrR1.bed > SL-ROOT-CON-1and2--unscaled-150mDrR1-wb-intersects.bed; 
+cat SL-ROOT-CON-1and2--unscaled-150mDrR1-wa-intersects.bed SL-ROOT-CON-1and2--unscaled-150mDrR1-wb-intersects.bed > SL-ROOT-CON-1and2-md150-wawb-intersects.bed; 
+bedtools sort -i SL-ROOT-CON-1and2-md150-wawb-intersects.bed | bedtools merge > SL-ROOT-CON-1and2.bed; 
+bedtools intersect -wa -a SL-ROOT-SUB-1-unscaled-150mDrR1.bed -b SL-ROOT-SUB-2-unscaled-150mDrR1.bed > SL-ROOT-SUB-1and2--unscaled-150mDrR1-wa-intersects.bed; 
+bedtools intersect -wa -a SL-ROOT-SUB-2-unscaled-150mDrR1.bed -b SL-ROOT-SUB-1-unscaled-150mDrR1.bed > SL-ROOT-SUB-1and2--unscaled-150mDrR1-wb-intersects.bed; 
+cat SL-ROOT-SUB-1and2--unscaled-150mDrR1-wa-intersects.bed SL-ROOT-SUB-1and2--unscaled-150mDrR1-wb-intersects.bed > SL-ROOT-SUB-1and2-md150-wawb-intersects.bed; 
+bedtools sort -i SL-ROOT-SUB-1and2-md150-wawb-intersects.bed | bedtools merge > SL-ROOT-SUB-1and2.bed; 
+cat SL-ROOT-CON-1and2.bed SL-ROOT-SUB-1and2.bed > SL-ROOT-CON-and-SUB-1and2.bed; 
+
+bedtools intersect -wa -a SL-SHOOT-CON-1-unscaled-150mDrR1.bed -b SL-SHOOT-CON-2-unscaled-150mDrR1.bed > SL-SHOOT-CON-1and2--unscaled-150mDrR1-wa-intersects.bed; 
+bedtools intersect -wa -a SL-SHOOT-CON-2-unscaled-150mDrR1.bed -b SL-SHOOT-CON-1-unscaled-150mDrR1.bed > SL-SHOOT-CON-1and2--unscaled-150mDrR1-wb-intersects.bed; 
+cat SL-SHOOT-CON-1and2--unscaled-150mDrR1-wa-intersects.bed SL-SHOOT-CON-1and2--unscaled-150mDrR1-wb-intersects.bed > SL-SHOOT-CON-1and2-md150-wawb-intersects.bed; 
+bedtools sort -i SL-SHOOT-CON-1and2-md150-wawb-intersects.bed | bedtools merge > SL-SHOOT-CON-1and2.bed; 
+bedtools intersect -wa -a SL-SHOOT-SUB-1-unscaled-150mDrR1.bed -b SL-SHOOT-SUB-2-unscaled-150mDrR1.bed > SL-SHOOT-SUB-1and2--unscaled-150mDrR1-wa-intersects.bed; 
+bedtools intersect -wa -a SL-SHOOT-SUB-2-unscaled-150mDrR1.bed -b SL-SHOOT-SUB-1-unscaled-150mDrR1.bed > SL-SHOOT-SUB-1and2--unscaled-150mDrR1-wb-intersects.bed; 
+cat SL-SHOOT-SUB-1and2--unscaled-150mDrR1-wa-intersects.bed SL-SHOOT-SUB-1and2--unscaled-150mDrR1-wb-intersects.bed > SL-SHOOT-SUB-1and2-md150-wawb-intersects.bed; 
+bedtools sort -i SL-SHOOT-SUB-1and2-md150-wawb-intersects.bed | bedtools merge > SL-SHOOT-SUB-1and2.bed; 
+cat SL-SHOOT-CON-1and2.bed SL-SHOOT-SUB-1and2.bed > SL-SHOOT-CON-and-SUB-1and2.bed; 
+
+bedtools intersect -wa -a SL-HAIRY-SUB-1-unscaled-150mDrR1.bed -b SL-HAIRY-SUB-2-unscaled-150mDrR1.bed > SL-HAIRY-SUB-1and2--unscaled-150mDrR1-wa-intersects.bed; 
+bedtools intersect -wa -a SL-HAIRY-SUB-2-unscaled-150mDrR1.bed -b SL-HAIRY-SUB-1-unscaled-150mDrR1.bed > SL-HAIRY-SUB-1and2--unscaled-150mDrR1-wb-intersects.bed; 
+cat SL-HAIRY-SUB-1and2--unscaled-150mDrR1-wa-intersects.bed SL-HAIRY-SUB-1and2--unscaled-150mDrR1-wb-intersects.bed > SL-HAIRY-SUB-1and2-md150-wawb-intersects.bed; 
+bedtools sort -i SL-HAIRY-SUB-1and2-md150-wawb-intersects.bed | bedtools merge > SL-HAIRY-SUB-1and2.bed; 
+bedtools intersect -wa -a SL-HAIRY-SUB-1-unscaled-150mDrR1.bed -b SL-HAIRY-SUB-3-unscaled-150mDrR1.bed > SL-HAIRY-SUB-1and3--unscaled-150mDrR1-wa-intersects.bed; 
+bedtools intersect -wa -a SL-HAIRY-SUB-3-unscaled-150mDrR1.bed -b SL-HAIRY-SUB-1-unscaled-150mDrR1.bed > SL-HAIRY-SUB-1and3--unscaled-150mDrR1-wb-intersects.bed; 
+cat SL-HAIRY-SUB-1and3--unscaled-150mDrR1-wa-intersects.bed SL-HAIRY-SUB-1and3--unscaled-150mDrR1-wb-intersects.bed > SL-HAIRY-SUB-1and3-md150-wawb-intersects.bed; 
+bedtools sort -i SL-HAIRY-SUB-1and3-md150-wawb-intersects.bed | bedtools merge > SL-HAIRY-SUB-1and3.bed; 
+bedtools intersect -wa -a SL-HAIRY-SUB-2-unscaled-150mDrR1.bed -b SL-HAIRY-SUB-3-unscaled-150mDrR1.bed > SL-HAIRY-SUB-2and3--unscaled-150mDrR1-wa-intersects.bed; 
+bedtools intersect -wa -a SL-HAIRY-SUB-3-unscaled-150mDrR1.bed -b SL-HAIRY-SUB-2-unscaled-150mDrR1.bed > SL-HAIRY-SUB-2and3--unscaled-150mDrR1-wb-intersects.bed; 
+cat SL-HAIRY-SUB-2and3--unscaled-150mDrR1-wa-intersects.bed SL-HAIRY-SUB-2and3--unscaled-150mDrR1-wb-intersects.bed > SL-HAIRY-SUB-2and3-md150-wawb-intersects.bed; 
+bedtools sort -i SL-HAIRY-SUB-2and3-md150-wawb-intersects.bed | bedtools merge > SL-HAIRY-SUB-2and3.bed; 
+
+bedtools intersect -wa -a SL-HAIRY-CON-1-unscaled-150mDrR1.bed -b SL-HAIRY-CON-2-unscaled-150mDrR1.bed > SL-HAIRY-CON-1and2--unscaled-150mDrR1-wa-intersects.bed; 
+bedtools intersect -wa -a SL-HAIRY-CON-2-unscaled-150mDrR1.bed -b SL-HAIRY-CON-1-unscaled-150mDrR1.bed > SL-HAIRY-CON-1and2--unscaled-150mDrR1-wb-intersects.bed; 
+cat SL-HAIRY-CON-1and2--unscaled-150mDrR1-wa-intersects.bed SL-HAIRY-CON-1and2--unscaled-150mDrR1-wb-intersects.bed > SL-HAIRY-CON-1and2-md150-wawb-intersects.bed; 
+bedtools sort -i SL-HAIRY-CON-1and2-md150-wawb-intersects.bed | bedtools merge > SL-HAIRY-CON-1and2.bed; 
+bedtools intersect -wa -a SL-HAIRY-CON-1-unscaled-150mDrR1.bed -b SL-HAIRY-CON-3-unscaled-150mDrR1.bed > SL-HAIRY-CON-1and3--unscaled-150mDrR1-wa-intersects.bed; 
+bedtools intersect -wa -a SL-HAIRY-CON-3-unscaled-150mDrR1.bed -b SL-HAIRY-CON-1-unscaled-150mDrR1.bed > SL-HAIRY-CON-1and3--unscaled-150mDrR1-wb-intersects.bed; 
+cat SL-HAIRY-CON-1and3--unscaled-150mDrR1-wa-intersects.bed SL-HAIRY-CON-1and3--unscaled-150mDrR1-wb-intersects.bed > SL-HAIRY-CON-1and3-md150-wawb-intersects.bed; 
+bedtools sort -i SL-HAIRY-CON-1and3-md150-wawb-intersects.bed | bedtools merge > SL-HAIRY-CON-1and3.bed; 
+bedtools intersect -wa -a SL-HAIRY-CON-2-unscaled-150mDrR1.bed -b SL-HAIRY-CON-3-unscaled-150mDrR1.bed > SL-HAIRY-CON-2and3--unscaled-150mDrR1-wa-intersects.bed; 
+bedtools intersect -wa -a SL-HAIRY-CON-3-unscaled-150mDrR1.bed -b SL-HAIRY-CON-2-unscaled-150mDrR1.bed > SL-HAIRY-CON-2and3--unscaled-150mDrR1-wb-intersects.bed; 
+cat SL-HAIRY-CON-2and3--unscaled-150mDrR1-wa-intersects.bed SL-HAIRY-CON-2and3--unscaled-150mDrR1-wb-intersects.bed > SL-HAIRY-CON-2and3-md150-wawb-intersects.bed; 
+bedtools sort -i SL-HAIRY-CON-2and3-md150-wawb-intersects.bed | bedtools merge > SL-HAIRY-CON-2and3.bed; 
+
+cat SL-HAIRY-SUB-1and2.bed SL-HAIRY-SUB-1and3.bed SL-HAIRY-SUB-2and3.bed > SL-HAIRY-SUB-all3reps.bed; 
+bedtools sort -i SL-HAIRY-SUB-all3reps.bed | bedtools merge > SL-HAIRY-SUB-merged-all3reps.bed; 
+cat SL-HAIRY-CON-1and2.bed SL-HAIRY-CON-1and3.bed SL-HAIRY-CON-2and3.bed > SL-HAIRY-CON-all3reps.bed; 
+bedtools sort -i SL-HAIRY-CON-all3reps.bed | bedtools merge > SL-HAIRY-CON-merged-all3reps.bed; 
+cat SL-HAIRY-SUB-merged-all3reps.bed SL-HAIRY-CON-merged-all3reps.bed > SL-HAIRY-CON-and-SUB-all3reps.bed; 
+mv SL-HAIRY-CON-and-SUB-all3reps.bedd MAIN/; 
+cat SL-HAIRY-SUB-all3reps.bed SL-HAIRY-CON-all3reps.bed > SL-HAIRY-CON-and-SUB-all3reps.bed; 
+
+bedtools intersect -wa -a SP-ROOT-CON-1-unscaled-150mDrR1.bed -b SP-ROOT-CON-2-unscaled-150mDrR1.bed > SP-ROOT-CON-1and2--unscaled-150mDrR1-wa-intersects.bed; 
+bedtools intersect -wa -a SP-ROOT-CON-2-unscaled-150mDrR1.bed -b SP-ROOT-CON-1-unscaled-150mDrR1.bed > SP-ROOT-CON-1and2--unscaled-150mDrR1-wb-intersects.bed; 
+cat SP-ROOT-CON-1and2--unscaled-150mDrR1-wa-intersects.bed SP-ROOT-CON-1and2--unscaled-150mDrR1-wb-intersects.bed > SP-ROOT-CON-1and2-md150-wawb-intersects.bed; 
+bedtools sort -i SP-ROOT-CON-1and2-md150-wawb-intersects.bed | bedtools merge > SP-ROOT-CON-1and2.bed; 
+bedtools intersect -wa -a SP-ROOT-CON-1-unscaled-150mDrR1.bed -b SP-ROOT-CON-3-unscaled-150mDrR1.bed > SP-ROOT-CON-1and3--unscaled-150mDrR1-wa-intersects.bed; 
+bedtools intersect -wa -a SP-ROOT-CON-3-unscaled-150mDrR1.bed -b SP-ROOT-CON-1-unscaled-150mDrR1.bed > SP-ROOT-CON-1and3--unscaled-150mDrR1-wb-intersects.bed; 
+cat SP-ROOT-CON-1and3--unscaled-150mDrR1-wa-intersects.bed SP-ROOT-CON-1and3--unscaled-150mDrR1-wb-intersects.bed > SP-ROOT-CON-1and3-md150-wawb-intersects.bed; 
+bedtools sort -i SP-ROOT-CON-1and3-md150-wawb-intersects.bed | bedtools merge > SP-ROOT-CON-1and3.bed; 
+bedtools intersect -wa -a SP-ROOT-CON-2-unscaled-150mDrR1.bed -b SP-ROOT-CON-3-unscaled-150mDrR1.bed > SP-ROOT-CON-2and3--unscaled-150mDrR1-wa-intersects.bed; 
+bedtools intersect -wa -a SP-ROOT-CON-3-unscaled-150mDrR1.bed -b SP-ROOT-CON-2-unscaled-150mDrR1.bed > SP-ROOT-CON-2and3--unscaled-150mDrR1-wb-intersects.bed; 
+cat SP-ROOT-CON-2and3--unscaled-150mDrR1-wa-intersects.bed SP-ROOT-CON-2and3--unscaled-150mDrR1-wb-intersects.bed > SP-ROOT-CON-2and3-md150-wawb-intersects.bed; 
+bedtools sort -i SP-ROOT-CON-2and3-md150-wawb-intersects.bed | bedtools merge > SP-ROOT-CON-2and3.bed; 
+
+bedtools intersect -wa -a SP-ROOT-SUB-1-unscaled-150mDrR1.bed -b SP-ROOT-SUB-2-unscaled-150mDrR1.bed > SP-ROOT-SUB-1and2--unscaled-150mDrR1-wa-intersects.bed; 
+bedtools intersect -wa -a SP-ROOT-SUB-2-unscaled-150mDrR1.bed -b SP-ROOT-SUB-1-unscaled-150mDrR1.bed > SP-ROOT-SUB-1and2--unscaled-150mDrR1-wb-intersects.bed; 
+cat SP-ROOT-SUB-1and2--unscaled-150mDrR1-wa-intersects.bed SP-ROOT-SUB-1and2--unscaled-150mDrR1-wb-intersects.bed > SP-ROOT-SUB-1and2-md150-wawb-intersects.bed; 
+bedtools sort -i SP-ROOT-SUB-1and2-md150-wawb-intersects.bed | bedtools merge > SP-ROOT-SUB-1and2.bed; 
+bedtools intersect -wa -a SP-ROOT-SUB-1-unscaled-150mDrR1.bed -b SP-ROOT-SUB-3-unscaled-150mDrR1.bed > SP-ROOT-SUB-1and3--unscaled-150mDrR1-wa-intersects.bed; 
+bedtools intersect -wa -a SP-ROOT-SUB-3-unscaled-150mDrR1.bed -b SP-ROOT-SUB-1-unscaled-150mDrR1.bed > SP-ROOT-SUB-1and3--unscaled-150mDrR1-wb-intersects.bed; 
+cat SP-ROOT-SUB-1and3--unscaled-150mDrR1-wa-intersects.bed SP-ROOT-SUB-1and3--unscaled-150mDrR1-wb-intersects.bed > SP-ROOT-SUB-1and3-md150-wawb-intersects.bed; 
+bedtools sort -i SP-ROOT-SUB-1and3-md150-wawb-intersects.bed | bedtools merge > SP-ROOT-SUB-1and3.bed; 
+bedtools intersect -wa -a SP-ROOT-SUB-2-unscaled-150mDrR1.bed -b SP-ROOT-SUB-3-unscaled-150mDrR1.bed > SP-ROOT-SUB-2and3--unscaled-150mDrR1-wa-intersects.bed; 
+bedtools intersect -wa -a SP-ROOT-SUB-3-unscaled-150mDrR1.bed -b SP-ROOT-SUB-2-unscaled-150mDrR1.bed > SP-ROOT-SUB-2and3--unscaled-150mDrR1-wb-intersects.bed; 
+cat SP-ROOT-SUB-2and3--unscaled-150mDrR1-wa-intersects.bed SP-ROOT-SUB-2and3--unscaled-150mDrR1-wb-intersects.bed > SP-ROOT-SUB-2and3-md150-wawb-intersects.bed; 
+bedtools sort -i SP-ROOT-SUB-2and3-md150-wawb-intersects.bed | bedtools merge > SP-ROOT-SUB-2and3.bed; 
+
+cat SP-ROOT-SUB-1and2.bed SP-ROOT-SUB-1and3.bed SP-ROOT-SUB-2and3.bed > SP-ROOT-SUB-all3reps.bed; 
+bedtools sort -i SP-ROOT-SUB-all3reps.bed | bedtools merge > SP-ROOT-SUB-merged-all3reps.bed; 
+cat SP-ROOT-CON-1and2.bed SP-ROOT-CON-1and3.bed SP-ROOT-CON-2and3.bed > SP-ROOT-CON-all3reps.bed; 
+bedtools sort -i SP-ROOT-CON-all3reps.bed | bedtools merge > SP-ROOT-CON-merged-all3reps.bed; 
+cat SP-ROOT-SUB-merged-all3reps.bed SP-ROOT-CON-merged-all3reps.bed > SP-ROOT-CON-and-SUB-all3reps.bed; 
+mv SP-ROOT-CON-and-SUB-all3reps.bedd MAIN/; 
+cat SP-ROOT-SUB-all3reps.bed SP-ROOT-CON-all3reps.bed > SP-ROOT-CON-and-SUB-all3reps.bed; 
+
+bedtools intersect -wa -a SP-SHOOT-CON-1-unscaled-150mDrR1.bed -b SP-SHOOT-CON-2-unscaled-150mDrR1.bed > SP-SHOOT-CON-1and2--unscaled-150mDrR1-wa-intersects.bed; 
+bedtools intersect -wa -a SP-SHOOT-CON-2-unscaled-150mDrR1.bed -b SP-SHOOT-CON-1-unscaled-150mDrR1.bed > SP-SHOOT-CON-1and2--unscaled-150mDrR1-wb-intersects.bed; 
+cat SP-SHOOT-CON-1and2--unscaled-150mDrR1-wa-intersects.bed SP-SHOOT-CON-1and2--unscaled-150mDrR1-wb-intersects.bed > SP-SHOOT-CON-1and2-md150-wawb-intersects.bed; 
+bedtools sort -i SP-SHOOT-CON-1and2-md150-wawb-intersects.bed | bedtools merge > SP-SHOOT-CON-1and2.bed; 
+bedtools intersect -wa -a SP-SHOOT-SUB-1-unscaled-150mDrR1.bed -b SP-SHOOT-SUB-2-unscaled-150mDrR1.bed > SP-SHOOT-SUB-1and2--unscaled-150mDrR1-wa-intersects.bed; 
+bedtools intersect -wa -a SP-SHOOT-SUB-2-unscaled-150mDrR1.bed -b SP-SHOOT-SUB-1-unscaled-150mDrR1.bed > SP-SHOOT-SUB-1and2--unscaled-150mDrR1-wb-intersects.bed; 
+cat SP-SHOOT-SUB-1and2--unscaled-150mDrR1-wa-intersects.bed SP-SHOOT-SUB-1and2--unscaled-150mDrR1-wb-intersects.bed > SP-SHOOT-SUB-1and2-md150-wawb-intersects.bed; 
+bedtools sort -i SP-SHOOT-SUB-1and2-md150-wawb-intersects.bed | bedtools merge > SP-SHOOT-SUB-1and2.bed; 
+cat SP-SHOOT-CON-1and2.bed SP-SHOOT-SUB-1and2.bed > SP-SHOOT-CON-and-SUB-1and2.bed; 
+
+mkdir MAIN; 
+
+mv SL-ROOT-CON-and-SUB-1and2.bed MAIN/; 
+mv SL-SHOOT-CON-and-SUB-1and2.bed MAIN/; 
+mv SL-HAIRY-CON-and-SUB-all3reps.bed MAIN/; 
+mv SP-ROOT-CON-and-SUB-all3reps.bed MAIN/; 
+mv SP-SHOOT-CON-and-SUB-1and2.bed MAIN/; 
+
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/M82/ROOT/StartingFiles; 
+
+htseq-count -m union -s no -i gene_id -t exon -f bam B13.bam SL-ROOT-CON-and-SUB-1and2.gff3 > SL-ROOT-CON-1-unscaled-counts.txt; 
+mv SL-ROOT-CON-1-unscaled-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledDEseq/SL-ROOT; 
+
+htseq-count -m union -s no -i gene_id -t exon -f bam C103.bam SL-ROOT-CON-and-SUB-1and2.gff3 > SL-ROOT-CON-2-unscaled-counts.txt; 
+mv SL-ROOT-CON-2-unscaled-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledDEseq/SL-ROOT; 
+
+htseq-count -m union -s no -i gene_id -t exon -f bam B14.bam SL-ROOT-CON-and-SUB-1and2.gff3 > SL-ROOT-SUB-1-unscaled-counts.txt; 
+mv SL-ROOT-SUB-1-unscaled-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledDEseq/SL-ROOT; 
+
+htseq-count -m union -s no -i gene_id -t exon -f bam C13.bam SL-ROOT-CON-and-SUB-1and2.gff3 > SL-ROOT-SUB-2-unscaled-counts.txt; 
+mv SL-ROOT-SUB-2-unscaled-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledDEseq/SL-ROOT; 
+
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/M82/SHOOT; 
+
+htseq-count -m union -s no -i gene_id -t exon -f bam Merged_C05.sorted.clean.q2.bam SL-SHOOT-CON-and-SUB-1and2.gff3 > SL-SHOOT-CON-1-unscaled-counts.txt; 
+mv SL-SHOOT-CON-1-unscaled-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledDEseq/SL-SHOOT; 
+
+htseq-count -m union -s no -i gene_id -t exon -f bam AT2-B06_S3_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam SL-SHOOT-CON-and-SUB-1and2.gff3 > SL-SHOOT-SUB-1-unscaled-counts.txt; 
+mv SL-SHOOT-SUB-1-unscaled-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledDEseq/SL-SHOOT; 
+
+htseq-count -m union -s no -i gene_id -t exon -f bam AT2-E05_S18_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam SL-SHOOT-CON-and-SUB-1and2.gff3 > SL-SHOOT-CON-2-unscaled-counts.txt; 
+mv SL-SHOOT-CON-2-unscaled-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledDEseq/SL-SHOOT; 
+
+htseq-count -m union -s no -i gene_id -t exon -f bam Merged_D06.sorted.clean.q2.bam SL-SHOOT-CON-and-SUB-1and2.gff3 > SL-SHOOT-SUB-2-unscaled-counts.txt; 
+mv SL-SHOOT-SUB-2-unscaled-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledDEseq/SL-SHOOT; 
+
+
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/HAIRY; 
+
+htseq-count -m union -s no -i gene_id -t exon -f bam Merged_A21.sorted.clean.q2.bam SL-HAIRY-CON-and-SUB-all3reps.gff3 > SL-HAIRY-CON-1-unscaled-counts.txt; 
+mv SL-HAIRY-CON-1-unscaled-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledDEseq/SL-HAIRY; 
+
+htseq-count -m union -s no -i gene_id -t exon -f bam AT2-B23_S7_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam SL-HAIRY-CON-and-SUB-all3reps.gff3 > SL-HAIRY-CON-2-unscaled-counts.txt; 
+mv SL-HAIRY-CON-2-unscaled-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledDEseq/SL-HAIRY; 
+
+htseq-count -m union -s no -i gene_id -t exon -f bam Merged_A22.sorted.clean.q2.bam SL-HAIRY-CON-and-SUB-all3reps.gff3 > SL-HAIRY-SUB-1-unscaled-counts.txt; 
+mv SL-HAIRY-SUB-1-unscaled-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledDEseq/SL-HAIRY; 
+
+htseq-count -m union -s no -i gene_id -t exon -f bam Merged_B22.sorted.clean.q2.bam SL-HAIRY-CON-and-SUB-all3reps.gff3 > SL-HAIRY-SUB-2-unscaled-counts.txt; 
+mv SL-HAIRY-SUB-2-unscaled-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledDEseq/SL-HAIRY; 
+
+htseq-count -m union -s no -i gene_id -t exon -f bam Merged_C21.sorted.clean.q2.bam SL-HAIRY-CON-and-SUB-all3reps.gff3 > SL-HAIRY-CON-3-unscaled-counts.txt; 
+mv SL-HAIRY-CON-3-unscaled-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledDEseq/SL-HAIRY; 
+
+htseq-count -m union -s no -i gene_id -t exon -f bam Merged_C22.sorted.clean.q2.bam SL-HAIRY-CON-and-SUB-all3reps.gff3 > SL-HAIRY-SUB-3-unscaled-counts.txt; 
+mv SL-HAIRY-SUB-3-unscaled-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledDEseq/SL-HAIRY; 
+
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/PENN/ROOT; 
+
+htseq-count -m union -s no -i gene_id -t exon -f bam AT2-B15_S5_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam SP-ROOT-CON-and-SUB-all3reps.gff3 > SP-ROOT-CON-1-unscaled-counts.txt; 
+mv SP-ROOT-CON-1-unscaled-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledDEseq/SP-ROOT; 
+
+htseq-count -m union -s no -i gene_id -t exon -f bam AT2-D16_S16_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam SP-ROOT-CON-and-SUB-all3reps.gff3 > SP-ROOT-SUB-1-unscaled-counts.txt; 
+mv SP-ROOT-SUB-1-unscaled-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledDEseq/SP-ROOT; 
+
+htseq-count -m union -s no -i gene_id -t exon -f bam Merged_E15.sorted.clean.q2.bam SP-ROOT-CON-and-SUB-all3reps.gff3 > SP-ROOT-CON-2-unscaled-counts.txt; 
+mv SP-ROOT-CON-2-unscaled-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledDEseq/SP-ROOT; 
+
+htseq-count -m union -s no -i gene_id -t exon -f bam AT2-D21_S17_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam SP-ROOT-CON-and-SUB-all3reps.gff3 > SP-ROOT-SUB-2-unscaled-counts.txt; 
+mv SP-ROOT-SUB-2-unscaled-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledDEseq/SP-ROOT; 
+
+htseq-count -m union -s no -i gene_id -t exon -f bam SUBEX-C16_S10_R1_001_1P.fastq.sam.sorted.clean.q2.bam SP-ROOT-CON-and-SUB-all3reps.gff3 > SP-ROOT-SUB-3-unscaled-counts.txt; 
+mv SP-ROOT-SUB-3-unscaled-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledDEseq/SP-ROOT; 
+
+htseq-count -m union -s no -i gene_id -t exon -f bam SUBEX-D15_S17_R1_001_1P.fastq.sam.sorted.clean.q2.bam SP-ROOT-CON-and-SUB-all3reps.gff3 > SP-ROOT-CON-3-unscaled-counts.txt; 
+mv SP-ROOT-CON-3-unscaled-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledDEseq/SP-ROOT; 
+
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/PENN/SHOOT; 
+
+htseq-count -m union -s no -i gene_id -t exon -f bam AT2-B07_S4_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam SP-SHOOT-CON-and-SUB-1and2.gff3 > SP-SHOOT-CON-1-unscaled-counts.txt; 
+mv SP-SHOOT-CON-1-unscaled-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledDEseq/SP-SHOOT; 
+
+htseq-count -m union -s no -i gene_id -t exon -f bam Merged_D07.sorted.clean.q2.bam SP-SHOOT-CON-and-SUB-1and2.gff3 > SP-SHOOT-CON-2-unscaled-counts.txt; 
+mv SP-SHOOT-CON-2-unscaled-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledDEseq/SP-SHOOT; 
+
+htseq-count -m union -s no -i gene_id -t exon -f bam Merged_C08.sorted.clean.q2.bam SP-SHOOT-CON-and-SUB-1and2.gff3 > SP-SHOOT-SUB-1-unscaled-counts.txt; 
+mv SP-SHOOT-SUB-1-unscaled-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledDEseq/SP-SHOOT; 
+
+htseq-count -m union -s no -i gene_id -t exon -f bam Merged_E08.sorted.clean.q2.bam SP-SHOOT-CON-and-SUB-1and2.gff3 > SP-SHOOT-SUB-2-unscaled-counts.txt; 
+mv SP-SHOOT-SUB-2-unscaled-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledDEseq/SP-SHOOT; 
+
+
+
+To fix the scaling and bigwig screwup:
+samtools view -c B13.bam; 
+samtools view -c B14.bam; 
+samtools view -c C13.bam; 
+samtools view -c C103.bam; 
+
+1687516
+1322098
+34414072
+8984710
+
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/M82/ROOT/StartingFiles; 
+
+samtools view -s 0.7834580531384590 -b B13.bam > SL-ROOT-CON-1-scaled4.bam; 
+samtools view -s 1.0000000000000000 -b B14.bam > SL-ROOT-SUB-1-scaled4.bam; 
+samtools view -s 0.1471497688851390 -b C13.bam > SL-ROOT-SUB-2-scaled4.bam; 
+samtools view -s 0.0384173660123684 -b C103.bam > SL-ROOT-CON-2-scaled4.bam; 
+
+
+samtools index SL-ROOT-CON-1-scaled4.bam; 
+samtools index SL-ROOT-SUB-1-scaled4.bam; 
+samtools index SL-ROOT-SUB-2-scaled4.bam;
+samtools index SL-ROOT-CON-2-scaled4.bam; 
+
+
+samtools view -c SL-ROOT-CON-1-scaled4.bam; 
+samtools view -c SL-ROOT-SUB-1-scaled4.bam; 
+samtools view -c SL-ROOT-SUB-2-scaled4.bam;
+samtools view -c SL-ROOT-CON-2-scaled4.bam; 
+
+
+multiBamSummary bins -b SL-ROOT-CON-1-scaled4.bam SL-ROOT-SUB-1-scaled4.bam SL-ROOT-CON-2-scaled4.bam SL-ROOT-SUB-2-scaled4.bam -out SL-CON-SUB-4scaled.npz -bs=5000 -p=max;  
+plotPCA -T=SL-SL-CON-SUB-4scaled -in SL-CON-SUB-4scaled.npz -o SL-CON-SUB-4scaled.pdf --labels SL-CON-1 SL-SUB-1 SL-CON-2 SL-SUB-2; 
+
+bamCoverage -b SL-ROOT-CON-1-scaled4.bam -o SL-ROOT-CON-1-scaled4.bw -bs=1 --normalizeUsingRPKM -p=max; 
+bamCoverage -b SL-ROOT-SUB-1-scaled4.bam -o SL-ROOT-SUB-1-scaled4.bw -bs=1 --normalizeUsingRPKM -p=max; 
+bamCoverage -b SL-ROOT-CON-2-scaled4.bam -o SL-ROOT-CON-2-scaled4.bw -bs=1 --normalizeUsingRPKM -p=max; 
+bamCoverage -b SL-ROOT-SUB-2-scaled4.bam -o SL-ROOT-SUB-2-scaled4.bw -bs=1 --normalizeUsingRPKM -p=max; 
+
+
+
+
+
+
+
+
+
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/M82/ROOT/StartingFiles; 
+
+multiBamSummary bins -b B13.bam C103.bam B14.bam C13.bam -out SL-ROOT-UNSCALED.npz -bs=5000 -p=max;
+plotPCA -T=SL-ROOT-UNSCALED -in SL-ROOT-UNSCALED.npz -o SL-ROOT-UNSCALED.pdf --labels SL-ROOT-CON-1 SL-ROOT-CON-2 SL-ROOT-SUB-1 SL-ROOT-SUB-2; 
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/M82/SHOOT; 
+
+multiBamSummary bins -b Merged_C05.sorted.clean.q2.bam AT2-B06_S3_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam AT2-E05_S18_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam Merged_D06.sorted.clean.q2.bam -out SL-SHOOT-UNSCALED.npz -bs=5000 -p=max;
+plotPCA -T=SL-SHOOT-UNSCALED -in SL-SHOOT-UNSCALED.npz -o SL-SHOOT-UNSCALED.pdf --labels SL-SHOOT-CON-1 SL-SHOOT-SUB-1 SL-SHOOT-CON-2 SL-SHOOT-SUB-2; 
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/HAIRY; 
+
+multiBamSummary bins -b Merged_A21.sorted.clean.q2.bam AT2-B23_S7_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam Merged_A22.sorted.clean.q2.bam Merged_B22.sorted.clean.q2.bam Merged_C21.sorted.clean.q2.bam Merged_C22.sorted.clean.q2.bam -out SL-HAIRY-UNSCALED.npz -bs=5000 -p=max;
+plotPCA -T=SL-HAIRY-UNSCALED -in SL-HAIRY-UNSCALED.npz -o SL-HAIRY-UNSCALED.pdf --labels SL-HAIRY-CON-1 SL-HAIRY-SUB-1 SL-HAIRY-CON-2 SL-HAIRY-SUB-2 SL-HAIRY-CON-3 SL-HAIRY-SUB-3; 
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/PENN/ROOT; 
+
+multiBamSummary bins -b AT2-B15_S5_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam AT2-D16_S16_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam Merged_E15.sorted.clean.q2.bam AT2-D21_S17_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam SUBEX-C16_S10_R1_001_1P.fastq.sam.sorted.clean.q2.bam SUBEX-D15_S17_R1_001_1P.fastq.sam.sorted.clean.q2.bam -out SP-ROOT-UNSCALED.npz -bs=5000 -p=max;
+plotPCA -T=SP-ROOT-UNSCALED -in SP-ROOT-UNSCALED.npz -o SP-ROOT-UNSCALED.pdf --labels SP-ROOT-CON-1 SP-ROOT-SUB-1 SP-ROOT-CON-2 SP-ROOT-SUB-2 SP-ROOT-SUB-3 SP-ROOT-CON-3; 
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/PENN/SHOOT; 
+
+multiBamSummary bins -b AT2-B07_S4_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam Merged_D07.sorted.clean.q2.bam Merged_C08.sorted.clean.q2.bam Merged_E08.sorted.clean.q2.bam -out SP-SHOOT-UNSCALED.npz -bs=5000 -p=max;
+plotPCA -T=SP-SHOOT-UNSCALED -in SP-SHOOT-UNSCALED.npz -o SP-SHOOT-UNSCALED.pdf --labels SP-SHOOT-CON-1 SP-SHOOT-CON-2 SP-SHOOT-SUB-1 SP-SHOOT-SUB-2; 
+
+
+
+
+
+
+
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/PENN/ROOT; 
+
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam AT2-B15_S5_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam SP-ROOT-CON-and-SUB-all3reps.gff3 > SP-ROOT-CON-1-nonunique-all-unscaled-counts.txt; 
+mv SP-ROOT-CON-1-nonunique-all-unscaled-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledDEseq/SP-ROOT/NonUnique; 
+
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam AT2-D16_S16_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam SP-ROOT-CON-and-SUB-all3reps.gff3 > SP-ROOT-SUB-1-nonunique-all-unscaled-counts.txt; 
+mv SP-ROOT-SUB-1-nonunique-all-unscaled-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledDEseq/SP-ROOT/NonUnique; 
+
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam Merged_E15.sorted.clean.q2.bam SP-ROOT-CON-and-SUB-all3reps.gff3 > SP-ROOT-CON-2-nonunique-all-unscaled-counts.txt; 
+mv SP-ROOT-CON-2-nonunique-all-unscaled-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledDEseq/SP-ROOT/NonUnique; 
+
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam AT2-D21_S17_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam SP-ROOT-CON-and-SUB-all3reps.gff3 > SP-ROOT-SUB-2-nonunique-all-unscaled-counts.txt; 
+mv SP-ROOT-SUB-2-nonunique-all-unscaled-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledDEseq/SP-ROOT/NonUnique; 
+
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam SUBEX-C16_S10_R1_001_1P.fastq.sam.sorted.clean.q2.bam SP-ROOT-CON-and-SUB-all3reps.gff3 > SP-ROOT-SUB-3-nonunique-all-unscaled-counts.txt; 
+mv SP-ROOT-SUB-3-nonunique-all-unscaled-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledDEseq/SP-ROOT/NonUnique; 
+
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam SUBEX-D15_S17_R1_001_1P.fastq.sam.sorted.clean.q2.bam SP-ROOT-CON-and-SUB-all3reps.gff3 > SP-ROOT-CON-3-nonunique-all-unscaled-counts.txt; 
+mv SP-ROOT-CON-3-nonunique-all-unscaled-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato/UnscaledDEseq/SP-ROOT/NonUnique; 
+
+
+
+
+
+
+
+
+
+
+
+
+SUB1 = PE40
+SUB0 = SE
+ShootMe
+
+PairedEnd name begins with SUBEX but the SingleEnd name begins with AT2
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/SingleEnd; 
+samtools view -c AT2-A21_S1_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+samtools view -c AT2-A22_S2_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+samtools view -c AT2-B06_S3_L001_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools view -c AT2-B07_S4_L001_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools view -c AT2-B15_S5_L001_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools view -c AT2-B22_S6_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+samtools view -c AT2-B23_S7_L001_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools view -c AT2-C05_S8_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+samtools view -c AT2-C08_S9_L001_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools view -c AT2-C103_S10_L001_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools view -c AT2-C13_S11_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+samtools view -c AT2-C21_S12_L001_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools view -c AT2-C22_S13_L001_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools view -c AT2-D06_S14_L001_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools view -c AT2-D07_S15_L001_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools view -c AT2-D16_S16_L001_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools view -c AT2-D21_S17_L001_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools view -c AT2-E05_S18_L001_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools view -c AT2-E08_S19_L001_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools view -c AT2-E13_S20_L001_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools view -c AT2-E14_S21_L001_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools view -c AT2-E15_S22_L001_R1_001_1P.fastq.sam.sorted.clean.bam; 
+
+A21	20161626
+A22	15009110
+B06	14836170
+B07	19568732
+B15	21294110
+B22	19901152
+B23	12434252
+C05	9849876
+C08	12088536
+C103	8984710
+C13	12229424
+C21	17170162
+C22	14183410
+D06	9323216
+D07	8785700
+D16	12208080
+D21	17002498
+E05	15079964
+E08	17971048
+E13	16739920
+E14	16674100
+E15	16983928
+
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/PairedEnd; 
+samtools view -c SUBEX-A21_S1_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+samtools view -c SUBEX-A22_S2_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+samtools view -c SUBEX-B13_S3_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools view -c SUBEX-B14_S4_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools view -c SUBEX-B21_S5_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools view -c SUBEX-B22_S6_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+samtools view -c SUBEX-C05_S8_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+samtools view -c SUBEX-C06_S7_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools view -c SUBEX-C08_S9_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+samtools view -c SUBEX-C13_S11_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+samtools view -c SUBEX-C16_S10_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools view -c SUBEX-C21_S12_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+samtools view -c SUBEX-C22_S13_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools view -c SUBEX-D06_S14_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools view -c SUBEX-D07_S15_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools view -c SUBEX-D14_S16_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools view -c SUBEX-D15_S17_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools view -c SUBEX-D19_S18_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools view -c SUBEX-E06_S20_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools view -c SUBEX-E08_S19_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools view -c SUBEX-E14_S21_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools view -c SUBEX-E15_S22_R1_001_1P.fastq.sam.sorted.clean.bam; 
+
+A21	29012316
+A22	62820770
+B13	1687516
+B14	1322098
+B21	4591138
+B22	108941190
+C05	29165030
+C06	194
+C08	20021128
+C13	22184648
+C16	2674724
+C21	87172728
+C22	28995104
+D06	16354584
+D07	12090610
+D14	658890
+D15	1758596
+D19	5948912
+E06	7608570
+E08	78813570
+E14	159108608
+E15	42185588
+
+
+
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/SingleEnd; 
+samtools index AT2-A21_S1_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+samtools index AT2-A22_S2_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+samtools index AT2-B06_S3_L001_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools index AT2-B07_S4_L001_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools index AT2-B15_S5_L001_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools index AT2-B22_S6_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+samtools index AT2-B23_S7_L001_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools index AT2-C05_S8_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+samtools index AT2-C08_S9_L001_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools index AT2-C103_S10_L001_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools index AT2-C13_S11_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+samtools index AT2-C21_S12_L001_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools index AT2-C22_S13_L001_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools index AT2-D06_S14_L001_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools index AT2-D07_S15_L001_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools index AT2-D16_S16_L001_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools index AT2-D21_S17_L001_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools index AT2-E05_S18_L001_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools index AT2-E08_S19_L001_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools index AT2-E13_S20_L001_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools index AT2-E14_S21_L001_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools index AT2-E15_S22_L001_R1_001_1P.fastq.sam.sorted.clean.bam; 
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/PairedEnd; 
+samtools index SUBEX-A21_S1_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+samtools index SUBEX-A22_S2_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+samtools index SUBEX-B13_S3_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools index SUBEX-B14_S4_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools index SUBEX-B21_S5_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools index SUBEX-B22_S6_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+samtools index SUBEX-C05_S8_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+samtools index SUBEX-C06_S7_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools index SUBEX-C08_S9_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+samtools index SUBEX-C13_S11_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+samtools index SUBEX-C16_S10_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools index SUBEX-C21_S12_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+samtools index SUBEX-C22_S13_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools index SUBEX-D06_S14_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools index SUBEX-D07_S15_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools index SUBEX-D14_S16_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools index SUBEX-D15_S17_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools index SUBEX-D19_S18_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools index SUBEX-E06_S20_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools index SUBEX-E08_S19_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools index SUBEX-E14_S21_R1_001_1P.fastq.sam.sorted.clean.bam; 
+samtools index SUBEX-E15_S22_R1_001_1P.fastq.sam.sorted.clean.bam; 
+
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/SingleEnd; 
+makeTagDirectory A21_SE AT2-A21_S1_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+makeTagDirectory A22_SE AT2-A22_S2_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+makeTagDirectory B06_SE AT2-B06_S3_L001_R1_001_1P.fastq.sam.sorted.clean.bam; 
+makeTagDirectory B07_SE AT2-B07_S4_L001_R1_001_1P.fastq.sam.sorted.clean.bam; 
+makeTagDirectory B15_SE AT2-B15_S5_L001_R1_001_1P.fastq.sam.sorted.clean.bam; 
+makeTagDirectory B22_SE AT2-B22_S6_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+makeTagDirectory B23_SE AT2-B23_S7_L001_R1_001_1P.fastq.sam.sorted.clean.bam; 
+makeTagDirectory C05_SE AT2-C05_S8_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+makeTagDirectory C08_SE AT2-C08_S9_L001_R1_001_1P.fastq.sam.sorted.clean.bam; 
+makeTagDirectory C103_SE AT2-C103_S10_L001_R1_001_1P.fastq.sam.sorted.clean.bam; 
+makeTagDirectory C13_SE AT2-C13_S11_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+makeTagDirectory C21_SE AT2-C21_S12_L001_R1_001_1P.fastq.sam.sorted.clean.bam; 
+makeTagDirectory C22_SE AT2-C22_S13_L001_R1_001_1P.fastq.sam.sorted.clean.bam; 
+makeTagDirectory D06_SE AT2-D06_S14_L001_R1_001_1P.fastq.sam.sorted.clean.bam; 
+makeTagDirectory D07_SE AT2-D07_S15_L001_R1_001_1P.fastq.sam.sorted.clean.bam; 
+makeTagDirectory D16_SE AT2-D16_S16_L001_R1_001_1P.fastq.sam.sorted.clean.bam; 
+makeTagDirectory D21_SE AT2-D21_S17_L001_R1_001_1P.fastq.sam.sorted.clean.bam; 
+makeTagDirectory E05_SE AT2-E05_S18_L001_R1_001_1P.fastq.sam.sorted.clean.bam; 
+makeTagDirectory E08_SE AT2-E08_S19_L001_R1_001_1P.fastq.sam.sorted.clean.bam; 
+makeTagDirectory E13_SE AT2-E13_S20_L001_R1_001_1P.fastq.sam.sorted.clean.bam; 
+makeTagDirectory E14_SE AT2-E14_S21_L001_R1_001_1P.fastq.sam.sorted.clean.bam; 
+makeTagDirectory E15_SE AT2-E15_S22_L001_R1_001_1P.fastq.sam.sorted.clean.bam; 
+
+findpeaks A21_SE/ -o A21_SE_unscaled_150mDrR1 -minDist 150 -region -regionRes 1; 
+findpeaks A22_SE/ -o A22_SE_unscaled_150mDrR1 -minDist 150 -region -regionRes 1; 
+findpeaks B06_SE/ -o B06_SE_unscaled_150mDrR1 -minDist 150 -region -regionRes 1; 
+findpeaks B07_SE/ -o B07_SE_unscaled_150mDrR1 -minDist 150 -region -regionRes 1; 
+findpeaks B15_SE/ -o B15_SE_unscaled_150mDrR1 -minDist 150 -region -regionRes 1; 
+findpeaks B22_SE/ -o B22_SE_unscaled_150mDrR1 -minDist 150 -region -regionRes 1; 
+findpeaks B23_SE/ -o B23_SE_unscaled_150mDrR1 -minDist 150 -region -regionRes 1; 
+findpeaks C05_SE/ -o C05_SE_unscaled_150mDrR1 -minDist 150 -region -regionRes 1; 
+findpeaks C08_SE/ -o C08_SE_unscaled_150mDrR1 -minDist 150 -region -regionRes 1; 
+findpeaks C103_SE/ -o C103_SE_unscaled_150mDrR1 -minDist 150 -region -regionRes 1; 
+findpeaks C13_SE/ -o C13_SE_unscaled_150mDrR1 -minDist 150 -region -regionRes 1; 
+findpeaks C21_SE/ -o C21_SE_unscaled_150mDrR1 -minDist 150 -region -regionRes 1; 
+findpeaks C22_SE/ -o C22_SE_unscaled_150mDrR1 -minDist 150 -region -regionRes 1; 
+findpeaks D06_SE/ -o D06_SE_unscaled_150mDrR1 -minDist 150 -region -regionRes 1; 
+findpeaks D07_SE/ -o D07_SE_unscaled_150mDrR1 -minDist 150 -region -regionRes 1; 
+findpeaks D16_SE/ -o D16_SE_unscaled_150mDrR1 -minDist 150 -region -regionRes 1; 
+findpeaks D21_SE/ -o D21_SE_unscaled_150mDrR1 -minDist 150 -region -regionRes 1; 
+findpeaks E05_SE/ -o E05_SE_unscaled_150mDrR1 -minDist 150 -region -regionRes 1; 
+findpeaks E08_SE/ -o E08_SE_unscaled_150mDrR1 -minDist 150 -region -regionRes 1; 
+findpeaks E13_SE/ -o E13_SE_unscaled_150mDrR1 -minDist 150 -region -regionRes 1; 
+findpeaks E14_SE/ -o E14_SE_unscaled_150mDrR1 -minDist 150 -region -regionRes 1; 
+findpeaks E15_SE/ -o E15_SE_unscaled_150mDrR1 -minDist 150 -region -regionRes 1; 
+
+pos2bed.pl A21_SE_unscaled_150mDrR1 | bedtools sort | bedtools merge > A21_SE_unscaled_150mDrR1.bed;  
+pos2bed.pl A22_SE_unscaled_150mDrR1 | bedtools sort | bedtools merge > A22_SE_unscaled_150mDrR1.bed;  
+pos2bed.pl B06_SE_unscaled_150mDrR1 | bedtools sort | bedtools merge > B06_SE_unscaled_150mDrR1.bed;  
+pos2bed.pl B07_SE_unscaled_150mDrR1 | bedtools sort | bedtools merge > B07_SE_unscaled_150mDrR1.bed;  
+pos2bed.pl B15_SE_unscaled_150mDrR1 | bedtools sort | bedtools merge > B15_SE_unscaled_150mDrR1.bed;  
+pos2bed.pl B22_SE_unscaled_150mDrR1 | bedtools sort | bedtools merge > B22_SE_unscaled_150mDrR1.bed;  
+pos2bed.pl B23_SE_unscaled_150mDrR1 | bedtools sort | bedtools merge > B23_SE_unscaled_150mDrR1.bed;  
+pos2bed.pl C05_SE_unscaled_150mDrR1 | bedtools sort | bedtools merge > C05_SE_unscaled_150mDrR1.bed;  
+pos2bed.pl C08_SE_unscaled_150mDrR1 | bedtools sort | bedtools merge > C08_SE_unscaled_150mDrR1.bed;  
+pos2bed.pl C103_SE_unscaled_150mDrR1 | bedtools sort | bedtools merge > C103_SE_unscaled_150mDrR1.bed;  
+pos2bed.pl C13_SE_unscaled_150mDrR1 | bedtools sort | bedtools merge > C13_SE_unscaled_150mDrR1.bed;  
+pos2bed.pl C21_SE_unscaled_150mDrR1 | bedtools sort | bedtools merge > C21_SE_unscaled_150mDrR1.bed;  
+pos2bed.pl C22_SE_unscaled_150mDrR1 | bedtools sort | bedtools merge > C22_SE_unscaled_150mDrR1.bed;  
+pos2bed.pl D06_SE_unscaled_150mDrR1 | bedtools sort | bedtools merge > D06_SE_unscaled_150mDrR1.bed;  
+pos2bed.pl D07_SE_unscaled_150mDrR1 | bedtools sort | bedtools merge > D07_SE_unscaled_150mDrR1.bed;  
+pos2bed.pl D16_SE_unscaled_150mDrR1 | bedtools sort | bedtools merge > D16_SE_unscaled_150mDrR1.bed;  
+pos2bed.pl D21_SE_unscaled_150mDrR1 | bedtools sort | bedtools merge > D21_SE_unscaled_150mDrR1.bed;  
+pos2bed.pl E05_SE_unscaled_150mDrR1 | bedtools sort | bedtools merge > E05_SE_unscaled_150mDrR1.bed;  
+pos2bed.pl E08_SE_unscaled_150mDrR1 | bedtools sort | bedtools merge > E08_SE_unscaled_150mDrR1.bed;  
+pos2bed.pl E13_SE_unscaled_150mDrR1 | bedtools sort | bedtools merge > E13_SE_unscaled_150mDrR1.bed;  
+pos2bed.pl E14_SE_unscaled_150mDrR1 | bedtools sort | bedtools merge > E14_SE_unscaled_150mDrR1.bed;  
+pos2bed.pl E15_SE_unscaled_150mDrR1 | bedtools sort | bedtools merge > E15_SE_unscaled_150mDrR1.bed;  
+
+mkdir Beds; 
+cp *.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/SingleEnd/Beds; 
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/SingleEnd/Beds; 
+wc -l A21_SE_unscaled_150mDrR1.bed;  
+wc -l A22_SE_unscaled_150mDrR1.bed;  
+wc -l B06_SE_unscaled_150mDrR1.bed;  
+wc -l B07_SE_unscaled_150mDrR1.bed;  
+wc -l B15_SE_unscaled_150mDrR1.bed;  
+wc -l B22_SE_unscaled_150mDrR1.bed;  
+wc -l B23_SE_unscaled_150mDrR1.bed;  
+wc -l C05_SE_unscaled_150mDrR1.bed;  
+wc -l C08_SE_unscaled_150mDrR1.bed;  
+wc -l C103_SE_unscaled_150mDrR1.bed;  
+wc -l C13_SE_unscaled_150mDrR1.bed;  
+wc -l C21_SE_unscaled_150mDrR1.bed;  
+wc -l C22_SE_unscaled_150mDrR1.bed;  
+wc -l D06_SE_unscaled_150mDrR1.bed;  
+wc -l D07_SE_unscaled_150mDrR1.bed;  
+wc -l D16_SE_unscaled_150mDrR1.bed;  
+wc -l D21_SE_unscaled_150mDrR1.bed;  
+wc -l E05_SE_unscaled_150mDrR1.bed;  
+wc -l E08_SE_unscaled_150mDrR1.bed;  
+wc -l E13_SE_unscaled_150mDrR1.bed;  
+wc -l E14_SE_unscaled_150mDrR1.bed;  
+wc -l E15_SE_unscaled_150mDrR1.bed;  
+
+17397 A21_SE_unscaled_150mDrR1.bed
+11629 A22_SE_unscaled_150mDrR1.bed
+7896 B06_SE_unscaled_150mDrR1.bed
+16262 B07_SE_unscaled_150mDrR1.bed
+17024 B15_SE_unscaled_150mDrR1.bed
+16395 B22_SE_unscaled_150mDrR1.bed
+9053 B23_SE_unscaled_150mDrR1.bed
+5689 C05_SE_unscaled_150mDrR1.bed
+10710 C08_SE_unscaled_150mDrR1.bed
+8090 C103_SE_unscaled_150mDrR1.bed
+8689 C13_SE_unscaled_150mDrR1.bed
+14037 C21_SE_unscaled_150mDrR1.bed
+11628 C22_SE_unscaled_150mDrR1.bed
+6465 D06_SE_unscaled_150mDrR1.bed
+10119 D07_SE_unscaled_150mDrR1.bed
+12892 D16_SE_unscaled_150mDrR1.bed
+12820 D21_SE_unscaled_150mDrR1.bed
+12467 E05_SE_unscaled_150mDrR1.bed
+12384 E08_SE_unscaled_150mDrR1.bed
+10208 E13_SE_unscaled_150mDrR1.bed
+9270 E14_SE_unscaled_150mDrR1.bed
+12770 E15_SE_unscaled_150mDrR1.bed
+
+
+
+
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/PairedEnd; 
+makeTagDirectory A21_PE SUBEX-A21_S1_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+makeTagDirectory A22_PE SUBEX-A22_S2_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+makeTagDirectory B13_PE SUBEX-B13_S3_R1_001_1P.fastq.sam.sorted.clean.bam; 
+makeTagDirectory B14_PE SUBEX-B14_S4_R1_001_1P.fastq.sam.sorted.clean.bam; 
+makeTagDirectory B21_PE SUBEX-B21_S5_R1_001_1P.fastq.sam.sorted.clean.bam; 
+makeTagDirectory B22_PE SUBEX-B22_S6_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+makeTagDirectory C05_PE SUBEX-C05_S8_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+makeTagDirectory C06_PE SUBEX-C06_S7_R1_001_1P.fastq.sam.sorted.clean.bam; 
+makeTagDirectory C08_PE SUBEX-C08_S9_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+makeTagDirectory C13_PE SUBEX-C13_S11_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+makeTagDirectory C16_PE SUBEX-C16_S10_R1_001_1P.fastq.sam.sorted.clean.bam; 
+makeTagDirectory C21_PE SUBEX-C21_S12_R1_001_1P.fastq.sam.sorted.clean.q2.bam; 
+makeTagDirectory C22_PE SUBEX-C22_S13_R1_001_1P.fastq.sam.sorted.clean.bam; 
+makeTagDirectory D06_PE SUBEX-D06_S14_R1_001_1P.fastq.sam.sorted.clean.bam; 
+makeTagDirectory D07_PE SUBEX-D07_S15_R1_001_1P.fastq.sam.sorted.clean.bam; 
+makeTagDirectory D14_PE SUBEX-D14_S16_R1_001_1P.fastq.sam.sorted.clean.bam; 
+makeTagDirectory D15_PE SUBEX-D15_S17_R1_001_1P.fastq.sam.sorted.clean.bam; 
+makeTagDirectory D19_PE SUBEX-D19_S18_R1_001_1P.fastq.sam.sorted.clean.bam; 
+makeTagDirectory E06_PE SUBEX-E06_S20_R1_001_1P.fastq.sam.sorted.clean.bam; 
+makeTagDirectory E08_PE SUBEX-E08_S19_R1_001_1P.fastq.sam.sorted.clean.bam; 
+makeTagDirectory E14_PE SUBEX-E14_S21_R1_001_1P.fastq.sam.sorted.clean.bam; 
+makeTagDirectory E15_PE SUBEX-E15_S22_R1_001_1P.fastq.sam.sorted.clean.bam; 
+
+findpeaks A21_PE/ -o A21_PE_unscaled_150mDrR1 -minDist 150 -region -regionRes 1; 
+findpeaks A22_PE/ -o A22_PE_unscaled_150mDrR1 -minDist 150 -region -regionRes 1; 
+findpeaks B13_PE/ -o B13_PE_unscaled_150mDrR1 -minDist 150 -region -regionRes 1; 
+findpeaks B14_PE/ -o B14_PE_unscaled_150mDrR1 -minDist 150 -region -regionRes 1; 
+findpeaks B21_PE/ -o B21_PE_unscaled_150mDrR1 -minDist 150 -region -regionRes 1; 
+findpeaks B22_PE/ -o B22_PE_unscaled_150mDrR1 -minDist 150 -region -regionRes 1; 
+findpeaks C05_PE/ -o C05_PE_unscaled_150mDrR1 -minDist 150 -region -regionRes 1; 
+findpeaks C06_PE/ -o C06_PE_unscaled_150mDrR1 -minDist 150 -region -regionRes 1; 
+findpeaks C08_PE/ -o C08_PE_unscaled_150mDrR1 -minDist 150 -region -regionRes 1; 
+findpeaks C13_PE/ -o C13_PE_unscaled_150mDrR1 -minDist 150 -region -regionRes 1; 
+findpeaks C16_PE/ -o C16_PE_unscaled_150mDrR1 -minDist 150 -region -regionRes 1; 
+findpeaks C21_PE/ -o C21_PE_unscaled_150mDrR1 -minDist 150 -region -regionRes 1; 
+findpeaks C22_PE/ -o C22_PE_unscaled_150mDrR1 -minDist 150 -region -regionRes 1; 
+findpeaks D06_PE/ -o D06_PE_unscaled_150mDrR1 -minDist 150 -region -regionRes 1; 
+findpeaks D07_PE/ -o D07_PE_unscaled_150mDrR1 -minDist 150 -region -regionRes 1; 
+findpeaks D14_PE/ -o D14_PE_unscaled_150mDrR1 -minDist 150 -region -regionRes 1; 
+findpeaks D15_PE/ -o D15_PE_unscaled_150mDrR1 -minDist 150 -region -regionRes 1; 
+findpeaks D19_PE/ -o D19_PE_unscaled_150mDrR1 -minDist 150 -region -regionRes 1; 
+findpeaks E06_PE/ -o E06_PE_unscaled_150mDrR1 -minDist 150 -region -regionRes 1; 
+findpeaks E08_PE/ -o E08_PE_unscaled_150mDrR1 -minDist 150 -region -regionRes 1; 
+findpeaks E14_PE/ -o E14_PE_unscaled_150mDrR1 -minDist 150 -region -regionRes 1; 
+findpeaks E15_PE/ -o E15_PE_unscaled_150mDrR1 -minDist 150 -region -regionRes 1; 
+
+pos2bed.pl A21_PE_unscaled_150mDrR1 | bedtools sort | bedtools merge > A21_PE_unscaled_150mDrR1.bed;  
+pos2bed.pl A22_PE_unscaled_150mDrR1 | bedtools sort | bedtools merge > A22_PE_unscaled_150mDrR1.bed;  
+pos2bed.pl B13_PE_unscaled_150mDrR1 | bedtools sort | bedtools merge > B13_PE_unscaled_150mDrR1.bed;  
+pos2bed.pl B14_PE_unscaled_150mDrR1 | bedtools sort | bedtools merge > B14_PE_unscaled_150mDrR1.bed;  
+pos2bed.pl B21_PE_unscaled_150mDrR1 | bedtools sort | bedtools merge > B21_PE_unscaled_150mDrR1.bed;  
+pos2bed.pl B22_PE_unscaled_150mDrR1 | bedtools sort | bedtools merge > B22_PE_unscaled_150mDrR1.bed;  
+pos2bed.pl C05_PE_unscaled_150mDrR1 | bedtools sort | bedtools merge > C05_PE_unscaled_150mDrR1.bed;  
+pos2bed.pl C06_PE_unscaled_150mDrR1 | bedtools sort | bedtools merge > C06_PE_unscaled_150mDrR1.bed;  
+pos2bed.pl C08_PE_unscaled_150mDrR1 | bedtools sort | bedtools merge > C08_PE_unscaled_150mDrR1.bed;  
+pos2bed.pl C13_PE_unscaled_150mDrR1 | bedtools sort | bedtools merge > C13_PE_unscaled_150mDrR1.bed;  
+pos2bed.pl C16_PE_unscaled_150mDrR1 | bedtools sort | bedtools merge > C16_PE_unscaled_150mDrR1.bed;  
+pos2bed.pl C21_PE_unscaled_150mDrR1 | bedtools sort | bedtools merge > C21_PE_unscaled_150mDrR1.bed;  
+pos2bed.pl C22_PE_unscaled_150mDrR1 | bedtools sort | bedtools merge > C22_PE_unscaled_150mDrR1.bed;  
+pos2bed.pl D06_PE_unscaled_150mDrR1 | bedtools sort | bedtools merge > D06_PE_unscaled_150mDrR1.bed;  
+pos2bed.pl D07_PE_unscaled_150mDrR1 | bedtools sort | bedtools merge > D07_PE_unscaled_150mDrR1.bed;  
+pos2bed.pl D14_PE_unscaled_150mDrR1 | bedtools sort | bedtools merge > D14_PE_unscaled_150mDrR1.bed;  
+pos2bed.pl D15_PE_unscaled_150mDrR1 | bedtools sort | bedtools merge > D15_PE_unscaled_150mDrR1.bed;  
+pos2bed.pl D19_PE_unscaled_150mDrR1 | bedtools sort | bedtools merge > D19_PE_unscaled_150mDrR1.bed;  
+pos2bed.pl E06_PE_unscaled_150mDrR1 | bedtools sort | bedtools merge > E06_PE_unscaled_150mDrR1.bed;  
+pos2bed.pl E08_PE_unscaled_150mDrR1 | bedtools sort | bedtools merge > E08_PE_unscaled_150mDrR1.bed;  
+pos2bed.pl E14_PE_unscaled_150mDrR1 | bedtools sort | bedtools merge > E14_PE_unscaled_150mDrR1.bed;  
+pos2bed.pl E15_PE_unscaled_150mDrR1 | bedtools sort | bedtools merge > E15_PE_unscaled_150mDrR1.bed;  
+
+mkdir Beds; 
+cp *.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/PairedEnd/Beds; 
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/PairedEnd/Beds; 
+wc -l A21_PE_unscaled_150mDrR1.bed;  
+wc -l A22_PE_unscaled_150mDrR1.bed;  
+wc -l B13_PE_unscaled_150mDrR1.bed;  
+wc -l B14_PE_unscaled_150mDrR1.bed;  
+wc -l B21_PE_unscaled_150mDrR1.bed;  
+wc -l B22_PE_unscaled_150mDrR1.bed;  
+wc -l C05_PE_unscaled_150mDrR1.bed;  
+wc -l C06_PE_unscaled_150mDrR1.bed;  
+wc -l C08_PE_unscaled_150mDrR1.bed;  
+wc -l C13_PE_unscaled_150mDrR1.bed;  
+wc -l C16_PE_unscaled_150mDrR1.bed;  
+wc -l C21_PE_unscaled_150mDrR1.bed;  
+wc -l C22_PE_unscaled_150mDrR1.bed;  
+wc -l D06_PE_unscaled_150mDrR1.bed;  
+wc -l D07_PE_unscaled_150mDrR1.bed;  
+wc -l D14_PE_unscaled_150mDrR1.bed;  
+wc -l D15_PE_unscaled_150mDrR1.bed;  
+wc -l D19_PE_unscaled_150mDrR1.bed;  
+wc -l E06_PE_unscaled_150mDrR1.bed;  
+wc -l E08_PE_unscaled_150mDrR1.bed;  
+wc -l E14_PE_unscaled_150mDrR1.bed;  
+wc -l E15_PE_unscaled_150mDrR1.bed;  
+
+19919 A21_PE_unscaled_150mDrR1.bed
+75184 A22_PE_unscaled_150mDrR1.bed
+2164 B13_PE_unscaled_150mDrR1.bed
+2612 B14_PE_unscaled_150mDrR1.bed
+3422 B21_PE_unscaled_150mDrR1.bed
+156350 B22_PE_unscaled_150mDrR1.bed
+13875 C05_PE_unscaled_150mDrR1.bed
+0 C06_PE_unscaled_150mDrR1.bed
+26315 C08_PE_unscaled_150mDrR1.bed
+12044 C13_PE_unscaled_150mDrR1.bed
+6992 C16_PE_unscaled_150mDrR1.bed
+102253 C21_PE_unscaled_150mDrR1.bed
+27044 C22_PE_unscaled_150mDrR1.bed
+7925 D06_PE_unscaled_150mDrR1.bed
+20043 D07_PE_unscaled_150mDrR1.bed
+1403 D14_PE_unscaled_150mDrR1.bed
+5521 D15_PE_unscaled_150mDrR1.bed
+4490 D19_PE_unscaled_150mDrR1.bed
+5981 E06_PE_unscaled_150mDrR1.bed
+65984 E08_PE_unscaled_150mDrR1.bed
+156347 E14_PE_unscaled_150mDrR1.bed
+40563 E15_PE_unscaled_150mDrR1.bed
+
+
+
+
+A21_PE_unscaled_150mDrR1.bed;  
+A22_PE_unscaled_150mDrR1.bed;  
+B22_PE_unscaled_150mDrR1.bed;  
+C05_PE_unscaled_150mDrR1.bed;  
+C08_PE_unscaled_150mDrR1.bed;  
+C13_PE_unscaled_150mDrR1.bed;  
+C21_PE_unscaled_150mDrR1.bed;  
+C22_PE_unscaled_150mDrR1.bed;  
+D06_PE_unscaled_150mDrR1.bed;  
+D07_PE_unscaled_150mDrR1.bed;  
+E08_PE_unscaled_150mDrR1.bed;  
+E14_PE_unscaled_150mDrR1.bed;  
+E15_PE_unscaled_150mDrR1.bed;  
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/PeakComparison; 
+bedtools intersect -wa -a A21_SE_unscaled_150mDrR1.bed -b A21_PE_unscaled_150mDrR1.bed > A21-wa-Intersections.bed; 
+bedtools intersect -wa -a A22_SE_unscaled_150mDrR1.bed -b A22_PE_unscaled_150mDrR1.bed > A22-wa-Intersections.bed; 
+bedtools intersect -wa -a B22_SE_unscaled_150mDrR1.bed -b B22_PE_unscaled_150mDrR1.bed > B22-wa-Intersections.bed; 
+bedtools intersect -wa -a C05_SE_unscaled_150mDrR1.bed -b C05_PE_unscaled_150mDrR1.bed > C05-wa-Intersections.bed; 
+bedtools intersect -wa -a C08_SE_unscaled_150mDrR1.bed -b C08_PE_unscaled_150mDrR1.bed > C08-wa-Intersections.bed; 
+bedtools intersect -wa -a C13_SE_unscaled_150mDrR1.bed -b C13_PE_unscaled_150mDrR1.bed > C13-wa-Intersections.bed; 
+bedtools intersect -wa -a C21_SE_unscaled_150mDrR1.bed -b C21_PE_unscaled_150mDrR1.bed > C21-wa-Intersections.bed; 
+bedtools intersect -wa -a C22_SE_unscaled_150mDrR1.bed -b C22_PE_unscaled_150mDrR1.bed > C22-wa-Intersections.bed; 
+bedtools intersect -wa -a D06_SE_unscaled_150mDrR1.bed -b D06_PE_unscaled_150mDrR1.bed > D06-wa-Intersections.bed; 
+bedtools intersect -wa -a D07_SE_unscaled_150mDrR1.bed -b D07_PE_unscaled_150mDrR1.bed > D07-wa-Intersections.bed; 
+bedtools intersect -wa -a E08_SE_unscaled_150mDrR1.bed -b E08_PE_unscaled_150mDrR1.bed > E08-wa-Intersections.bed; 
+bedtools intersect -wa -a E14_SE_unscaled_150mDrR1.bed -b E14_PE_unscaled_150mDrR1.bed > E14-wa-Intersections.bed; 
+bedtools intersect -wa -a E15_SE_unscaled_150mDrR1.bed -b E15_PE_unscaled_150mDrR1.bed > E15-wa-Intersections.bed; 
+
+Remove Duplicates, because of the stupid way that intersections work
+
+wc -l A21-wa-Intersections.bed; 
+wc -l A22-wa-Intersections.bed; 
+wc -l B22-wa-Intersections.bed; 
+wc -l C05-wa-Intersections.bed; 
+wc -l C08-wa-Intersections.bed; 
+wc -l C13-wa-Intersections.bed; 
+wc -l C21-wa-Intersections.bed; 
+wc -l C22-wa-Intersections.bed; 
+wc -l D06-wa-Intersections.bed; 
+wc -l D07-wa-Intersections.bed; 
+wc -l E08-wa-Intersections.bed; 
+wc -l E14-wa-Intersections.bed; 
+wc -l E15-wa-Intersections.bed; 
+
+bedtools intersect -a A21_PE_unscaled_150mDrR1.bed -b A21_SE_unscaled_150mDrR1.bed > A21-wb-Intersections.bed; 
+bedtools intersect -a A22_PE_unscaled_150mDrR1.bed -b A22_SE_unscaled_150mDrR1.bed > A22-wb-Intersections.bed; 
+bedtools intersect -a B22_PE_unscaled_150mDrR1.bed -b B22_SE_unscaled_150mDrR1.bed > B22-wb-Intersections.bed; 
+bedtools intersect -a C05_PE_unscaled_150mDrR1.bed -b C05_SE_unscaled_150mDrR1.bed > C05-wb-Intersections.bed; 
+bedtools intersect -a C08_PE_unscaled_150mDrR1.bed -b C08_SE_unscaled_150mDrR1.bed > C08-wb-Intersections.bed; 
+bedtools intersect -a C13_PE_unscaled_150mDrR1.bed -b C13_SE_unscaled_150mDrR1.bed > C13-wb-Intersections.bed; 
+bedtools intersect -a C21_PE_unscaled_150mDrR1.bed -b C21_SE_unscaled_150mDrR1.bed > C21-wb-Intersections.bed; 
+bedtools intersect -a C22_PE_unscaled_150mDrR1.bed -b C22_SE_unscaled_150mDrR1.bed > C22-wb-Intersections.bed; 
+bedtools intersect -a D06_PE_unscaled_150mDrR1.bed -b D06_SE_unscaled_150mDrR1.bed > D06-wb-Intersections.bed; 
+bedtools intersect -a D07_PE_unscaled_150mDrR1.bed -b D07_SE_unscaled_150mDrR1.bed > D07-wb-Intersections.bed; 
+bedtools intersect -a E08_PE_unscaled_150mDrR1.bed -b E08_SE_unscaled_150mDrR1.bed > E08-wb-Intersections.bed; 
+bedtools intersect -a E14_PE_unscaled_150mDrR1.bed -b E14_SE_unscaled_150mDrR1.bed > E14-wb-Intersections.bed; 
+bedtools intersect -a E15_PE_unscaled_150mDrR1.bed -b E15_SE_unscaled_150mDrR1.bed > E15-wb-Intersections.bed; 
+
+Remove Duplicates, because of the stupid way that intersections work
+
+wc -l A21-wb-Intersections.bed; 
+wc -l A22-wb-Intersections.bed; 
+wc -l B22-wb-Intersections.bed; 
+wc -l C05-wb-Intersections.bed; 
+wc -l C08-wb-Intersections.bed; 
+wc -l C13-wb-Intersections.bed; 
+wc -l C21-wb-Intersections.bed; 
+wc -l C22-wb-Intersections.bed; 
+wc -l D06-wb-Intersections.bed; 
+wc -l D07-wb-Intersections.bed; 
+wc -l E08-wb-Intersections.bed; 
+wc -l E14-wb-Intersections.bed; 
+wc -l E15-wb-Intersections.bed; 
+
+
+
+multiBamSummary bins -b AT2-A21_S1_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam AT2-C21_S12_L001_R1_001_1P.fastq.sam.sorted.clean.bam AT2-A22_S2_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam AT2-B22_S6_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam SUBEX-A21_S1_R1_001_1P.fastq.sam.sorted.clean.q2.bam SUBEX-C21_S12_R1_001_1P.fastq.sam.sorted.clean.q2.bam SUBEX-A22_S2_R1_001_1P.fastq.sam.sorted.clean.q2.bam SUBEX-B22_S6_R1_001_1P.fastq.sam.sorted.clean.q2.bam -out SL-HAIRY-PCA.npz -bs=5000 -p=max; 
+plotPCA -T=SL-HAIRY-PCA -in SL-HAIRY-PCA.npz -o SL-HAIRY-PCA.pdf --labels CON1-SE CON2-SE SUB1-SE SUB2-SE CON1-PE CON2-PE SUB1-PE SUB2-PE; 
+
+
+
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/PairedEnd; 
+samtools view -f 0x40 -b SUBEX-A21_S1_R1_001_1P.fastq.sam.sorted.clean.q2.bam > A21-UPE.bam; 
+samtools view -f 0x40 -b SUBEX-A22_S2_R1_001_1P.fastq.sam.sorted.clean.q2.bam > A22-UPE.bam; 
+samtools view -f 0x40 -b SUBEX-B22_S6_R1_001_1P.fastq.sam.sorted.clean.q2.bam > B22-UPE.bam; 
+samtools view -f 0x40 -b SUBEX-C05_S8_R1_001_1P.fastq.sam.sorted.clean.q2.bam > C05-UPE.bam; 
+samtools view -f 0x40 -b SUBEX-C08_S9_R1_001_1P.fastq.sam.sorted.clean.q2.bam > C08-UPE.bam; 
+samtools view -f 0x40 -b SUBEX-C13_S11_R1_001_1P.fastq.sam.sorted.clean.q2.bam > C13-UPE.bam; 
+samtools view -f 0x40 -b SUBEX-C21_S12_R1_001_1P.fastq.sam.sorted.clean.q2.bam > C21-UPE.bam; 
+samtools view -f 0x40 -b SUBEX-C22_S13_R1_001_1P.fastq.sam.sorted.clean.bam > C22-UPE.bam; 
+samtools view -f 0x40 -b SUBEX-D06_S14_R1_001_1P.fastq.sam.sorted.clean.bam > D06-UPE.bam; 
+samtools view -f 0x40 -b SUBEX-D07_S15_R1_001_1P.fastq.sam.sorted.clean.bam > D07-UPE.bam; 
+samtools view -f 0x40 -b SUBEX-E08_S19_R1_001_1P.fastq.sam.sorted.clean.bam > E08-UPE.bam; 
+samtools view -f 0x40 -b SUBEX-E14_S21_R1_001_1P.fastq.sam.sorted.clean.bam > E14-UPE.bam; 
+samtools view -f 0x40 -b SUBEX-E15_S22_R1_001_1P.fastq.sam.sorted.clean.bam > E15-UPE.bam; 
+
+mkdir TOMATO-UNPAIRED; 
+mv *UPE.bam TOMATO-UNPAIRED; 
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/PairedEnd/TOMATO-UNPAIRED; 
+samtools index A21-UPE.bam; 
+samtools index A22-UPE.bam; 
+samtools index B22-UPE.bam; 
+samtools index C05-UPE.bam; 
+samtools index C08-UPE.bam; 
+samtools index C13-UPE.bam; 
+samtools index C21-UPE.bam; 
+samtools index C22-UPE.bam; 
+samtools index D06-UPE.bam; 
+samtools index D07-UPE.bam; 
+samtools index E08-UPE.bam; 
+samtools index E14-UPE.bam; 
+samtools index E15-UPE.bam; 
+
+samtools view -c A21-UPE.bam; 
+samtools view -c A22-UPE.bam; 
+samtools view -c B22-UPE.bam; 
+samtools view -c C05-UPE.bam; 
+samtools view -c C08-UPE.bam; 
+samtools view -c C13-UPE.bam; 
+samtools view -c C21-UPE.bam; 
+samtools view -c C22-UPE.bam; 
+samtools view -c D06-UPE.bam; 
+samtools view -c D07-UPE.bam; 
+samtools view -c E08-UPE.bam; 
+samtools view -c E14-UPE.bam; 
+samtools view -c E15-UPE.bam; 
+
+cp *.bam /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/PCAplot; 
+cp *.bai /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/PCAplot; 
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/PCAplot; 
+multiBamSummary bins -b AT2-A21_S1_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam AT2-C21_S12_L001_R1_001_1P.fastq.sam.sorted.clean.bam AT2-A22_S2_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam AT2-B22_S6_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam A21-UPE.bam C21-UPE.bam A22-UPE.bam B22-UPE.bam -out SL-HAIRY-SEvUPE-PCA.npz -bs=5000 -p=max; 
+plotPCA -T=SL-HAIRY-SEvUPE-PCA -in SL-HAIRY-SEvUPE-PCA.npz -o SL-HAIRY-SEvUPE-PCA.pdf --labels CON1-SE CON2-SE SUB1-SE SUB2-SE CON1-UPE CON2-UPE SUB1-UPE SUB2-UPE; 
+
+
+
+To recap,
+I have called peaks for the tomato SE samples
+Also, I have called peaks for the tomato PE samples
+
+These are the peak files that I will work with for finding the final list of peaks where I will count
+I have also made the unpaired BAM files
+These unpaired (UPE) bam files are NOT the ones I will call peaks on and use for finding where to count
+HOWEVER, these ARE the files I will count alongside the SE files
+
+After counting, I will have THSs and their corresponding counts for the SE and UPE samples
+Idea was to then combine the counts and have one count at each THS, whether it was resequenced or not
+
+This would mean that 
+A21
+A22
+B22
+C21
+C22
+E14
+C13
+D06
+C05
+E15
+E08
+D07
+C08
+would end up being combined
+
+and 
+B23
+E13
+C103
+E05
+B06
+D16
+D21
+B15
+B07
+are the ones that were not resequenced and are the ones that would not be combined
+
+Keep these in mind as you get to DESeq2 and have to give the proper estimated size Factor value
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/SingleEnd; 
+cp *.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/Peaks; 
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/PairedEnd; 
+cp *.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/Peaks; 
+
+
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/Peaks; 
+
+bedtools intersect -wa -a A21_SE_unscaled_150mDrR1.bed -b A21_PE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > A21SE-A21PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a A21_PE_unscaled_150mDrR1.bed -b A21_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > A21SE-A21PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat A21SE-A21PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed A21SE-A21PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > A21SE-A21PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i A21SE-A21PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > A21SE-A21PE-50pINT.bed; 
+
+bedtools intersect -wa -a A21_SE_unscaled_150mDrR1.bed -b C21_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > A21SE-C21SE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a C21_SE_unscaled_150mDrR1.bed -b A21_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > A21SE-C21SE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat A21SE-A21PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed A21SE-A21PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > A21SE-C21SE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i A21SE-C21SE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > A21SE-C21SE-50pINT.bed; 
+
+bedtools intersect -wa -a A21_SE_unscaled_150mDrR1.bed -b C21_PE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > A21SE-C21PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a C21_PE_unscaled_150mDrR1.bed -b A21_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > A21SE-C21PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat A21SE-A21PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed A21SE-C21PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > A21SE-C21PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i A21SE-C21PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > A21SE-C21PE-50pINT.bed; 
+
+bedtools intersect -wa -a A21_SE_unscaled_150mDrR1.bed -b B23_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > A21SE-B23SE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a B23_SE_unscaled_150mDrR1.bed -b A21_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > A21SE-B23SE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat A21SE-A21PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed A21SE-B23SE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > A21SE-B23SE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i A21SE-B23SE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > A21SE-B23SE-50pINT.bed; 
+
+bedtools intersect -wa -a C21_SE_unscaled_150mDrR1.bed -b A21_PE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > C21SE-A21PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a A21_PE_unscaled_150mDrR1.bed -b C21_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > C21SE-A21PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat C21SE-A21PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed C21SE-A21PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > C21SE-A21PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i C21SE-A21PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > C21SE-A21PE-50pINT.bed; 
+
+bedtools intersect -wa -a C21_PE_unscaled_150mDrR1.bed -b A21_PE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > C21PE-A21PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a A21_PE_unscaled_150mDrR1.bed -b C21_PE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > C21PE-A21PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat C21SE-A21PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed C21SE-A21PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > C21PE-A21PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i C21PE-A21PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > C21PE-A21PE-50pINT.bed; 
+
+bedtools intersect -wa -a B23_SE_unscaled_150mDrR1.bed -b A21_PE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > B23SE-A21PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a A21_PE_unscaled_150mDrR1.bed -b B23_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > B23SE-A21PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat B23SE-A21PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed B23SE-A21PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > B23SE-A21PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i B23SE-A21PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > B23SE-A21PE-50pINT.bed; 
+
+bedtools intersect -wa -a C21_SE_unscaled_150mDrR1.bed -b C21_PE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > C21SE-C21PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a C21_PE_unscaled_150mDrR1.bed -b C21_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > C21SE-C21PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat C21SE-C21PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed C21SE-C21PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > C21SE-C21PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i C21SE-C21PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > C21SE-C21PE-50pINT.bed; 
+
+bedtools intersect -wa -a B23_SE_unscaled_150mDrR1.bed -b C21_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > B23SE-C21SE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a C21_SE_unscaled_150mDrR1.bed -b B23_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > B23SE-C21SE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat B23SE-C21SE-mD150Rr1-unscaled-wa-50pINT-intersects.bed B23SE-C21SE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > B23SE-C21SE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i B23SE-C21SE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > B23SE-C21SE-50pINT.bed; 
+
+bedtools intersect -wa -a B23_SE_unscaled_150mDrR1.bed -b C21_PE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > B23SE-C21PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a C21_PE_unscaled_150mDrR1.bed -b B23_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > B23SE-C21PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat B23SE-C21PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed B23SE-C21PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > B23SE-C21PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i B23SE-C21PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > B23SE-C21PE-50pINT.bed; 
+
+cat A21SE-A21PE-50pINT.bed A21SE-C21SE-50pINT.bed A21SE-C21PE-50pINT.bed A21SE-B23SE-50pINT.bed C21SE-A21PE-50pINT.bed C21PE-A21PE-50pINT.bed B23SE-A21PE-50pINT.bed C21SE-C21PE-50pINT.bed B23SE-C21SE-50pINT.bed B23SE-C21SE-50pINT.bed > SL-HAIRY-CON-50INT-intersects.bed; 
+
+
+bedtools intersect -wa -a A22_SE_unscaled_150mDrR1.bed -b A22_PE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > A22SE-A22PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a A22_PE_unscaled_150mDrR1.bed -b A22_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > A22SE-A22PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat A22SE-A22PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed A22SE-A22PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > A22SE-A22PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i A22SE-A22PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > A22SE-A22PE-50pINT.bed; 
+
+bedtools intersect -wa -a A22_SE_unscaled_150mDrR1.bed -b B22_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > A22SE-B22SE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a B22_SE_unscaled_150mDrR1.bed -b A22_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > A22SE-B22SE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat A22SE-A22PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed A22SE-A22PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > A22SE-B22SE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i A22SE-B22SE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > A22SE-B22SE-50pINT.bed; 
+
+bedtools intersect -wa -a A22_SE_unscaled_150mDrR1.bed -b B22_PE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > A22SE-B22PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a B22_PE_unscaled_150mDrR1.bed -b A22_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > A22SE-B22PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat A22SE-B22PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed A22SE-B22PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > A22SE-B22PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i A22SE-B22PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > A22SE-B22PE-50pINT.bed; 
+
+bedtools intersect -wa -a A22_SE_unscaled_150mDrR1.bed -b C22_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > A22SE-C22SE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a C22_SE_unscaled_150mDrR1.bed -b A22_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > A22SE-C22SE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat A22SE-A22PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed A22SE-A22PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > A22SE-C22SE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i A22SE-C22SE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > A22SE-C22SE-50pINT.bed; 
+
+bedtools intersect -wa -a A22_SE_unscaled_150mDrR1.bed -b C22_PE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > A22SE-C22PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a C22_PE_unscaled_150mDrR1.bed -b A22_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > A22SE-C22PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat A22SE-C22PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed A22SE-C22PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > A22SE-C22PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i A22SE-C22PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > A22SE-C22PE-50pINT.bed; 
+
+bedtools intersect -wa -a B22_SE_unscaled_150mDrR1.bed -b A22_PE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > B22SE-A22PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a B22_SE_unscaled_150mDrR1.bed -b B22_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > B22SE-A22PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat A22SE-A22PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed A22SE-A22PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > B22SE-A22PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i B22SE-A22PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > B22SE-A22PE-50pINT.bed; 
+
+bedtools intersect -wa -a A22_PE_unscaled_150mDrR1.bed -b B22_PE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > A22PE-B22PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a B22_PE_unscaled_150mDrR1.bed -b A22_PE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > A22PE-B22PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat A22SE-B22PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed A22SE-B22PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > A22PE-B22PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i A22PE-B22PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > A22PE-B22PE-50pINT.bed; 
+
+bedtools intersect -wa -a C22_SE_unscaled_150mDrR1.bed -b A22_PE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > C22SE-A22PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a C22_SE_unscaled_150mDrR1.bed -b C22_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > C22SE-A22PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat A22SE-A22PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed A22SE-A22PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > C22SE-A22PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i C22SE-A22PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > C22SE-A22PE-50pINT.bed; 
+
+bedtools intersect -wa -a A22_PE_unscaled_150mDrR1.bed -b C22_PE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > A22PE-C22PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a C22_PE_unscaled_150mDrR1.bed -b A22_PE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > A22PE-C22PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat A22SE-C22PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed A22SE-C22PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > A22PE-C22PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i A22PE-C22PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > A22PE-C22PE-50pINT.bed; 
+
+bedtools intersect -wa -a B22_SE_unscaled_150mDrR1.bed -b B22_PE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > B22SE-B22PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a B22_PE_unscaled_150mDrR1.bed -b B22_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > B22SE-B22PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat B22SE-B22PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed B22SE-B22PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > B22SE-B22PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i B22SE-B22PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > B22SE-B22PE-50pINT.bed; 
+
+bedtools intersect -wa -a B22_SE_unscaled_150mDrR1.bed -b C22_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > B22SE-C22SE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a C22_SE_unscaled_150mDrR1.bed -b B22_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > B22SE-C22SE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat B22SE-B22PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed B22SE-B22PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > B22SE-C22SE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i B22SE-C22SE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > B22SE-C22SE-50pINT.bed; 
+
+bedtools intersect -wa -a B22_SE_unscaled_150mDrR1.bed -b C22_PE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > B22SE-C22PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a C22_PE_unscaled_150mDrR1.bed -b B22_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > B22SE-C22PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat B22SE-C22PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed B22SE-C22PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > B22SE-C22PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i B22SE-C22PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > B22SE-C22PE-50pINT.bed; 
+
+bedtools intersect -wa -a C22_SE_unscaled_150mDrR1.bed -b B22_PE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > C22SE-B22PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a B22_PE_unscaled_150mDrR1.bed -b C22_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > C22SE-B22PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat C22SE-B22PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed C22SE-B22PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > C22SE-B22PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i C22SE-B22PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > C22SE-B22PE-50pINT.bed; 
+
+bedtools intersect -wa -a B22_PE_unscaled_150mDrR1.bed -b C22_PE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > B22PE-C22PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a C22_PE_unscaled_150mDrR1.bed -b B22_PE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > B22PE-C22PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat B22SE-C22PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed B22SE-C22PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > B22PE-C22PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i B22PE-C22PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > B22PE-C22PE-50pINT.bed; 
+
+bedtools intersect -wa -a C22_SE_unscaled_150mDrR1.bed -b C22_PE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > C22SE-C22PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a C22_PE_unscaled_150mDrR1.bed -b C22_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > C22SE-C22PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat C22SE-C22PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed C22SE-C22PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > C22SE-C22PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i C22SE-C22PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > C22SE-C22PE-50pINT.bed; 
+
+cat A22SE-A22PE-50pINT.bed A22SE-B22SE-50pINT.bed A22SE-B22PE-50pINT.bed A22SE-C22SE-50pINT.bed A22SE-C22PE-50pINT.bed B22SE-A22PE-50pINT.bed A22PE-B22PE-50pINT.bed C22SE-A22PE-50pINT.bed A22PE-C22PE-50pINT.bed B22SE-B22PE-50pINT.bed B22SE-C22SE-50pINT.bed B22SE-C22PE-50pINT.bed C22SE-B22PE-50pINT.bed B22PE-C22PE-50pINT.bed > SL-HAIRY-SUB-50INT-intersects.bed;  
+
+
+bedtools intersect -wa -a E13_SE_unscaled_150mDrR1.bed -b C103_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > E13SE-C103SE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a C103_SE_unscaled_150mDrR1.bed -b E13_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > E13SE-C103SE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat E13SE-C103SE-mD150Rr1-unscaled-wa-50pINT-intersects.bed E13SE-C103SE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > E13SE-C103SE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i E13SE-C103SE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > E13SE-C103SE-50pINT.bed; 
+
+cat E13SE-C103SE-50pINT.bed > SL-ROOT-CON-50pINT-intersects.bed; 
+
+
+bedtools intersect -wa -a E14_SE_unscaled_150mDrR1.bed -b E14_PE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > E14SE-E14PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a E14_PE_unscaled_150mDrR1.bed -b E14_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > E14SE-E14PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat E14SE-E14PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed E14SE-E14PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > E14SE-E14PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i E14SE-E14PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > E14SE-E14PE-50pINT.bed; 
+
+bedtools intersect -wa -a E14_SE_unscaled_150mDrR1.bed -b C13_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > E14SE-C13SE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a C13_SE_unscaled_150mDrR1.bed -b E14_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > E14SE-C13SE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat E14SE-E14PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed E14SE-E14PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > E14SE-C13SE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i E14SE-C13SE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > E14SE-C13SE-50pINT.bed; 
+
+bedtools intersect -wa -a E14_SE_unscaled_150mDrR1.bed -b C13_PE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > E14SE-C13PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a C13_PE_unscaled_150mDrR1.bed -b E14_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > E14SE-C13PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat E14SE-C13PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed E14SE-C13PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > E14SE-C13PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i E14SE-C13PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > E14SE-C13PE-50pINT.bed; 
+
+bedtools intersect -wa -a E14_PE_unscaled_150mDrR1.bed -b C13_PE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > E14PE-C13PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a C13_PE_unscaled_150mDrR1.bed -b E14_PE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > E14PE-C13PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat E14SE-C13PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed E14SE-C13PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > E14PE-C13PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i E14PE-C13PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > E14PE-C13PE-50pINT.bed; 
+
+bedtools intersect -wa -a C13_SE_unscaled_150mDrR1.bed -b E14_PE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > C13SE-E14PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a E14_PE_unscaled_150mDrR1.bed -b C13_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > C13SE-E14PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat C13SE-E14PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed C13SE-E14PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > C13SE-E14PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i C13SE-E14PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > C13SE-E14PE-50pINT.bed; 
+
+bedtools intersect -wa -a C13_SE_unscaled_150mDrR1.bed -b C13_PE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > C13SE-C13PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a C13_PE_unscaled_150mDrR1.bed -b C13_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > C13SE-C13PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat C13SE-C13PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed C13SE-C13PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > C13SE-C13PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i C13SE-C13PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > C13SE-C13PE-50pINT.bed; 
+
+cat E14SE-E14PE-50pINT.bed E14SE-C13SE-50pINT.bed E14SE-C13PE-50pINT.bed E14PE-C13PE-50pINT.bed C13SE-E14PE-50pINT.bed C13SE-C13PE-50pINT.bed > SL-ROOT-SUB-50pINT-intersects.bed; 
+
+
+bedtools intersect -wa -a C05_SE_unscaled_150mDrR1.bed -b C05_PE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > C05SE-C05PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a C05_PE_unscaled_150mDrR1.bed -b C05_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > C05SE-C05PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat C05SE-C05PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed C05SE-C05PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > C05SE-C05PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i C05SE-C05PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > C05SE-C05PE-50pINT.bed; 
+
+bedtools intersect -wa -a C05_SE_unscaled_150mDrR1.bed -b E05_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > C05SE-E05SE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a E05_SE_unscaled_150mDrR1.bed -b C05_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > C05SE-E05SE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat C05SE-C05PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed C05SE-C05PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > C05SE-E05SE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i C05SE-E05SE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > C05SE-E05SE-50pINT.bed; 
+
+bedtools intersect -wa -a E05_SE_unscaled_150mDrR1.bed -b C05_PE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > E05SE-C05PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a C05_PE_unscaled_150mDrR1.bed -b E05_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > E05SE-C05PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat E05SE-C05PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed E05SE-C05PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > E05SE-C05PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i E05SE-C05PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > E05SE-C05PE-50pINT.bed; 
+
+cat C05SE-C05PE-50pINT.bed C05SE-E05SE-50pINT.bed E05SE-C05PE-50pINT.bed > SL-SHOOT-CON-50pINT-intersects.bed; 
+
+
+bedtools intersect -wa -a D06_SE_unscaled_150mDrR1.bed -b D06_PE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > D06SE-D06PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a D06_PE_unscaled_150mDrR1.bed -b D06_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > D06SE-D06PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat D06SE-D06PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed D06SE-D06PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > D06SE-D06PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i D06SE-D06PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > D06SE-D06PE-50pINT.bed; 
+
+bedtools intersect -wa -a D06_SE_unscaled_150mDrR1.bed -b B06_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > D06SE-B06SE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a B06_SE_unscaled_150mDrR1.bed -b D06_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > D06SE-B06SE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat D06SE-D06PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed D06SE-D06PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > D06SE-B06SE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i D06SE-B06SE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > D06SE-B06SE-50pINT.bed; 
+
+bedtools intersect -wa -a B06_SE_unscaled_150mDrR1.bed -b D06_PE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > B06SE-D06PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a D06_PE_unscaled_150mDrR1.bed -b B06_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > B06SE-D06PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat B06SE-D06PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed B06SE-D06PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > B06SE-D06PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i B06SE-D06PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > B06SE-D06PE-50pINT.bed; 
+
+cat D06SE-D06PE-50pINT.bed D06SE-B06SE-50pINT.bed B06SE-D06PE-50pINT.bed > SL-SHOOT-SUB-50pINT-intersects.bed; 
+
+
+bedtools intersect -wa -a E15_SE_unscaled_150mDrR1.bed -b E15_PE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > E15SE-E15PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a E15_PE_unscaled_150mDrR1.bed -b E15_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > E15SE-E15PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat E15SE-E15PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed E15SE-E15PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > E15SE-E15PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i E15SE-E15PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > E15SE-E15PE-50pINT.bed; 
+
+bedtools intersect -wa -a E15_SE_unscaled_150mDrR1.bed -b B15_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > E15SE-B15SE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a B15_SE_unscaled_150mDrR1.bed -b E15_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > E15SE-B15SE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat E15SE-E15PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed E15SE-E15PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > E15SE-B15SE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i E15SE-B15SE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > E15SE-B15SE-50pINT.bed; 
+
+bedtools intersect -wa -a B15_SE_unscaled_150mDrR1.bed -b E15_PE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > B15SE-E15PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a E15_PE_unscaled_150mDrR1.bed -b B15_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > B15SE-E15PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat B15SE-E15PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed B15SE-E15PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > B15SE-E15PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i B15SE-E15PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > B15SE-E15PE-50pINT.bed; 
+
+bedtools intersect -wa -a E15_SE_unscaled_150mDrR1.bed -b D15_PE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > E15SE-D15PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a D15_PE_unscaled_150mDrR1.bed -b E15_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > E15SE-D15PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat E15SE-D15PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed E15SE-D15PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > E15SE-D15PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i E15SE-D15PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > E15SE-D15PE-50pINT.bed; 
+
+bedtools intersect -wa -a E15_PE_unscaled_150mDrR1.bed -b D15_PE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > E15PE-D15PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a D15_PE_unscaled_150mDrR1.bed -b E15_PE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > E15PE-D15PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat E15SE-D15PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed E15SE-D15PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > E15PE-D15PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i E15PE-D15PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > E15PE-D15PE-50pINT.bed; 
+
+bedtools intersect -wa -a B15_SE_unscaled_150mDrR1.bed -b D15_PE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > B15SE-D15PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a D15_PE_unscaled_150mDrR1.bed -b B15_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > B15SE-D15PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat B15SE-D15PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed B15SE-D15PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > B15SE-D15PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i B15SE-D15PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > B15SE-D15PE-50pINT.bed; 
+
+cat E15SE-E15PE-50pINT.bed E15SE-B15SE-50pINT.bed B15SE-E15PE-50pINT.bed E15SE-D15PE-50pINT.bed E15PE-D15PE-50pINT.bed B15SE-D15PE-50pINT.bed > SP-ROOT-CON-50pINT-intersects.bed; 
+
+
+bedtools intersect -wa -a D16_SE_unscaled_150mDrR1.bed -b D21_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > D16SE-D21SE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a D21_SE_unscaled_150mDrR1.bed -b D16_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > D16SE-D21SE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat D16SE-D21SE-mD150Rr1-unscaled-wa-50pINT-intersects.bed D16SE-D21SE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > D16SE-D21SE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i D16SE-D21SE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > D16SE-D21SE-50pINT.bed; 
+
+bedtools intersect -wa -a D16_SE_unscaled_150mDrR1.bed -b C16_PE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > D16SE-C16PE-mC160Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a C16_PE_unscaled_150mDrR1.bed -b D16_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > D16SE-C16PE-mC160Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat D16SE-C16PE-mC160Rr1-unscaled-wa-50pINT-intersects.bed D16SE-C16PE-mC160Rr1-unscaled-wb-50pINT-intersects.bed > D16SE-C16PE-mC160Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i D16SE-C16PE-mC160Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > D16SE-C16PE-50pINT.bed; 
+
+bedtools intersect -wa -a D21_SE_unscaled_150mDrR1.bed -b C16_PE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > D21SE-C16PE-mC160Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a C16_PE_unscaled_150mDrR1.bed -b D21_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > D21SE-C16PE-mC160Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat D21SE-C16PE-mC160Rr1-unscaled-wa-50pINT-intersects.bed D21SE-C16PE-mC160Rr1-unscaled-wb-50pINT-intersects.bed > D21SE-C16PE-mC160Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i D21SE-C16PE-mC160Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > D21SE-C16PE-50pINT.bed; 
+
+cat D16SE-D21SE-50pINT.bed D16SE-C16PE-50pINT.bed D21SE-C16PE-50pINT.bed > SP-ROOT-SUB-50pINT-intersects.bed; 
+
+
+bedtools intersect -wa -a D07_SE_unscaled_150mDrR1.bed -b D07_PE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > D07SE-D07PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a D07_PE_unscaled_150mDrR1.bed -b D07_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > D07SE-D07PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat D07SE-D07PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed D07SE-D07PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > D07SE-D07PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i D07SE-D07PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > D07SE-D07PE-50pINT.bed; 
+
+bedtools intersect -wa -a D07_SE_unscaled_150mDrR1.bed -b B07_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > D07SE-B07SE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a B07_SE_unscaled_150mDrR1.bed -b D07_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > D07SE-B07SE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat D07SE-D07PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed D07SE-D07PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > D07SE-B07SE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i D07SE-B07SE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > D07SE-B07SE-50pINT.bed; 
+
+bedtools intersect -wa -a B07_SE_unscaled_150mDrR1.bed -b D07_PE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > B07SE-D07PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a D07_PE_unscaled_150mDrR1.bed -b B07_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > B07SE-D07PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat B07SE-D07PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed B07SE-D07PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > B07SE-D07PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i B07SE-D07PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > B07SE-D07PE-50pINT.bed; 
+
+cat D07SE-D07PE-50pINT.bed D07SE-B07SE-50pINT.bed B07SE-D07PE-50pINT.bed > SP-SHOOT-CON-50pINT-intersects.bed; 
+
+
+bedtools intersect -wa -a E08_SE_unscaled_150mDrR1.bed -b E08_PE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > E08SE-E08PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a E08_PE_unscaled_150mDrR1.bed -b E08_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > E08SE-E08PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat E08SE-E08PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed E08SE-E08PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > E08SE-E08PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i E08SE-E08PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > E08SE-E08PE-50pINT.bed; 
+
+bedtools intersect -wa -a E08_SE_unscaled_150mDrR1.bed -b C08_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > E08SE-C08SE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a C08_SE_unscaled_150mDrR1.bed -b E08_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > E08SE-C08SE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat E08SE-E08PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed E08SE-E08PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > E08SE-C08SE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i E08SE-C08SE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > E08SE-C08SE-50pINT.bed; 
+
+bedtools intersect -wa -a E08_SE_unscaled_150mDrR1.bed -b C08_PE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > E08SE-C08PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a C08_PE_unscaled_150mDrR1.bed -b E08_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > E08SE-C08PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat E08SE-C08PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed E08SE-C08PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > E08SE-C08PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i E08SE-C08PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > E08SE-C08PE-50pINT.bed; 
+
+bedtools intersect -wa -a E08_PE_unscaled_150mDrR1.bed -b C08_PE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > E08PE-C08PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a C08_PE_unscaled_150mDrR1.bed -b E08_PE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > E08PE-C08PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat E08SE-C08PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed E08SE-C08PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > E08PE-C08PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i E08PE-C08PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > E08PE-C08PE-50pINT.bed; 
+
+bedtools intersect -wa -a C08_SE_unscaled_150mDrR1.bed -b E08_PE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > C08SE-E08PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a E08_PE_unscaled_150mDrR1.bed -b C08_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > C08SE-E08PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat C08SE-E08PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed C08SE-E08PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > C08SE-E08PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i C08SE-E08PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > C08SE-E08PE-50pINT.bed; 
+
+bedtools intersect -wa -a C08_SE_unscaled_150mDrR1.bed -b C08_PE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > C08SE-C08PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a C08_PE_unscaled_150mDrR1.bed -b C08_SE_unscaled_150mDrR1.bed -f 0.5 -F 0.5 > C08SE-C08PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat C08SE-C08PE-mD150Rr1-unscaled-wa-50pINT-intersects.bed C08SE-C08PE-mD150Rr1-unscaled-wb-50pINT-intersects.bed > C08SE-C08PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed; 
+bedtools sort -i C08SE-C08PE-mD150Rr1-unscaled-wawb-50pINT-intersects.bed | bedtools merge > C08SE-C08PE-50pINT.bed; 
+
+cat E08SE-E08PE-50pINT.bed E08SE-C08SE-50pINT.bed E08SE-C08PE-50pINT.bed E08PE-C08PE-50pINT.bed C08SE-E08PE-50pINT.bed C08SE-C08PE-50pINT.bed > SP-SHOOT-SUB-50pINT-intersects.bed; 
+
+cat SL-HAIRY-CON-50INT-intersects.bed SL-HAIRY-SUB-50INT-intersects.bed > SL-HAIRY-CON-and-SUB-50pINT-unscaled.bed; 
+bedtools sort -i SL-HAIRY-CON-and-SUB-50pINT-unscaled.bed | bedtools merge > SL-HAIRY-CON-SUB-50pINT-unscaled-All25samples; 
+
+cat SL-ROOT-CON-50pINT-intersects.bed SL-ROOT-SUB-50pINT-intersects.bed > SL-ROOT-CON-and-SUB-50pINT-unscaled.bed; 
+bedtools sort -i SL-ROOT-CON-and-SUB-50pINT-unscaled.bed | bedtools merge > SL-ROOT-CON-SUB-50pINT-unscaled-All6samples; 
+
+cat SL-SHOOT-CON-50pINT-intersects.bed SL-SHOOT-SUB-50pINT-intersects.bed > SL-SHOOT-CON-and-SUB-50pINT-unscaled.bed; 
+bedtools sort -i SL-SHOOT-CON-and-SUB-50pINT-unscaled.bed | bedtools merge > SL-SHOOT-CON-SUB-50pINT-unscaled-All6samples; 
+
+cat SP-ROOT-CON-50pINT-intersects.bed SP-ROOT-SUB-50pINT-intersects.bed > SP-ROOT-CON-and-SUB-50pINT-unscaled.bed; 
+bedtools sort -i SP-ROOT-CON-and-SUB-50pINT-unscaled.bed | bedtools merge > SP-ROOT-CON-SUB-50pINT-unscaled-All7samples; 
+
+cat SP-SHOOT-CON-50pINT-intersects.bed SP-SHOOT-SUB-50pINT-intersects.bed > SP-SHOOT-CON-and-SUB-50pINT-unscaled.bed; 
+bedtools sort -i SP-SHOOT-CON-and-SUB-50pINT-unscaled.bed | bedtools merge > SP-SHOOT-CON-SUB-50pINT-unscaled-All7samples; 
+
+wc -l A21SE-A21PE-50pINT.bed; 
+wc -l A21SE-C21SE-50pINT.bed; 
+wc -l A21SE-C21PE-50pINT.bed; 
+wc -l A21SE-B23SE-50pINT.bed; 
+wc -l C21SE-A21PE-50pINT.bed; 
+wc -l C21PE-A21PE-50pINT.bed; 
+wc -l B23SE-A21PE-50pINT.bed; 
+wc -l C21SE-C21PE-50pINT.bed; 
+wc -l B23SE-C21SE-50pINT.bed; 
+wc -l B23SE-C21PE-50pINT.bed; 
+wc -l A22SE-A22PE-50pINT.bed; 
+wc -l A22SE-B22SE-50pINT.bed; 
+wc -l A22SE-B22PE-50pINT.bed; 
+wc -l A22SE-C22SE-50pINT.bed; 
+wc -l A22SE-C22PE-50pINT.bed; 
+wc -l B22SE-A22PE-50pINT.bed; 
+wc -l A22PE-B22PE-50pINT.bed; 
+wc -l C22SE-A22PE-50pINT.bed; 
+wc -l A22PE-C22PE-50pINT.bed; 
+wc -l B22SE-B22PE-50pINT.bed; 
+wc -l B22SE-C22SE-50pINT.bed; 
+wc -l B22SE-C22PE-50pINT.bed; 
+wc -l C22SE-B22PE-50pINT.bed; 
+wc -l B22PE-C22PE-50pINT.bed; 
+wc -l C22SE-C22PE-50pINT.bed; 
+wc -l E13SE-C103SE-50pINT.bed; 
+wc -l E14SE-E14PE-50pINT.bed; 
+wc -l E14SE-C13SE-50pINT.bed; 
+wc -l E14SE-C13PE-50pINT.bed; 
+wc -l E14PE-C13PE-50pINT.bed; 
+wc -l C13SE-E14PE-50pINT.bed; 
+wc -l C13SE-C13PE-50pINT.bed; 
+wc -l C05SE-C05PE-50pINT.bed; 
+wc -l C05SE-E05SE-50pINT.bed; 
+wc -l E05SE-C05PE-50pINT.bed; 
+wc -l D06SE-D06PE-50pINT.bed; 
+wc -l D06SE-B06SE-50pINT.bed; 
+wc -l B06SE-D06PE-50pINT.bed; 
+wc -l E15SE-E15PE-50pINT.bed; 
+wc -l E15SE-B15SE-50pINT.bed; 
+wc -l B15SE-E15PE-50pINT.bed; 
+wc -l E15SE-D15PE-50pINT.bed; 
+wc -l E15PE-D15PE-50pINT.bed; 
+wc -l B15SE-D15PE-50pINT.bed; 
+wc -l D16SE-D21SE-50pINT.bed; 
+wc -l D16SE-C16PE-50pINT.bed; 
+wc -l D21SE-C16PE-50pINT.bed; 
+wc -l D07SE-D07PE-50pINT.bed; 
+wc -l D07SE-B07SE-50pINT.bed; 
+wc -l B07SE-D07PE-50pINT.bed; 
+wc -l E08SE-E08PE-50pINT.bed; 
+wc -l E08SE-C08SE-50pINT.bed; 
+wc -l E08SE-C08PE-50pINT.bed; 
+wc -l E08PE-C08PE-50pINT.bed; 
+wc -l C08SE-E08PE-50pINT.bed; 
+wc -l C08SE-C08PE-50pINT.bed; 
+
+4406 A21SE-A21PE-50pINT.bed
+4406 A21SE-C21SE-50pINT.bed
+10431 A21SE-C21PE-50pINT.bed
+7250 A21SE-B23SE-50pINT.bed
+3707 C21SE-A21PE-50pINT.bed
+3707 C21PE-A21PE-50pINT.bed
+2970 B23SE-A21PE-50pINT.bed
+8309 C21SE-C21PE-50pINT.bed
+4827 B23SE-C21SE-50pINT.bed
+5509 B23SE-C21PE-50pINT.bed
+6169 A22SE-A22PE-50pINT.bed
+6169 A22SE-B22SE-50pINT.bed
+7529 A22SE-B22PE-50pINT.bed
+6169 A22SE-C22SE-50pINT.bed
+4499 A22SE-C22PE-50pINT.bed
+6169 B22SE-A22PE-50pINT.bed
+7529 A22PE-B22PE-50pINT.bed
+6169 C22SE-A22PE-50pINT.bed
+4499 A22PE-C22PE-50pINT.bed
+10637 B22SE-B22PE-50pINT.bed
+10637 B22SE-C22SE-50pINT.bed
+5277 B22SE-C22PE-50pINT.bed
+7433 C22SE-B22PE-50pINT.bed
+5277 B22PE-C22PE-50pINT.bed
+4467 C22SE-C22PE-50pINT.bed
+4020 E13SE-C103SE-50pINT.bed
+6466 E14SE-E14PE-50pINT.bed
+6466 E14SE-C13SE-50pINT.bed
+2333 E14SE-C13PE-50pINT.bed
+2333 E14PE-C13PE-50pINT.bed
+5768 C13SE-E14PE-50pINT.bed
+2325 C13SE-C13PE-50pINT.bed
+1912 C05SE-C05PE-50pINT.bed
+1912 C05SE-E05SE-50pINT.bed
+219 E05SE-C05PE-50pINT.bed
+1528 D06SE-D06PE-50pINT.bed
+1528 D06SE-B06SE-50pINT.bed
+1646 B06SE-D06PE-50pINT.bed
+8057 E15SE-E15PE-50pINT.bed
+8057 E15SE-B15SE-50pINT.bed
+9007 B15SE-E15PE-50pINT.bed
+2201 E15SE-D15PE-50pINT.bed
+2201 E15PE-D15PE-50pINT.bed
+2247 B15SE-D15PE-50pINT.bed
+7489 D16SE-D21SE-50pINT.bed
+2437 D16SE-C16PE-50pINT.bed
+2546 D21SE-C16PE-50pINT.bed
+575 D07SE-D07PE-50pINT.bed
+575 D07SE-B07SE-50pINT.bed
+581 B07SE-D07PE-50pINT.bed
+8676 E08SE-E08PE-50pINT.bed
+8676 E08SE-C08SE-50pINT.bed
+6594 E08SE-C08PE-50pINT.bed
+6594 E08PE-C08PE-50pINT.bed
+7727 C08SE-E08PE-50pINT.bed
+6344 C08SE-C08PE-50pINT.bed
+
+
+cp SL-HAIRY-CON-and-SUB-50pINT-unscaled.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/MainPeaks; 
+cp SL-ROOT-CON-and-SUB-50pINT-unscaled.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/MainPeaks; 
+cp SL-SHOOT-CON-and-SUB-50pINT-unscaled.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/MainPeaks; 
+cp SP-ROOT-CON-and-SUB-50pINT-unscaled.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/MainPeaks; 
+cp SP-SHOOT-CON-and-SUB-50pINT-unscaled.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/MainPeaks; 
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/MainPeaks; 
+
+wc -l SL-HAIRY-CON-and-SUB-50pINT-unscaled.bed; 
+wc -l SL-ROOT-CON-and-SUB-50pINT-unscaled.bed; 
+wc -l SL-SHOOT-CON-and-SUB-50pINT-unscaled.bed; 
+wc -l SP-ROOT-CON-and-SUB-50pINT-unscaled.bed; 
+wc -l SP-SHOOT-CON-and-SUB-50pINT-unscaled.bed; 
+
+149002 SL-HAIRY-CON-and-SUB-50pINT-unscaled.bed
+29711 SL-ROOT-CON-and-SUB-50pINT-unscaled.bed
+9404 SL-SHOOT-CON-and-SUB-50pINT-unscaled.bed
+44242 SP-ROOT-CON-and-SUB-50pINT-unscaled.bed
+46342 SP-SHOOT-CON-and-SUB-50pINT-unscaled.bed
+
+
+For Finding the Numbers of CON or SUB only use the -CON-SUB- bed files (second line in the above CON and SUB combos) and use this sample subtraction code from MT
+bedtools subtract -A -a MT-CON-SUB-50pINT-unscaled-all3reps.bed -b MT-CON-50pINT-unscaled-all3reps.bed > MT-SUBonly-unscaled-all3reps.bed; 
+bedtools subtract -A -a MT-CON-SUB-50pINT-unscaled-all3reps.bed -b MT-SUB-50pINT-unscaled-all3reps.bed > MT-CONonly-unscaled-all3reps.bed; 
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/PairedEnd; 
+samtools view -f 0x40 -b SUBEX-D15_S17_R1_001_1P.fastq.sam.sorted.clean.bam > D15-UPE.bam; 
+mv *UPE.bam TOMATO-UNPAIRED; 
+cd TOMATO-UNPAIRED; 
+samtools index D15-UPE.bam; 
+samtools view -c D15-UPE.bam; 
+
+
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/SingleEnd; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam AT2-A21_S1_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam SL-HAIRY.gff3 > A21-HAIRY-CON-SE-1-counts.txt; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam AT2-C21_S12_L001_R1_001_1P.fastq.sam.sorted.clean.bam SL-HAIRY.gff3 > C21-HAIRY-CON-SE-2B-counts.txt; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam AT2-B23_S7_L001_R1_001_1P.fastq.sam.sorted.clean.bam SL-HAIRY.gff3 > B23-HAIRY-CON-SE-2-counts.txt; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam AT2-A22_S2_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam SL-HAIRY.gff3 > A22-HAIRY-SUB-SE-1-counts.txt; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam AT2-B22_S6_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam SL-HAIRY.gff3 > B22-HAIRY-SUB-SE-2-counts.txt; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam AT2-C22_S13_L001_R1_001_1P.fastq.sam.sorted.clean.bam SL-HAIRY.gff3 > C22-HAIRY-SUB-SE-2B-counts.txt; 
+
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/PairedEnd/TOMATO-UNPAIRED; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam A21-UPE.bam SL-HAIRY.gff3 > A21-HAIRY-CON-UPE-1-counts.txt; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam C21-UPE.bam SL-HAIRY.gff3 > C21-HAIRY-CON-UPE-2B-counts.txt; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam A22-UPE.bam SL-HAIRY.gff3 > A22-HAIRY-SUB-UPE-1-counts.txt; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam B22-UPE.bam SL-HAIRY.gff3 > B22-HAIRY-SUB-UPE-2-counts.txt; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam C22-UPE.bam SL-HAIRY.gff3 > C22-HAIRY-SUB-UPE-2B-counts.txt; 
+
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/SingleEnd; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam AT2-E13_S20_L001_R1_001_1P.fastq.sam.sorted.clean.bam SL-ROOT.gff3 > E13-SL-ROOT-CON-SE-1-counts.txt; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam AT2-C103_S10_L001_R1_001_1P.fastq.sam.sorted.clean.bam SL-ROOT.gff3 > C103-SL-ROOT-CON-SE-2-counts.txt; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam AT2-E14_S21_L001_R1_001_1P.fastq.sam.sorted.clean.bam SL-ROOT.gff3 > E14-SL-ROOT-SUB-SE-1-counts.txt; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam AT2-C13_S11_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam SL-ROOT.gff3 > C13-SL-ROOT-SUB-SE-2-counts.txt; 
+
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/PairedEnd/TOMATO-UNPAIRED; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam E14-UPE.bam SL-ROOT.gff3 > E14-SL-ROOT-SUB-UPE-1B-counts.txt; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam C13-UPE.bam SL-ROOT.gff3 > C13-SL-ROOT-SUB-UPE-2B-counts.txt; 
+
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/SingleEnd; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam AT2-C05_S8_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam SL-SHOOT.gff3 > C05-SL-SHOOT-CON-SE-2-counts.txt; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam AT2-E05_S18_L001_R1_001_1P.fastq.sam.sorted.clean.bam SL-SHOOT.gff3 > E05-SL-SHOOT-CON-SE-1-counts.txt; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam AT2-D06_S14_L001_R1_001_1P.fastq.sam.sorted.clean.bam SL-SHOOT.gff3 > D06-SL-SHOOT-SUB-SE-1-counts.txt; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam AT2-B06_S3_L001_R1_001_1P.fastq.sam.sorted.clean.bam SL-SHOOT.gff3 > B06-SL-SHOOT-SUB-SE-2-counts.txt; 
+
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/PairedEnd/TOMATO-UNPAIRED; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam C05-UPE.bam SL-SHOOT.gff3 > C05-SL-SHOOT-CON-UPE-2-counts.txt; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam D06-UPE.bam SL-SHOOT.gff3 > D06-SL-SHOOT-SUB-UPE-1B-counts.txt; 
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/SingleEnd; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam AT2-E15_S22_L001_R1_001_1P.fastq.sam.sorted.clean.bam SP-ROOT.gff3 > E15-SP-ROOT-CON-SE-1-counts.txt; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam AT2-B15_S5_L001_R1_001_1P.fastq.sam.sorted.clean.bam SP-ROOT.gff3 > B15-SP-ROOT-CON-SE-2-counts.txt; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam AT2-D16_S16_L001_R1_001_1P.fastq.sam.sorted.clean.bam SP-ROOT.gff3 > D16-SP-ROOT-SUB-SE-1-counts.txt; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam AT2-D21_S17_L001_R1_001_1P.fastq.sam.sorted.clean.bam SP-ROOT.gff3 > D21-SP-ROOT-SUB-SE-1B-counts.txt; 
+
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/PairedEnd/TOMATO-UNPAIRED; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam E15-UPE.bam SP-ROOT.gff3 > E15-SP-ROOT-CON-UPE-1B-counts.txt; 
+ 
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/SingleEnd; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam AT2-D07_S15_L001_R1_001_1P.fastq.sam.sorted.clean.bam SP-SHOOT.gff3 > D07-SP-SHOOT-CON-SE-1-counts.txt; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam AT2-B07_S4_L001_R1_001_1P.fastq.sam.sorted.clean.bam SP-SHOOT.gff3 > B07-SP-SHOOT-CON-SE-2-counts.txt; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam AT2-E08_S19_L001_R1_001_1P.fastq.sam.sorted.clean.bam SP-SHOOT.gff3 > E08-SP-SHOOT-SUB-SE-1-counts.txt; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam AT2-C08_S9_L001_R1_001_1P.fastq.sam.sorted.clean.bam SP-SHOOT.gff3 > C08-SP-SHOOT-SUB-SE-2-counts.txt; 
+
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/PairedEnd/TOMATO-UNPAIRED; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam D07-UPE.bam SP-SHOOT.gff3 > D07-SP-SHOOT-CON-UPE-1-counts.txt; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam E08-UPE.bam SP-SHOOT.gff3 > E08=SP-SHOOT-SUB-UPE-1-counts.txt; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam C08-UPE.bam SP-SHOOT.gff3 > E08=SP-SHOOT-SUB-UPE-2-counts.txt; 
+
+
+Had some errors, major stuff was that I did NOT put the gff3 files into the UNPAIRED folder but the parent PairedEnd folder....
+Also, I did not need as many copy commands as I had. Corrected above. I basically just need one for the SingleEnd and one for the UNPAIRED folders, and do it at the end. Like this:
+
+cp *.gff3 TOMATO-UNPAIRED; 
+
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/SingleEnd; 
+cp *counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/CountResults; 
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/PairedEnd/TOMATO-UNPAIRED; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam A21-UPE.bam SL-HAIRY.gff3 > A21-HAIRY-CON-UPE-1-counts.txt; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam C21-UPE.bam SL-HAIRY.gff3 > C21-HAIRY-CON-UPE-2B-counts.txt; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam A22-UPE.bam SL-HAIRY.gff3 > A22-HAIRY-SUB-UPE-1-counts.txt; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam B22-UPE.bam SL-HAIRY.gff3 > B22-HAIRY-SUB-UPE-2-counts.txt; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam C22-UPE.bam SL-HAIRY.gff3 > C22-HAIRY-SUB-UPE-2B-counts.txt; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam E14-UPE.bam SL-ROOT.gff3 > E14-SL-ROOT-SUB-UPE-1B-counts.txt; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam C13-UPE.bam SL-ROOT.gff3 C13-SL-ROOT-SUB-UPE-2B-counts.txt; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam C05-UPE.bam SL-SHOOT.gff3 > C05-SL-SHOOT-CON-UPE-2-counts.txt; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam D06-UPE.bam SL-SHOOT.gff3 > D06-SL-SHOOT-SUB-UPE-1B-counts.txt; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam E15-UPE.bam SP-ROOT.gff3 > E15-SP-ROOT-CON-UPE-1B-counts.txt; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam D07-UPE.bam SP-SHOOT.gff3 > D07-SP-SHOOT-CON-UPE-1-counts.txt; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam E08-UPE.bam SP-SHOOT.gff3 > E08-SP-SHOOT-SUB-UPE-1-counts.txt; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam C08-UPE.bam SP-SHOOT.gff3 > C08-SP-SHOOT-SUB-UPE-2-counts.txt; 
+ 
+cp *counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/CountResults; 
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/CountResults; 
+wc -l A21-HAIRY-CON-SE-1-counts.txt; 
+wc -l C22-HAIRY-SUB-SE-2B-counts.txt; 
+wc -l A22-HAIRY-SUB-SE-1-counts.txt; 
+wc -l D06-SL-SHOOT-SUB-SE-1-counts.txt; 
+wc -l B06-SL-SHOOT-SUB-SE-2-counts.txt; 
+wc -l D07-SP-SHOOT-CON-SE-1-counts.txt; 
+wc -l B07-SP-SHOOT-CON-SE-2-counts.txt; 
+wc -l D16-SP-ROOT-SUB-SE-1-counts.txt; 
+wc -l B15-SP-ROOT-CON-SE-2-counts.txt; 
+wc -l D21-SP-ROOT-SUB-SE-1B-counts.txt; 
+wc -l B22-HAIRY-SUB-SE-2-counts.txt; 
+wc -l E05-SL-SHOOT-CON-SE-1-counts.txt; 
+wc -l B23-HAIRY-CON-SE-2-counts.txt; 
+wc -l E08-SP-SHOOT-SUB-SE-1-counts.txt; 
+wc -l C05-SL-SHOOT-CON-SE-2-counts.txt; 
+wc -l E13-SL-ROOT-CON-SE-1-counts.txt; 
+wc -l C08-SP-SHOOT-SUB-SE-2-counts.txt; 
+wc -l E14-SL-ROOT-SUB-SE-1-counts.txt; 
+wc -l C103-SL-ROOT-CON-SE-2-counts.txt; 
+wc -l E15-SP-ROOT-CON-SE-1-counts.txt; 
+wc -l C13-SL-ROOT-SUB-SE-2-counts.txt; 
+wc -l C21-HAIRY-CON-SE-2B-counts.txt; 
+
+73013 A21-HAIRY-CON-SE-1-counts.txt
+73013 C22-HAIRY-SUB-SE-2B-counts.txt
+73013 A22-HAIRY-SUB-SE-1-counts.txt
+3172 D06-SL-SHOOT-SUB-SE-1-counts.txt
+3172 B06-SL-SHOOT-SUB-SE-2-counts.txt
+23515 D07-SP-SHOOT-CON-SE-1-counts.txt
+23515 B07-SP-SHOOT-CON-SE-2-counts.txt
+31433 D16-SP-ROOT-SUB-SE-1-counts.txt
+31433 B15-SP-ROOT-CON-SE-2-counts.txt
+31433 D21-SP-ROOT-SUB-SE-1B-counts.txt
+73013 B22-HAIRY-SUB-SE-2-counts.txt
+3172 E05-SL-SHOOT-CON-SE-1-counts.txt
+73013 B23-HAIRY-CON-SE-2-counts.txt
+23515 E08-SP-SHOOT-SUB-SE-1-counts.txt
+3172 C05-SL-SHOOT-CON-SE-2-counts.txt
+19004 E13-SL-ROOT-CON-SE-1-counts.txt
+23515 C08-SP-SHOOT-SUB-SE-2-counts.txt
+19004 E14-SL-ROOT-SUB-SE-1-counts.txt
+19004 C103-SL-ROOT-CON-SE-2-counts.txt
+31433 E15-SP-ROOT-CON-SE-1-counts.txt
+19004 C13-SL-ROOT-SUB-SE-2-counts.txt
+73013 C21-HAIRY-CON-SE-2B-counts.txt
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/CountResults; 
+wc -l A21-HAIRY-CON-UPE-1-counts.txt; 
+wc -l C05-SL-SHOOT-CON-UPE-2-counts.txt; 
+wc -l D06-SL-SHOOT-SUB-UPE-1B-counts.txt; 
+wc -l E08=SP-SHOOT-SUB-UPE-2-counts.txt; 
+wc -l A22-HAIRY-SUB-UPE-1-counts.txt; 
+wc -l C21-HAIRY-CON-UPE-2B-counts.txt; 
+wc -l D07-SP-SHOOT-CON-UPE-1-counts.txt; 
+wc -l E14-SL-ROOT-SUB-UPE-1B-counts.txt; 
+wc -l B22-HAIRY-SUB-UPE-2-counts.txt; 
+wc -l C22-HAIRY-SUB-UPE-2B-counts.txt; 
+wc -l E08=SP-SHOOT-SUB-UPE-1-counts.txt; 
+wc -l E15-SP-ROOT-CON-UPE-1B-counts.txt; 
+
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/PairedEnd/TOMATO-UNPAIRED; 
+
+bamCoverage -b A21-UPE.bam -o A21-UPE-scaling.bw -bs=1 --normalizeUsingRPKM -p=max; 
+
+samtools view -s 0.401447159024322 -b C21-UPE.bam > C21-UPE-scaling.bam; 
+samtools index C21-UPE-scaling.bam; 
+bamCoverage -b C21-UPE-scaling.bam -o C21-UPE-scaling.bw -bs=1 --normalizeUsingRPKM -p=max; 
+
+samtools view -s 0.62586542635501 -b A22-UPE.bam > A22-UPE-scaling.bam; 
+samtools index A22-UPE-scaling.bam; 
+bamCoverage -b A22-UPE-scaling.bam -o A22-UPE-scaling.bw -bs=1 --normalizeUsingRPKM -p=max; 
+
+samtools view -s 0.271093642358781 -b B22-UPE.bam > B22-UPE-scaling.bam; 
+samtools index B22-UPE-scaling.bam; 
+bamCoverage -b B22-UPE-scaling.bam -o B22-UPE-scaling.bw -bs=1 --normalizeUsingRPKM -p=max; 
+
+cp A21-UPE-scaling.bw /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/BigWigs; 
+cp C21-UPE-scaling.bw /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/BigWigs; 
+cp A22-UPE-scaling.bw /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/BigWigs; 
+cp B22-UPE-scaling.bw /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/BigWigs; 
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/SingleEnd; 
+bamCoverage -b AT2-A21_S1_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam -o A21-SE-scaling.bw -bs=1 --normalizeUsingRPKM -p=max; 
+bamCoverage -b AT2-C21_S12_L001_R1_001_1P.fastq.sam.sorted.clean.bam -o C21-SE-scaling.bw -bs=1 --normalizeUsingRPKM -p=max; 
+bamCoverage -b AT2-A22_S2_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam -o A22-SE-scaling.bw -bs=1 --normalizeUsingRPKM -p=max; 
+bamCoverage -b AT2-B22_S6_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam -o B22-SE-scaling.bw -bs=1 --normalizeUsingRPKM -p=max; 
+
+cp A21-SE-scaling.bw /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/BigWigs; 
+cp C21-SE-scaling.bw /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/BigWigs; 
+cp A22-SE-scaling.bw /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/BigWigs; 
+cp B22-SE-scaling.bw /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/BigWigs; 
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/GenomeInfo/TOMATO; 
+samtools faidx Spenn.fasta; 
+cut -f1,2 Spenn.fasta.fai > Spenn-ChrSizestest.txt; 
+cut -f1,2 S_lycopersicum_chromosomes.3.00.fa.fai > Slyco-ChrSizestest.txt; 
+
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/BigWigs; 
+
+bigWigMerge A21-UPE-scaling.bw A21-SE-scaling.bw A21-SEandUPE.bedGraph; 
+bedtools sort -i A21-SEandUPE.bedGraph > A21-SEandUPE-sorted.bedGraph; 
+bedGraphToBigWig A21-SEandUPE-sorted.bedGraph Slyco-ChrSizestest.txt A21-SEandUPE.bw; 
+
+bigWigMerge C21-UPE-scaling.bw C21-SE-scaling.bw C21-SEandUPE.bedGraph; 
+bedtools sort -i C21-SEandUPE.bedGraph > C21-SEandUPE-sorted.bedGraph; 
+bedGraphToBigWig C21-SEandUPE-sorted.bedGraph Slyco-ChrSizestest.txt C21-SEandUPE.bw; 
+
+bigWigMerge A21-SEandUPE.bw C21-SEandUPE.bw A21-C21.bedGraph; 
+bedtools sort -i A21-C21.bedGraph > A21-C21-sorted.bedGraph; 
+bedGraphToBigWig A21-C21-sorted.bedGraph Slyco-ChrSizestest.txt SL-HAIRY-CON.bw; 
+
+
+bigWigMerge A22-UPE-scaling.bw A22-SE-scaling.bw A22-SEandUPE.bedGraph; 
+bedtools sort -i A22-SEandUPE.bedGraph > A22-SEandUPE-sorted.bedGraph; 
+bedGraphToBigWig A22-SEandUPE-sorted.bedGraph Slyco-ChrSizestest.txt A22-SEandUPE.bw; 
+
+bigWigMerge B22-UPE-scaling.bw B22-SE-scaling.bw B22-SEandUPE.bedGraph; 
+bedtools sort -i B22-SEandUPE.bedGraph > B22-SEandUPE-sorted.bedGraph; 
+bedGraphToBigWig B22-SEandUPE-sorted.bedGraph Slyco-ChrSizestest.txt B22-SEandUPE.bw; 
+
+bigWigMerge A22-SEandUPE.bw B22-SEandUPE.bw A22-B22.bedGraph; 
+bedtools sort -i A22-B22.bedGraph > A22-B22-sorted.bedGraph; 
+bedGraphToBigWig A22-B22-sorted.bedGraph Slyco-ChrSizestest.txt SL-HAIRY-SUB.bw; 
+
+cp SL-HAIRY-CON.bw MAIN; 
+cp SL-HAIRY-SUB.bw MAIN; 
+
+
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Genomic-DNA; 
+
+samtools view -s 0.352102013774437 -b SL-gDNA-q2.sorted.bam > SL-gDNA-ScaledForHAIRY.bam; 
+samtools index SL-gDNA-ScaledForHAIRY.bam; 
+bamCoverage -b SL-gDNA-ScaledForHAIRY.bam -o SL-gDNA-HAIRY.bw -bs=1 --normalizeUsingRPKM -p=max; 
+
+cp SL-gDNA-HAIRY.bw /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/BigWigs/MAIN; 
+
+samtools view -s 0.0912528612783361 -b SL-gDNA-q2.sorted.bam > SL-gDNA-ScaledForROOT.bam; 
+samtools index SL-gDNA-ScaledForROOT.bam; 
+bamCoverage -b SL-gDNA-ScaledForROOT.bam -o SL-gDNA-ROOT.bw -bs=1 --normalizeUsingRPKM -p=max; 
+
+cp SL-gDNA-ROOT.bw /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/BigWigs/MAIN; 
+
+samtools view -s 0.150682989535757 -b SL-gDNA-q2.sorted.bam > SL-gDNA-ScaledForSHOOT.bam; 
+samtools index SL-gDNA-ScaledForSHOOT.bam; 
+bamCoverage -b SL-gDNA-ScaledForSHOOT.bam -o SL-gDNA-SHOOT.bw -bs=1 --normalizeUsingRPKM -p=max; 
+
+cp SL-gDNA-SHOOT.bw /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/BigWigs/MAIN; 
+
+samtools view -s 0.107778484142457 -b SP-gDNA-q2.sorted.bam > SP-gDNA-ScaledForROOT.bam; 
+samtools index SP-gDNA-ScaledForROOT.bam; 
+bamCoverage -b SP-gDNA-ScaledForROOT.bam -o SP-gDNA-ROOT.bw -bs=1 --normalizeUsingRPKM -p=max; 
+
+cp SP-gDNA-ROOT.bw /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/BigWigs/MAIN; 
+
+samtools view -s 0.130934859307049 -b SP-gDNA-q2.sorted.bam > SP-gDNA-ScaledForSHOOT.bam; 
+samtools index SP-gDNA-ScaledForSHOOT.bam; 
+bamCoverage -b SP-gDNA-ScaledForSHOOT.bam -o SP-gDNA-SHOOT.bw -bs=1 --normalizeUsingRPKM -p=max; 
+
+cp SP-gDNA-SHOOT.bw /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/BigWigs/MAIN; 
+
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/SingleEnd; 
+
+bamCoverage -b AT2-C103_S10_L001_R1_001_1P.fastq.sam.sorted.clean.bam -o C103-SE-scaling.bw -bs=1 --normalizeUsingRPKM -p=max; 
+
+samtools view -s 0.536723592466392 -b AT2-E13_S20_L001_R1_001_1P.fastq.sam.sorted.clean.bam > E13-SE-ScaledForROOT.bam; 
+samtools index E13-SE-ScaledForROOT.bam; 
+bamCoverage -b E13-SE-ScaledForROOT.bam -o E13-SE-scaling.bw -bs=1 --normalizeUsingRPKM -p=max; 
+
+samtools view -s 0.53884227634475 -b AT2-E14_S21_L001_R1_001_1P.fastq.sam.sorted.clean.bam > E14-SE-ScaledForROOT.bam; 
+samtools index E14-SE-ScaledForROOT.bam; 
+bamCoverage -b E14-SE-ScaledForROOT.bam -o E14-SE-scaling.bw -bs=1 --normalizeUsingRPKM -p=max; 
+
+samtools view -s 0.73467973634735 -b AT2-C13_S11_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam > C13-SE-ScaledForROOT.bam; 
+samtools index C13-SE-ScaledForROOT.bam; 
+bamCoverage -b C13-SE-ScaledForROOT.bam -o C13-SE-scaling.bw -bs=1 --normalizeUsingRPKM -p=max; 
+
+cp E13-SE-scaling.bw /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/BigWigs; 
+cp E14-SE-scaling.bw /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/BigWigs; 
+cp C13-SE-scaling.bw /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/BigWigs; 
+cp C103-SE-scaling.bw /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/BigWigs; 
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/BigWigs; 
+
+bigWigMerge E13-SE-scaling.bw C103-SE-scaling.bw E13-C103-SE.bedGraph; 
+bedtools sort -i E13-C103-SE.bedGraph > E13-C103-SE-sorted.bedGraph; 
+bedGraphToBigWig E13-C103-SE-sorted.bedGraph Slyco-ChrSizestest.txt SL-ROOT-CON.bw; 
+
+cp SL-ROOT-CON.bw MAIN; 
+
+bigWigMerge E14-SE-scaling.bw C13-SE-scaling.bw E14-C13-SE.bedGraph; 
+bedtools sort -i E14-C13-SE.bedGraph > E14-C13-SE-sorted.bedGraph; 
+bedGraphToBigWig E14-C13-SE-sorted.bedGraph Slyco-ChrSizestest.txt SL-ROOT-SUB.bw; 
+
+cp SL-ROOT-SUB.bw MAIN; 
+
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/SingleEnd; 
+
+bamCoverage -b AT2-B06_S3_L001_R1_001_1P.fastq.sam.sorted.clean.bam -o B06-SE-scaling.bw -bs=1 --normalizeUsingRPKM -p=max; 
+bamCoverage -b AT2-D06_S14_L001_R1_001_1P.fastq.sam.sorted.clean.bam -o D06-SE-scaling.bw -bs=1 --normalizeUsingRPKM -p=max; 
+bamCoverage -b AT2-C05_S8_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam -o C05-SE-scaling.bw -bs=1 --normalizeUsingRPKM -p=max; 
+
+samtools view -s 0.983833250530306 -b AT2-E05_S18_L001_R1_001_1P.fastq.sam.sorted.clean.bam > E05-SE-ScaledForSHOOT.bam; 
+samtools index E05-SE-ScaledForSHOOT.bam; 
+bamCoverage -b E05-SE-ScaledForSHOOT.bam -o E05-SE-scaling.bw -bs=1 --normalizeUsingRPKM -p=max; 
+
+cp B06-SE-scaling.bw /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/BigWigs; 
+cp D06-SE-scaling.bw /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/BigWigs; 
+cp C05-SE-scaling.bw /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/BigWigs; 
+cp E05-SE-scaling.bw /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/BigWigs; 
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/PairedEnd/TOMATO-UNPAIRED; 
+
+samtools view -s 0.34193649037906 -b C05-UPE.bam > C05-UPE-ScaledForSHOOT.bam; 
+samtools index C05-UPE-ScaledForSHOOT.bam; 
+bamCoverage -b C05-UPE-ScaledForSHOOT.bam -o C05-UPE-scaling.bw -bs=1 --normalizeUsingRPKM -p=max; 
+
+samtools view -s 0.674178444404333 -b D06-UPE.bam > D06-UPE-ScaledForSHOOT.bam; 
+samtools index D06-UPE-ScaledForSHOOT.bam; 
+bamCoverage -b D06-UPE-ScaledForSHOOT.bam -o D06-UPE-scaling.bw -bs=1 --normalizeUsingRPKM -p=max; 
+
+cp C05-UPE-scaling.bw /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/BigWigs; 
+cp D06-UPE-scaling.bw /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/BigWigs; 
+
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/BigWigs; 
+
+bigWigMerge C05-SE-scaling.bw C05-UPE-scaling.bw C05-SEandUPE.bedGraph; 
+bedtools sort -i C05-SEandUPE.bedGraph > C05-SEandUPE-sorted.bedGraph; 
+bedGraphToBigWig C05-SEandUPE-sorted.bedGraph Slyco-ChrSizestest.txt C05-SEandUPE.bw; 
+
+bigWigMerge D06-SE-scaling.bw D06-UPE-scaling.bw D06-SEandUPE.bedGraph; 
+bedtools sort -i D06-SEandUPE.bedGraph > D06-SEandUPE-sorted.bedGraph; 
+bedGraphToBigWig D06-SEandUPE-sorted.bedGraph Slyco-ChrSizestest.txt D06-SEandUPE.bw; 
+
+bigWigMerge C05-SEandUPE.bw E05-SE-scaling.bw C05-E05.bedGraph; 
+bedtools sort -i C05-E05.bedGraph > C05-E05-sorted.bedGraph; 
+bedGraphToBigWig C05-E05-sorted.bedGraph Slyco-ChrSizestest.txt SL-SHOOT-CON.bw; 
+
+bigWigMerge D06-SEandUPE.bw B06-SE-scaling.bw D06-B06.bedGraph; 
+bedtools sort -i D06-B06.bedGraph > D06-B06-sorted.bedGraph; 
+bedGraphToBigWig D06-B06-sorted.bedGraph Slyco-ChrSizestest.txt SL-SHOOT-SUB.bw; 
+
+cp SL-SHOOT-CON.bw MAIN; 
+cp SL-SHOOT-SUB.bw MAIN; 
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/SingleEnd; 
+
+bamCoverage -b AT2-D16_S16_L001_R1_001_1P.fastq.sam.sorted.clean.bam -o D16-SE-scaling.bw -bs=1 --normalizeUsingRPKM -p=max; 
+
+samtools view -s 0.57330783019342 -b AT2-B15_S5_L001_R1_001_1P.fastq.sam.sorted.clean.bam > B15-SE-ScaledForROOT.bam; 
+samtools index B15-SE-ScaledForROOT.bam; 
+bamCoverage -b B15-SE-ScaledForROOT.bam -o B15-SE-scaling.bw -bs=1 --normalizeUsingRPKM -p=max; 
+
+samtools view -s 0.718801916729746 -b AT2-E15_S22_L001_R1_001_1P.fastq.sam.sorted.clean.bam > E15-SE-ScaledForROOT.bam; 
+samtools index E15-SE-ScaledForROOT.bam; 
+bamCoverage -b E15-SE-ScaledForROOT.bam -o E15-SE-scaling.bw -bs=1 --normalizeUsingRPKM -p=max; 
+
+samtools view -s 0.718016846700997 -b AT2-D21_S17_L001_R1_001_1P.fastq.sam.sorted.clean.bam > D21-SE-ScaledForROOT.bam; 
+samtools index D21-SE-ScaledForROOT.bam; 
+bamCoverage -b D21-SE-ScaledForROOT.bam -o D21-SE-scaling.bw -bs=1 --normalizeUsingRPKM -p=max; 
+
+cp D16-SE-scaling.bw /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/BigWigs; 
+cp B15-SE-scaling.bw /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/BigWigs; 
+cp E15-SE-scaling.bw /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/BigWigs; 
+cp D21-SE-scaling.bw /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/BigWigs; 
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/BigWigs; 
+
+bigWigMerge E15-SE-scaling.bw B15-SE-scaling.bw E15-B15.bedGraph; 
+bedtools sort -i E15-B15.bedGraph > E15-B15-sorted.bedGraph; 
+bedGraphToBigWig E15-B15-sorted.bedGraph Spenn-ChrSizestest.txt SP-ROOT-CON.bw;
+
+bigWigMerge D16-SE-scaling.bw D21-SE-scaling.bw D16-D21.bedGraph; 
+bedtools sort -i D16-D21.bedGraph > D16-D21-sorted.bedGraph; 
+bedGraphToBigWig D16-D21-sorted.bedGraph Spenn-ChrSizestest.txt SP-ROOT-SUB.bw; 
+
+cp SP-ROOT-CON.bw MAIN; 
+cp SP-ROOT-SUB.bw MAIN; 
+
+
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/SingleEnd; 
+
+bamCoverage -b AT2-D07_S15_L001_R1_001_1P.fastq.sam.sorted.clean.bam -o D07-SE-scaling.bw -bs=1 --normalizeUsingRPKM -p=max; 
+bamCoverage -b AT2-C08_S9_L001_R1_001_1P.fastq.sam.sorted.clean.bam -o C08-SE-scaling.bw -bs=1 --normalizeUsingRPKM -p=max; 
+
+samtools view -s 0.757892999914353 -b AT2-B07_S4_L001_R1_001_1P.fastq.sam.sorted.clean.bam > B07-SE-ScaledForSHOOT.bam; 
+samtools index B07-SE-ScaledForSHOOT.bam; 
+bamCoverage -b B07-SE-ScaledForSHOOT.bam -o B07-SE-scaling.bw -bs=1 --normalizeUsingRPKM -p=max; 
+
+samtools view -s 0.82527212658939 -b AT2-E08_S19_L001_R1_001_1P.fastq.sam.sorted.clean.bam > E08-SE-ScaledForSHOOT.bam; 
+samtools index E08-SE-ScaledForSHOOT.bam; 
+bamCoverage -b E08-SE-ScaledForSHOOT.bam -o E08-SE-scaling.bw -bs=1 --normalizeUsingRPKM -p=max; 
+
+cp D07-SE-scaling.bw /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/BigWigs; 
+cp C08-SE-scaling.bw /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/BigWigs; 
+cp B07-SE-scaling.bw /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/BigWigs; 
+cp E08-SE-scaling.bw /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/BigWigs; 
+
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/PairedEnd/TOMATO-UNPAIRED; 
+
+bamCoverage -b C08-UPE.bam -o D07-UPE-scaling.bw -bs=1 --normalizeUsingRPKM -p=max; 
+
+samtools view -s 0.273957491306184 -b C08-UPE.bam > C08-UPE-ScaledForSHOOT.bam; 
+samtools index C08-UPE-ScaledForSHOOT.bam; 
+bamCoverage -b C08-UPE-ScaledForSHOOT.bam -o C08-UPE-scaling.bw -bs=1 --normalizeUsingRPKM -p=max; 
+
+cp C08-UPE-scaling.bw /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/BigWigs; 
+cp D07-UPE-scaling.bw /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/BigWigs; 
+
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/BigWigs; 
+
+bigWigMerge D07-SE-scaling.bw D07-UPE-scaling.bw D07-SEandUPE.bedGraph; 
+bedtools sort -i D07-SEandUPE.bedGraph > D07-SEandUPE-sorted.bedGraph; 
+bedGraphToBigWig D07-SEandUPE-sorted.bedGraph Spenn-ChrSizestest.txt D07-SEandUPE.bw; 
+
+bigWigMerge C08-SE-scaling.bw C08-UPE-scaling.bw C08-SEandUPE.bedGraph; 
+bedtools sort -i C08-SEandUPE.bedGraph > C08-SEandUPE-sorted.bedGraph; 
+bedGraphToBigWig C08-SEandUPE-sorted.bedGraph Spenn-ChrSizestest.txt C08-SEandUPE.bw; 
+
+bigWigMerge D07-SEandUPE.bw B07-SE-scaling.bw D07-B07.bedGraph; 
+bedtools sort -i D07-B07.bedGraph > D07-B07-sorted.bedGraph; 
+bedGraphToBigWig D07-B07-sorted.bedGraph Spenn-ChrSizestest.txt SP-SHOOT-CON.bw; 
+
+bigWigMerge C08-SEandUPE.bw E08-SE-scaling.bw C08-E08.bedGraph; 
+bedtools sort -i C08-E08.bedGraph > C08-E08-sorted.bedGraph; 
+bedGraphToBigWig C08-E08-sorted.bedGraph Spenn-ChrSizestest.txt SP-SHOOT-SUB.bw; 
+
+cp SP-SHOOT-CON.bw MAIN; 
+cp SP-SHOOT-SUB.bw MAIN; 
+
+
+BACK TO COUNTING
+
+Went through each file and removed the non count information and made \n\t into \t
+Also, made some new folders: HAIRY, SL-ROOT, SL-SHOOT, SP-ROOT, SP-SHOOT
+
+Finally, for ease of sorting, this WORKS:
+
+cp A21* C21* B23* A22* B22* C22* HAIRY; 
+cp E13* C103* E14* C13* SL-ROOT; 
+cp E15* B15* D16* D21* SP-ROOT; 
+cp C05* E05* D06* B06* SL-SHOOT; 
+cp D07* B07* E08* C08* SP-SHOOT; 
+
+Bah, In addition to combining the ones that need combining do NOT forget to remove any duplicate lines, like in HAIRY there were 2 duplicates, you know, because of all the THS calling and replicating
+
+SL-HAIRY-CON-SE-1 
+SL-HAIRY-CON-UPE-1
+SL-HAIRY-SUB-SE-1
+SL-HAIRY-SUB-UPE-1
+SL-HAIRY-SUB-SE-2
+SL-HAIRY-SUB-UPE-2
+SL-HAIRY-CON-SE-2                                   
+SL-HAIRY-CON-SE-2B
+SL-HAIRY-CON-UPE-2B
+SL-HAIRY-SUB-SE-2B
+SL-HAIRY-SUB-UPE-2B
+
+
+
+
+
+cat SL-HAIRY-CON-50INT-intersects.bed SL-HAIRY-SUB-50INT-intersects.bed > SL-HAIRY-CON-and-SUB-50pINT-unscaled.bed; 
+bedtools sort -i SL-HAIRY-CON-and-SUB-50pINT-unscaled.bed | bedtools merge > SL-HAIRY-CON-SUB-50pINT-unscaled-All25samples; 
+
+cat SL-ROOT-CON-50pINT-intersects.bed SL-ROOT-SUB-50pINT-intersects.bed > SL-ROOT-CON-and-SUB-50pINT-unscaled.bed; 
+bedtools sort -i SL-ROOT-CON-and-SUB-50pINT-unscaled.bed | bedtools merge > SL-ROOT-CON-SUB-50pINT-unscaled-All6samples; 
+
+cat SL-SHOOT-CON-50pINT-intersects.bed SL-SHOOT-CON-50pINT-intersects.bed > SL-SHOOT-CON-and-SUB-50pINT-unscaled.bed; 
+bedtools sort -i SL-SHOOT-CON-and-SUB-50pINT-unscaled.bed | bedtools merge > SL-SHOOT-CON-SUB-50pINT-unscaled-All6samples; 
+
+cat SP-ROOT-CON-50pINT-intersects.bed SP-ROOT-SUB-50pINT-intersects.bed > SP-ROOT-CON-and-SUB-50pINT-unscaled.bed; 
+bedtools sort -i SP-ROOT-CON-and-SUB-50pINT-unscaled.bed | bedtools merge > SP-ROOT-CON-SUB-50pINT-unscaled-All7samples; 
+
+cat SP-SHOOT-CON-50pINT-intersects.bed SP-SHOOT-SUB-50pINT-intersects.bed > SP-SHOOT-CON-and-SUB-50pINT-unscaled.bed; 
+bedtools sort -i SP-SHOOT-CON-and-SUB-50pINT-unscaled.bed | bedtools merge > SP-SHOOT-CON-SUB-50pINT-unscaled-All7samples; 
+
+
+
+wc -l SL-HAIRY-CON-and-SUB-50pINT-unscaled.bed; 
+wc -l SL-ROOT-CON-and-SUB-50pINT-unscaled.bed; 
+wc -l SL-SHOOT-CON-and-SUB-50pINT-unscaled.bed; 
+wc -l SP-ROOT-CON-and-SUB-50pINT-unscaled.bed; 
+wc -l SP-SHOOT-CON-and-SUB-50pINT-unscaled.bed; 
+
+149002 SL-HAIRY-CON-and-SUB-50pINT-unscaled.bed
+29711 SL-ROOT-CON-and-SUB-50pINT-unscaled.bed
+9404 SL-SHOOT-CON-and-SUB-50pINT-unscaled.bed
+44242 SP-ROOT-CON-and-SUB-50pINT-unscaled.bed
+46342 SP-SHOOT-CON-and-SUB-50pINT-unscaled.bed
+
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/THS-Breakup; 
+wc -l SL-HAIRY-CON-50INT-intersects.bed; 
+wc -l SL-HAIRY-CON-SUB-50pINT-unscaled-All25samples.bed; 
+wc -l SL-HAIRY-CON-and-SUB-50pINT-unscaled.bed; 
+wc -l SL-HAIRY-SUB-50INT-intersects.bed; 
+wc -l SL-ROOT-CON-50pINT-intersects.bed; 
+wc -l SL-ROOT-CON-SUB-50pINT-unscaled-All6samples.bed; 
+wc -l SL-ROOT-CON-and-SUB-50pINT-unscaled.bed; 
+wc -l SL-ROOT-SUB-50pINT-intersects.bed; 
+wc -l SL-SHOOT-CON-50pINT-intersects.bed; 
+wc -l SL-SHOOT-CON-SUB-50pINT-unscaled-All6samples.bed; 
+wc -l SL-SHOOT-CON-and-SUB-50pINT-unscaled.bed; 
+wc -l SL-SHOOT-SUB-50pINT-intersects.bed; 
+wc -l SP-ROOT-CON-50pINT-intersects.bed; 
+wc -l SP-ROOT-CON-SUB-50pINT-unscaled-All7samples.bed; 
+wc -l SP-ROOT-CON-and-SUB-50pINT-unscaled.bed; 
+wc -l SP-ROOT-SUB-50pINT-intersects.bed; 
+wc -l SP-SHOOT-CON-50pINT-intersects.bed; 
+wc -l SP-SHOOT-CON-SUB-50pINT-unscaled-All7samples.bed; 
+wc -l SP-SHOOT-CON-and-SUB-50pINT-unscaled.bed; 
+wc -l SP-SHOOT-SUB-50pINT-intersects.bed; 
+
+36191	SL-HAIRY-CON-50INT-intersects.bed
+17889	SL-HAIRY-CON-SUB-50pINT-unscaled-All25samples.bed
+73007	SL-HAIRY-CON-and-SUB-50pINT-unscaled.bed
+36819	SL-HAIRY-SUB-50INT-intersects.bed
+
+4020	SL-ROOT-CON-50pINT-intersects.bed
+8780	SL-ROOT-CON-SUB-50pINT-unscaled-All6samples.bed
+18998	SL-ROOT-CON-and-SUB-50pINT-unscaled.bed
+14978	SL-ROOT-SUB-50pINT-intersects.bed
+
+4043 	SL-SHOOT-CON-50pINT-intersects.bed
+2059 	SL-SHOOT-CON-SUB-50pINT-unscaled-All6samples.bed
+8086 	SL-SHOOT-CON-and-SUB-50pINT-unscaled.bed
+4702	SL-SHOOT-SUB-50pINT-intersects.bed
+
+8826	SP-ROOT-CON-50pINT-intersects.bed
+10436	SP-ROOT-CON-SUB-50pINT-unscaled-All7samples.bed
+20920	SP-ROOT-CON-and-SUB-50pINT-unscaled.bed
+12094	SP-ROOT-SUB-50pINT-intersects.bed
+
+563		SP-SHOOT-CON-50pINT-intersects.bed
+9951	SP-SHOOT-CON-SUB-50pINT-unscaled-All7samples.bed
+7779	SP-SHOOT-CON-and-SUB-50pINT-unscaled.bed
+7216	SP-SHOOT-SUB-50pINT-intersects.bed
+
+
+bedtools subtract -A -a SL-HAIRY-CON-SUB-50pINT-unscaled-All25samples.bed -b SL-HAIRY-CON-50INT-intersects.bed  > SL-HAIRY-SUBonly.bed; 
+bedtools subtract -A -a SL-HAIRY-CON-SUB-50pINT-unscaled-All25samples.bed -b  SL-HAIRY-SUB-50INT-intersects.bed > SL-HAIRY-CONonly.bed; 
+bedtools subtract -A -a SL-ROOT-CON-SUB-50pINT-unscaled-All6samples.bed -b SL-ROOT-CON-50pINT-intersects.bed > SL-ROOT-SUBonly.bed; 
+bedtools subtract -A -a SL-ROOT-CON-SUB-50pINT-unscaled-All6samples.bed -b SL-ROOT-SUB-50pINT-intersects.bed > SL-ROOT-CONonly.bed; 
+bedtools subtract -A -a SL-SHOOT-CON-SUB-50pINT-unscaled-All6samples.bed -b SL-SHOOT-CON-50pINT-intersects.bed > SL-SHOOT-SUBonly.bed; 
+bedtools subtract -A -a SL-SHOOT-CON-SUB-50pINT-unscaled-All6samples.bed -b SL-SHOOT-SUB-50pINT-intersects.bed > SL-SHOOT-CONonly.bed; 
+bedtools subtract -A -a SP-ROOT-CON-SUB-50pINT-unscaled-All7samples.bed -b SP-ROOT-CON-50pINT-intersects.bed > SP-ROOT-SUBonly.bed; 
+bedtools subtract -A -a SP-ROOT-CON-SUB-50pINT-unscaled-All7samples.bed -b SP-ROOT-SUB-50pINT-intersects.bed > SP-ROOT-CONonly.bed; 
+bedtools subtract -A -a SP-SHOOT-CON-SUB-50pINT-unscaled-All7samples.bed -b SP-SHOOT-CON-50pINT-intersects.bed > SP-SHOOT-SUBonly.bed; 
+bedtools subtract -A -a SP-SHOOT-CON-SUB-50pINT-unscaled-All7samples.bed -b SP-SHOOT-SUB-50pINT-intersects.bed > SP-SHOOT-CONonly.bed; 
+
+wc -l SL-HAIRY-CONonly.bed; 
+wc -l SL-HAIRY-SUBonly.bed; 
+wc -l SL-ROOT-CONonly.bed; 
+wc -l SL-ROOT-SUBonly.bed; 
+wc -l SL-SHOOT-CONonly.bed; 
+wc -l SL-SHOOT-SUBonly.bed; 
+wc -l SP-ROOT-CONonly.bed; 
+wc -l SP-ROOT-SUBonly.bed; 
+wc -l SP-SHOOT-CONonly.bed; 
+wc -l SP-SHOOT-SUBonly.bed; 
+
+
+4150 	SL-HAIRY-CONonly.bed
+5972 	SL-HAIRY-SUBonly.bed
+613 	SL-ROOT-CONonly.bed
+5040 	SL-ROOT-SUBonly.bed
+0 		SL-SHOOT-CONonly.bed
+893 	SL-SHOOT-SUBonly.bed
+3242 	SP-ROOT-CONonly.bed
+3485 	SP-ROOT-SUBonly.bed
+5432 	SP-SHOOT-CONonly.bed
+9405 	SP-SHOOT-SUBonly.bed
+
+
+
+I had an error with SL-SHOOT
+The SUB sample was named as CON and this messed things up
+However, this has been corrected in the script above
+The recounting was done as this:
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/SingleEnd; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam AT2-C05_S8_L001_R1_001_1P.fastq.sam.sorted.clean.q2.bam SL-SHOOT.gff3 > C05-SL-SHOOT-CON-SE-2-counts.txt; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam AT2-E05_S18_L001_R1_001_1P.fastq.sam.sorted.clean.bam SL-SHOOT.gff3 > E05-SL-SHOOT-CON-SE-1-counts.txt; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam AT2-D06_S14_L001_R1_001_1P.fastq.sam.sorted.clean.bam SL-SHOOT.gff3 > D06-SL-SHOOT-SUB-SE-1-counts.txt; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam AT2-B06_S3_L001_R1_001_1P.fastq.sam.sorted.clean.bam SL-SHOOT.gff3 > B06-SL-SHOOT-SUB-SE-2-counts.txt; 
+
+cp C05-SL-SHOOT-CON-SE-2-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/CorrectedSLShoot; 
+cp E05-SL-SHOOT-CON-SE-1-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/CorrectedSLShoot;  
+cp D06-SL-SHOOT-SUB-SE-1-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/CorrectedSLShoot; 
+cp B06-SL-SHOOT-SUB-SE-2-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/CorrectedSLShoot; 
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/PairedEnd/TOMATO-UNPAIRED; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam C05-UPE.bam SL-SHOOT.gff3 > C05-SL-SHOOT-CON-UPE-2-counts.txt; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam D06-UPE.bam SL-SHOOT.gff3 > D06-SL-SHOOT-SUB-UPE-1B-counts.txt; 
+
+cp C05-SL-SHOOT-CON-UPE-2-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/CorrectedSLShoot; 
+cp D06-SL-SHOOT-SUB-UPE-1B-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Tomato2/CorrectedSLShoot; 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

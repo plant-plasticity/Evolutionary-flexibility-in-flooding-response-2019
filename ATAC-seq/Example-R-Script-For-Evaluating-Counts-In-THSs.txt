@@ -1,0 +1,144 @@
+##############################################################################    DESEQ2    ##################################################################################################################################################################
+
+
+#If needed
+#source("https://bioconductor.org/biocLite.R")
+#biocLite("DESeq2")
+#source("https://bioconductor.org/biocLite.R")
+#library("genefilter")
+#source("https://bioconductor.org/biocLite.R")
+#library("pheatmap")
+#source("https://bioconductor.org/biocLite.R")
+#biocLite("IHW")
+#install.packages("whateverismissingtypeitinhereandruntoinstall")
+#source("https://bioconductor.org/biocLite.R")
+#biocLite("tweeDEseq")
+
+library("DESeq2")
+library("kdecopula")
+library("foreign")
+library("ggplot2")
+library("MASS")
+library("pheatmap")
+library( "gplots" )
+library( "RColorBrewer" )
+
+#This is not the best way to do this cause there is a lot of preemptive matching and setting up, but this is what I had to work with form the website and just stuck with it
+#Instead of explaining each line, I just included the lines, and will annotate what I can
+
+#To set up where your counts files are you will tell R where the directory that holds your counts files is
+
+directory <- "/Volumes/Deal-5TB/SUBEXP-ATAC/Rice/UNSCALED-DEseq-CORRECT-NonuniqueAll"
+
+#Each of the text files had the word counts in it, so this line is identifying the counts files using that criterion
+
+sampleFiles <- grep("counts",list.files(directory),value=TRUE)
+
+#This ultimately does not matter, but for batch effects, you can specify if the samples were done on different days
+
+SampleDay <- c("DayOne", "DayTwo", "DayThree", "DayFour", "DayOne", "DayTwo", "DayThree", "DayFour")
+
+#This is what is most important. We had submergence and control samples. Instead, it may be one cell type or the other
+
+sampleCondition <- c("CON", "CON", "CON", "CON", "SUB","SUB", "SUB", "SUB")
+
+#Name information, again, this was in the original example
+Names <- c("OS-CON-1", "OS-CON-2", "OS-CON-3", "OS-CON-4", "OS-SUB-1", "OS-SUB-2", "OS-SUB-3", "OS-SUB-4")
+
+#The reason all that setup was done is this, to make a table
+sampleTable <- data.frame(sampleName = Names,
+                          fileName = sampleFiles,
+                          condition = sampleCondition,
+                          Batch = SampleDay)
+
+To view the table
+sampleTable
+
+
+#This is acutally still setting up the analysis to be run
+
+ddsHTseq <- DESeqDataSetFromHTSeqCount( sampleTable = sampleTable,
+                                        directory = directory,
+                                        design = ~condition) 
+colData(ddsHTseq)$condition <- factor(colData(ddsHTseq)$condition,
+                                      levels = c('CON','SUB'))
+
+
+#This is the DESeq2 analysis being run on the set up ddsHTseq variable defined
+
+dds <- DESeq(ddsHTseq)
+
+
+#This is the results output, what will be useful for getting the information out
+
+res <- results(dds)
+
+
+#These lines will create a csv file and save it the directory where R studios is
+
+resdataL <- merge(as.data.frame(res), as.data.frame(counts(dds,normalized=T)), by='row.names',sort=F)
+names(resdataL)[1] <- 'gene'
+head(resdataL)
+write.csv(resdataL, file="OS-ATAC-Initial-results.csv")
+
+
+#here we get some numbers, like how many THSs had padj value less than 0.05, and then the next line is how many had pvalue values less than 0.05
+
+sum(resdataL$padj < 0.05, na.rm=TRUE )
+sum(resdataL$pvalue < 0.05, na.rm=TRUE )
+
+
+#Here is some normalizing
+#DEseq2 automatically will estimate the sizes of bam files based on the read amounts at our coordinates analysed. However, to be 100% correct, we can input the ratios of the files relative to each other ourselves.
+#To input this information it is done as the second line below, but to ge this information you need to count the bam files in terminal using the samtools view -c command, and then you can get the ratios either by calculating the fraction of reads in each file relative to the average of all or you can do it relative to one file
+#Order listed here is very important
+
+ddsTestTwo <- dds
+sizeFactors(ddsTestTwo) <- c(1.227854012254020,	1.218911266300930,	1.001137579065360,	1.117253113693160,	0.676946896941124,	0.891067852160297,	0.790742421354222,	1.076087219941240)
+sizeFactors(ddsTestTwo)
+ddsTestTwo <- estimateDispersions(ddsTestTwo)
+ddsTestTwo <- nbinomWaldTest(ddsTestTwo)
+resTestTwo <- results(ddsTestTwo)
+
+
+#This will generate, and then save, a Manhattan plot, you can vary the axes by changing the -3 and 3 to whatever you wan the y-axes to be
+plotMA(resTestTwo, ylim = c(-3,3))
+dev.copy(png,'OS-MAnorm-Formforallspecies.png')
+dev.off()
+
+
+#some more number reporting, now that we have normalized we want to know the difference
+
+sum(resTestTwo$padj < 0.05, na.rm=TRUE )
+sum(resTestTwo$pvalue < 0.05, na.rm=TRUE )
+
+
+#One more bit of normalizing
+
+rld <- rlogTransformation(ddsTestTwo, blind=T)
+print(plotPCA(rld, intgroup = c("condition","Batch")))
+
+
+#The processed, normalized file is saved again as a csv file
+
+resTestTwoDFr <- merge(as.data.frame(resTestTwo), as.data.frame(counts(ddsTestTwo,normalized=T)), by='row.names',sort=F)
+names(resTestTwoDFr)[1] <- 'gene'
+head(resTestTwoDFr)
+write.csv(resTestTwoDFr, file="OS-resTestTwo-NormalizedResults.csv")
+
+
+#This generates a VOLCANO plot
+#Here we were doing purple and green because the rest of the paper's results were color coded that way
+#You can choose the colors and what the criteria are for the dots by changing the information (I know, no duh, but worth saying, for ease of mind)
+
+#For All Species - Same Format
+with(resTestTwoDFr, plot(log2FoldChange, -log10(pvalue), pch=20, main="Volcano plot", ylim=c(0,10), xlim=c(-4,4)))
+with(subset(resTestTwoDFr, abs(log2FoldChange)>1), points(log2FoldChange, -log10(pvalue), pch=20, col="blue"))
+with(subset(resTestTwoDFr, pvalue<.05 ), points(log2FoldChange, -log10(pvalue), pch=20, col="gray"))
+with(subset(resTestTwoDFr, pvalue<.05 & (log2FoldChange)>1), points(log2FoldChange, -log10(pvalue), pch=20, col="purple"))
+with(subset(resTestTwoDFr, pvalue<.05 & (log2FoldChange)<(-1)), points(log2FoldChange, -log10(pvalue), pch=20, col="green"))
+
+
+
+
+################################################################################    DESEQ2    ################################################################################################################################################################

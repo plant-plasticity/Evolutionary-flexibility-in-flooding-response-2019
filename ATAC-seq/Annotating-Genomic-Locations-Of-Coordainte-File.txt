@@ -1,0 +1,28 @@
+#1. Use gffread to read in the gff file, which is a standard gff3 or gtf file, to make a new gtf file that will be called up in the next command (PATHS to Files are super helpful here) The new gtf file looks very much like the gff file, but I guess cleaner... THIS IS NECESSARY!
+
+gffread /Users/deallabuser/Documents/Genomes_and_annotation/Tomato/3.0/ITAG3.2_gene_models.gff -T -o /Users/deallabuser/Documents/Genomes_and_annotation/Tomato/3.0/ITAG3.2_gene_modelss.gtf
+
+#Translated this is
+
+gffread inputgfffile.gff -T -o outputgtffile.gtf
+
+#2. Parse the gtf file using a script to make ANOTHER FILE THAT THE NEXT COMMAND WILL NEED, OOoOOOoOOoooohhhHHh
+
+parseGTF.pl /Users/deallabuser/Documents/Genomes_and_annotation/Tomato/3.0/ITAG3.2_gene_modelss.gtf ann > ANNOTATEDgtfFile.txt
+
+#Translated this is
+
+parseGTF.pl outputgtffilefromstep1.gtf ann > ANNOTATEDgtfFile.txt
+
+#I've tried many different options that they have and the ann does the best job of giving out all the genome features that we care about and are in PAVIS
+
+
+#3. You will do some processing of output from step 2 so that the final step has things in correct format, but I'm still a little confused here. Seems like this TABLE gets created And THEN it outputs a stats file
+
+assignGenomeAnnotation ANNOTATEDgtfFile.txt ANNOTATEDgtfFile.txt -prioritize AnnotationsTABLE.txt > statsfile.txt
+
+
+4. Annotate your peaks, or whatever the coordinates represent, using the bed file (annotation is based on the center of the coordinates)
+
+annotatePeaks.pl BedFileToBeAnnotated.bed FastaFileOfYourSpeciesGenomeSequence.fa -ann AnnotationsTABLE.txt > outputfile.txt
+

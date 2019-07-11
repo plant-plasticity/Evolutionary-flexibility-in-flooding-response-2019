@@ -1,0 +1,731 @@
+#I use ";" to separate commands. It will not run commands after the ; until the one before the ; is complete
+
+
+#You will either download fastq files you generated, which will be downloaded from the sequencing repository where the sequences were generated or you will be interested in publically available data
+#For the publically available data, you will more than likely get it from GEO. The specific piece of data you are interested in will have a unique SRR ID
+#To download and extract the desired information, and tell the terminal WHERE to place it, you do this
+
+fastq-dump -O /Path/To/Where/You/Want/To/Place/This/NameForFile SRRIDyouretryingtodownload; 
+
+
+#First thing to do is to combine any reads of the same barcode that got split because of size limitations
+#This is done using the concatenate command, cat, and then you specify what to combine and the name of the output. Typically the downloaded files are all the same name except for some variable number thing
+#Would look like this
+
+cat file*.something > FastaFile.fastq.gz
+
+
+
+#That .gz, there's really not much difference in size or content whether the fastq file is zipped or not, so don't worry about it too much
+
+
+
+
+
+#ALIGNMENT
+#Alignment requires some preliminary setup if this is the first time you're aligning to a genome
+#The special setup is largely in the GENOME information
+#These can be downloaded online, from several different places, hard to specify what is best, but doing some researching on online genome browsers for the species of interest can explain which genome to use
+#This is also very important because genome builds for species get updated over time, so using whatever is most current is typically the best way to go
+#The genome information, ">" designated chromosomes and the actual sequence, is just a text file really, but a really really REALLY BIG text file
+#However, because the genome file is basically a text file it means that you can do text processing on it using awk commands, which is gooooooooood stuff
+#Additionally, the genome files that are masked are the best to download. The masked part means that the repeats (tricky to sequence and place parts of the genome) are not represented by the repeat sequence but instead by NNNNNNs
+#When downloading the genome file you want to go ahead and download all the ANNOTATION data there is for that genome build. Typically there is only one that matters, but specific topics have specific annotations, such as retrotransposons...
+#A typical annotation file has either a .gff3 or .gtf file type ending
+#The kind of information in these files lists types of genomic features (gene, CDS, 5'UTR, 3'UTR, and others) where they are located, corresponding gene, geneID, gene name.... there's a lot
+#Most important things to pull out of these annotation files are the genes (in my opinion) so we can pull that information out
+
+#Also, annotation and genome files may also have the chloroplast and mitochondria in there as well. Do NOT remove this information from the file you will be aligning. We can get rid of it later, but it is super important that the genome contains this information
+#If the genome does not contain the sequence information for the organelles then you will be biasing your reads for false positives
+#What I mean by this is that there may be reads in your sequencing that align to organelles, but they also align to the genome at equivalent or slightly less optimal amounts
+#If the organellar sequences are not included in the alignment then the reads will be aligned to the genome at incorrect qualities (will have higher scoring than if the organellar information was available for the reads to find them)
+#Finally, it is really important to take a look at the genome file to see how it lists the genome information (What follows the ">" in the file)
+
+#Once the genome is set, you want to index it. This may already be available, but if not you do it by:
+
+bowtie2-build InputGenomeFastaFile OuptuNameFortheIndicesSomethingShortLIkeTAIR10; 
+
+#Good practice is to put the fasta file and the indices (the bowtie2-build command makes 6 indices) in a folder somewhere
+
+
+#Now, for alginment, if you are using paired end sequences there will be two fastq.gz files for each sequencing run, single end will have one. For ATAC-seq we basically use exclusively paired end sequencing
+#Alignment command is (Using 6 processors (6 out of 8 for lab computer, 8 is max), using max may slow it down... worth knowing how many you have on your computer and choose about 80%, you can do 100% if you are ONLY going to be aligning, otherwise you will see significant slowdown with other things you are doing, but it will align faster)
+
+bowtie2 -p 6 -x ShortNameThatTheGenomeIndicesAllShareThatYouSpecifiedWhenBuildingTheGenomeIndices -1 NameOfAlignmentFile1 -2 NameOfAlignmentFile2 -S OuputSAMfileName.sam; 
+
+
+
+#SAM files are huge. Convert to binary format (BAM file) and then get rid of the SAM file (may not have to be right away, but no reason to keep it once you have the bam file
+#Command for converting
+
+samtools view -bS -o OutputBAMfile.bam InputSAMfile.sam; 
+
+
+
+#To remove the same file
+rm InputSAMfile.sam
+
+
+
+
+#Next you sort the bam file (newer version of Samtools, older version had a "-o" precede the output name)
+
+samtools sort BamFile.bam SortedBamFile.bam;
+
+
+#For reporting purposes, we want to know how many reads aligned, to do this we can count the reads in the bam file, by doing
+samtools view -c BamFileToCount.bam; 
+But this command will just print the result in the terminal, which is not super useful, so let's put it in a text file instead
+
+samtools view -c BamFileToCount.bam > BamFileCounted-Reads.txt; 
+
+
+
+#Next, we want to get rid of any reads that had bad quality
+
+samtools view -q 2 -b INPUTbamFile.bam > OutputQualityFilteredBamFile.bam; 
+
+
+
+#Now we can count again, the difference in this read number versusus the original tells us how many reads got removed
+
+
+
+#Finally, we can remove any organellar reads by specifying which reads to keep, so if we tell the command to keep only chromosomal reads (and scaffolds if those are present) then it will not keep the organellar reads, thereby removing them
+
+samtools view -b INPUTbamFile.bam CHROMOSOMEStoKEEPcanBelistedHereseparatedbyspace > OuptuBamFileName.bam; 
+
+#If you are not sure how the chromosomes are listed, you can either go back and look at the fasta file of the genome, but really, this is not useful cause it is either slow or maybe you are given a BAM file and want to go from there, in which case, instead of asking the person who gave you the bam file information about it you can do this instead
+#NOTE, the command below will just keep going until it gets through the entire bam file and you do NOT need to do that because one line of information is all you need and bam files can be huge
+#So, in order to stop the command just press CONTROL + Z (please note, it is control and not command)
+
+samtools view BAMfile.bam; 
+
+
+#once the command runs for a second go ahead and press the control+z and stop it and then you will want to resize the terminal window so that the sides are stretched out
+#The information here is sooooo useful to know about. But, more importantly, if you look at the third column to get the chromosome designation
+
+#Alternatively, MUCH easier, you just look at the header information by
+
+samtools view -H BAMfile.bam; 
+
+
+
+#Finally, if you DO need to make changes to a bam file, primarily with how it lists the chromosomes (like if you downloaded a bam file and the chromosome info is different from how you have it) you can do this
+
+samtools view -H inputbam.bam | sed -e 's/SN:Chr/SN:chr/'  samtools reheader - inputbam.bam > outputbam.bam; 
+
+#That command will change capitalized Chr to chr
+#To do the inverse
+samtools view -H inputbam.bam | sed -e 's/SN:chr/SN:Chr/'  samtools reheader - inputbam.bam > outputbam.bam; 
+
+#To remove a lowercase (for example) chr entirely
+
+samtools view -H inputbam.bam | sed -e 's/SN:chr/SN:/'  samtools reheader - inputbam.bam > outputbam.bam; 
+
+#And finally, the worst case scenario, to input a chr where there was none, you will have to do this for each chromosome, so the 5 for Arabidopsis: (there may be organellar info, but we shouldn't have it at this stage)
+
+samtools view -H test.bam | sed -e 's/SN:1/SN:chr1/' | sed -e 's/SN:2/SN:chr2/' | sed -e 's/SN:3/SN:chr3/' | sed -e 's/SN:4/SN:chr4/' | sed -e 's/SN:5/SN:chr5/' | samtools reheader - test.bam > test_chr.bam
+
+
+
+
+
+#OKAY, we got a little in the weeds there, back at it, where were we, ah yes, organelle-free, quality-filtered, SORTED bam files
+#There is just one more thing that needs to get done, primarily because creating a bigwig file from the bam file later on will need this, which is to index the bam file. It's fast, and it creates an extra .bam.bai file from in addition to your .bam file. If in the future you change the names of either one and they do not match you'll have issues, so rename the same or just reindex the bam file... they need to have the same name before that .
+
+samtools index bamfile.bam; 
+
+
+
+
+
+
+#Before the next logical step of peak calling, let's get the really really really useful file type taken care of, which is the bigwig file type
+#These are much smaller than the bam file. This is because it is essentially a read amount for each base type of file. It lists for each base (assuming that's the resolution we want) how many reads there were
+#command to make bigwig file from bam file, shouldn't take too long, but max processor usage is something to have a heads up on
+
+bamCoverage -b InputBamFile.bam -o OutputBigWigFile.bw -bs=1 --normalizeUsing RPKM -p=max; 
+
+
+
+
+
+
+
+#ALSO, irrelevant of the peak calling and further downstream processes, you can make some great PCA plots (also can make pearson correlation heatmaps using the computed matrix file, but really dependent on what doing) comparing several bam files 
+#In addition to comparing the BAM files at the entirety of the genome, you can designate a bed file in the command and compare the bam files across the genome locations specified in the bed file. For example, you may be curious how different the bam files are across gene bodies or some specific peaks
+#To compare genome wide:
+
+multiBamSummary --bamfiles BamFiles Separated By Space Please Note Their ListingOrientation -out NameOfMatrixFile.npz; 
+plotPCA --corData NameOfMatrixFile.npz --labels Label The Bam Files In the Same ListingOrder as in prev command --plotTitle "TitleYou want to use" --plotFile NameForFile.pdf; 
+
+#Also, Pearson or Spearman correlation plots can be made using the same computed matrix input
+plotCorrelation -in NameOfMatrixFile.npz --removeOutliers --corMethod pearson --skipZeros --plotTitle "Title" --whatToPlot heatmap --colorMap hot -o NameForFile.pdf --labels Label The Bam Files In the Same ListingOrder as in prev command; 
+plotCorrelation -in NameOfMatrixFile.npz --removeOutliers --corMethod spearman --skipZeros --plotTitle "Title" --whatToPlot heatmap --colorMap hot -o NameForFile.pdf --labels Label The Bam Files In the Same ListingOrder as in prev command; 
+
+
+
+##ALSO ALSO, I forgot about this, but a really important analysis of the bam files is to look at the fragment size distribution
+#This uses a java called picard.jar and for some reason I can't add it to the path so you have to specify the path, so the below command is specific to the lab computer but the path will be different on your computer if you install the jar
+
+java -jar /Path/To/JarFile/picard.jar CollectInsertSizeMetrics I=InputBamFile.bam O=outputmetricsfile.txt H=TheReallyImportantPlot.pdf M=0.5
+
+
+
+
+
+
+#PEAK CALLING
+
+
+
+
+
+makeTagDirectory NAMEofDIRECTORY INPUTbamFile.bam; 
+
+#May have to add the "-single" option if there are lots of scaffolds because the command fails when too many scaffolds
+
+
+
+findpeaks NAMEofDIRECTORY/ -o NameOfTempFileForPeaks -minDist 150 -regionRes 1 -region; 
+pos2bed.pl NameOfTempFileForPeaks | bedtools sort | bedtools merge > SampleSpecificName.bed; 
+
+#The bedtools merge command in the previous line will combine any peaks that overlap, by a base, which is not really ideal IMO
+#A better approach is to have them overlap by 50% but for that specific bedtools command you have to specify base pairs
+#From previous work, the peaks tend to be around 300bp in size, even with the very specific regionRes of 1 option, so half would be 150
+#Therefore the command can be "bedtools merge -d -150"
+#These are small things, and may not be really important for this stage, but if it can be improved at any level we should go for it
+#By putting in a pretty stringent option such as this we will actually end up with many more peaks, but that actually gets resolved later
+#Also, having more peaks to analyze improves our chances of finding peaks that will be different because there was not an awkward combination that reduces the chances of seeing 
+#the specific places where the chromatin change occurred, therefore, the commands will be:
+#As of most recently the "-region" option MUST go at the END of the command. This is CRUCIAL
+#The last little commandy bits are to remove duplicate lines and then change any instance of 0 (in start position) to 1... this is a bed file issue that has been observed in Medicago (chromosomes start at 0, mainly an issue with scaffolds... scaffolds are so obnoxious)
+
+
+findpeaks NAMEofDIRECTORY/ -o NameOfTempFileForPeaks -minDist 150 -regionRes1 -region; 
+pos2bed.pl NameOfTempFileForPeaks | bedtools sort | bedtools merge -d -150 > SampleSpecificName.bed; 
+ex -sc '%s/	0	/	1	/g|x' SampleSpecificName.bed; 
+
+
+
+
+#After doing this for every sample, we will next find the replicates
+#So, let's say there are 3 peak files, one for each replicate, SAMPLE1.bed SAMPLE2.bed SAMPLE3.bed
+#uhhmmmm, there is a LOT packed in here, but it's been improved a lot over time
+#First, we do replicate combinations to find peaks that intersect by 50% (replicate by at least 50%) and keep the original coordinates of each replicate if it did
+#The one to another replicate comparison is then combined, sorted, and any peaks that overlap by 150 bp or more are combined
+#This is then done for every replicate combination, 1 to 2, 1 to 3, and 2 to 3
+#Finally, all replicated combined peaks are combined and then sorted and combined if they overlap by 150 bp
+
+
+bedtools intersect -wa -a SAMPLE1.bed -b SAMPLE2.bed -f 0.5 -F 0.5 > RepsSample1and2-50pInt.bed; 
+bedtools intersect -wa -a SAMPLE2.bed -b SAMPLE1.bed -f 0.5 -F 0.5 > RepsSample2and1-50pInt.bed; 
+cat RepsSample1and2-50pInt.bed RepsSample2and1-50pInt.bed | bedtools sort | bedtools merge -d -150 > Sample1and2-50PercentIntersects.bed; 
+
+bedtools intersect -wa -a SAMPLE1.bed -b SAMPLE3.bed -f 0.5 -F 0.5 > RepsSample1and3-50pInt.bed; 
+bedtools intersect -wa -a SAMPLE3.bed -b SAMPLE1.bed -f 0.5 -F 0.5 > RepsSample3and1-50pInt.bed; 
+cat RepsSample1and3-50pInt.bed RepsSample3and1-50pInt.bed | bedtools sort | bedtools merge -d -150 > Sample1and3-50PercentIntersects.bed; 
+
+bedtools intersect -wa -a SAMPLE2.bed -b SAMPLE3.bed -f 0.5 -F 0.5 > RepsSample2and3-50pInt.bed; 
+bedtools intersect -wa -a SAMPLE3.bed -b SAMPLE2.bed -f 0.5 -F 0.5 > RepsSample3and2-50pInt.bed; 
+cat RepsSample1and3-50pInt.bed RepsSample3and2-50pInt.bed | bedtools sort | bedtools merge -d -150 > Sample2and3-50PercentIntersects.bed; 
+
+cat Sample1and2-50PercentIntersects.bed Sample1and3-50PercentIntersects.bed Sample2and3-50PercentIntersects.bed | bedtools sort | bedtools merge -d -150 | awk '!x[$0]++' > SampleWhatever-all3reps.bed; 
+
+
+
+
+
+#Now, let's say we found the replicated peaks for the different cell types. To see which ones are unique to one or the other, and those that are shared by default, we can do this:
+
+cat Sample-BLAH-all3reps.bed Sample-BLAHBLAHBLAH-all3reps.bed | bedtools sort | bedtools merge -d -150 > Sample-BLAH-and-BLAHBLAHBLAH-all3reps.bed; 
+
+bedtools subtract -A -a Sample-BLAH-and-BLAHBLAHBLAH-all3reps.bed -b Sample-BLAH-all3reps.bed > Sample-BLAHBLAHBLAH-ONLY-all3reps.bed; 
+bedtools subtract -A -a Sample-BLAH-and-BLAHBLAHBLAH-all3reps.bed -b Sample-BLAHBLAHBLAH-all3reps.bed > Sample-BLAH-ONLY-all3reps.bed; 
+
+
+
+#Some clever bit of awk to get the numbers and put them into a file
+
+wc -l Sample-BLAHBLAHBLAH-ONLY-all3reps.bed | awk '{print $1}' > int1.txt; 
+wc -l Sample-BLAH-ONLY-all3reps.bed | awk '{print $1}' > int2.txt; 
+wc -l Sample-BLAH-and-BLAHBLAHBLAH-all3reps.bed | awk '{print $1}' > int3.txt; 
+
+
+paste int1.txt int2.txt int3.txt | awk '{print $1"\t"$2"\t"($3-$2-$1)}' | awk 'BEGIN{print "BLAHBLAHBLAH-ONLY""\t""BLAH-ONLY""\t""BLAH-and-BLAHBLAHBLAH"};{print}' > Samples-Numbers.txt;  
+
+rm int*.txt; 
+
+
+
+
+
+
+
+#At some point we will have peaks that are either all the peaks for a sample, those that are shared, those that are enriched in one or the other... 
+#Once we have the different peak files, the next steps include annotating WHERE those peaks are, doing statistical analyses to see which ones reproduce statistically (by read amounts) and which are enriched in one sample type over the other, which means we will need to get counts for the peak coordinates from our data, and we will want to visualize, which means visualizing read density around the peak coordinates as well as other information about the peaks such as size distribution and placement relative to TSS sites
+
+
+#One thing we can do to process the bed files is to do some quality control. This is something that I've not really ever done before but it makes logical sense
+#The proposed control is to get rid of peaks that are smaller than a specific size. For example, peaks that are 1 bp in size are very dubious and bad. The question is, where do we make the cutoff? Personally, based on what ATAC-seq	data represents and what can fit into accessible sites, the smallest cutoff would be 4 bp, even though I'd like to make it 20 bp.
+#At the same time, if it all goes as anticipated, the significantly changing peaks (ones that are more accessible or less accessible in one sample type compared to other) will never be these smaller sized peaks
+#With all that said, if we did want to filter a bed file by size, let's say by 20 bp, here is how we would do that:
+
+awk '{print $1"\t"$2"\t"$3"\t"($3-$2)}' INPUTbedFile.bed | awk -F "\t" '{if($4 >= 20) {print}}' | awk '{print $1"\t"$2"\t"$3}' > OutputBedFileWhereOnlyPeaksWiderthanorequalto20arereported.bed; 
+
+
+
+#Annotating Peaks. In the past we have used Pavis to figure out WHERE in the genome our peaks are located, and then it would report this information as a PieChart as well as provide an Excel file with all the input peaks and the annotation of where they are...
+#The problem is that PAVIS does not have information for every species, or every genome build, and sometimes the site is just down so you cannot do any work 
+#To get around this we can use the information from our genome annotations and genome file to build a reference file and then we annotate our peaks to that
+#What follows that is a way to streamline the output and not have to do things manually, which is to get the numbers of peaks in the different categories
+#From the output information we can construct a PieChart, either in Excel, or in R. I looked it up so the PieChart building Information is included below as well
+#I have somewhere the details of how to build the annotation file (important for new genomes or species) but for now we already have this for Arabidopsis
+
+
+annotatePeaks.pl BedFileToAnnotate.bed /Navigate/To/Where/Genome/Fasta/File/Is/GenomeFile.fa -ann /Navigate/To/Where/AnnotationTableIs/AnnotationTable.txt > AnnotatedBed.txt; 
+
+less AnnotatedBed.txt | grep -c "promoter-TSS" | awk '{print $1"\t""Promoter"}' > number1.txt; 
+less AnnotatedBed.txt | grep -c "exon" | awk '{print $1"\t""Exon"}' > number2.txt; 
+less AnnotatedBed.txt | grep -c "intron" | awk '{print $1"\t""Intron"}' > number3.txt; 
+less AnnotatedBed.txt | grep -c "TTS" | awk '{print $1"\t""Downstream"}' > number4.txt; 
+less AnnotatedBed.txt | grep -c "Intergenic" | awk '{print $1"\t""Intergenic"}' > number5.txt; 
+
+cat number1.txt number2.txt number3.txt number4.txt number5.txt | awk '{print $2"\t"$1}' | awk 'BEGIN{print "GenomicFeature""\t""Number"};{print}' > AnnotatedBedFile-Numbers.txt; 
+
+rm number*.txt
+
+
+
+#PleasePleasePlease NOTE that this is to run R. You can run R in terminal or you can do it in R studios. While R studios is waaaay more user friendly, powerful, and amazing for storing your work, if you know what you want to do and it's pretty simple then you can just launch R in terminal and run your R script there
+#For here, the terminal command is to press R
+
+R
+
+#It will launch R, the stuff that follows is R script that can be run in terminal or through other ways that utilize R
+#This script will create an image. You can save it as a pdf or an image file. If you resize the window it will save the resized version. It is NOT recommended to this if you are creating multiple images because the default will make them all sized the same and this is beneficial
+#The Path Below and the File Name are the only things that need to be changed
+
+library(ggplot2)
+
+Values <- read.table("/Path/To/Where/The/AnnotatedBedFile-Numbers/Text/File/Is/AnnotatedBedFile-Numbers.txt", header=T, sep="\t", check.names=F)
+
+SUM <- sum(Values$Number)
+Values$Number <- (Values$Number)/SUM
+Values$GenomicFeature <- factor(Values$GenomicFeature, levels = Values$GenomicFeature)
+ggplot(Values, aes(x="", y=Number, fill=GenomicFeature), clockwise=TRUE) + geom_bar(stat="identity", width=1) + coord_polar("y", start=0, direction=-1) + scale_fill_manual(values=c("deepskyblue", "#F26419", "#F6AE2D", "forestgreen", "#999999")) + labs(x = NULL, y = NULL, fill = NULL, title = "Genomic Distribution") + theme_classic() + theme(axis.line = element_blank(), axis.text = element_blank(), axis.ticks = element_blank(), plot.title = element_text(hjust = 0.5, color = "#666666")) + geom_text(aes(label = paste0(round(Number*100), "%")), position = position_stack(vjust = 0.5))
+
+
+
+
+
+
+#WOW, what a foray into the intense. R can truly TRULY get out of hand. For almost any example, such as the one I came up with above, you will end up doing several Google searches and then Frankenstein code from several sources, it will work, you will want to make 1 or 2 changes, it will take even more effort to do that one single thing than it did to do all of the other things. Finally, you'll find it, add it in, and move along
+#Seriously, it took about as long if not less time to get the setup and main plotting lines as it did to figure out how to do 2 things that appeared simple
+#These two things are How to Order the Slices, specifically how to have them be in the exact same orientation as listed in the input file (third line, GenomicFeature line, the levels bit is important), and then how to have the pie chart go in the same orientation as the legend (direction=-1)
+
+#yep yep yep, a big ole foray
+#Let's get back to the coordinates
+#What we really want to know about these places of enriched accessibility is the LEVEL of accessibility and how it compares between samples
+#Now, a caveat of this is that our samples may have different read amounts, so how do we normalize
+#In the past we used to set the files to the same read amounts, but this is no longer necessary AND it loses resolution by lowering some so they are all the same
+#Through DESeq2 we can normalize the reads, but even more so we can tell the R script we'll be running the EXACT ratios of the different files relative to each other's read amounts
+#DESeq2 actually attempts to do this on its own and is ~90% accurate, but we can make sure it is 100% accurate
+#Anyways, that's me getting ahead of myself
+#For now, we want to know HOW to get read amounts at our coordinates, and we do this by COUNTING reads at our coordinates
+#In the past, it used to be impossible to have overlapping coordinates in the file that is to be counted
+#This is no longer an issue, we just have to include an extra option in the command
+#The program for counting reads at our coordinates is called HTSEQ-COUNT
+
+#Before we can count the amounts of reads at our coordinates in the bed file we need to do some formatting because it wants a specific file called a gff3 file
+#Again, both of these are basically text files, so instead of doing a whole lot of outdated stuff I used to do in Excel, now we can set up our gff3 file from the bed file in seconds using the awk command
+
+
+awk '{print $1"\t""Counting""\t""THS""\t"$2"\t"$3"\t"".""\t"".""\t"".""\t""gene_id="$1":"$2"-"$3}' BEDfileForWhereToCount.bed > OUTPUTgff3File.gff3; 
+
+
+
+#Counting is done using htseq-count where you count the reads in a BAM file across the coordinates in the gff3 file
+#The output will be a line for each gene_id, which we set up to be our THS coordinates (smart smart), and the corresponding
+
+
+htseq-count -m union -s no --nonunique all -i gene_id -t WhateverIsInTheThirdColumnOfTheGFF3File-ForUsItIsTHS -f bam BAMfileToCountReadsAtTheCoordinatesInTheGFF3file.bam GFF3fielWithInforForWhereToCount.gff3 > outputcountinfofile-counts.txt
+
+
+
+#Here's an actual example
+
+htseq-count -m union -s no --nonunique all -i gene_id -t THS -f bam Mt_ATAC_C1.sorted.q2.bam MT-DownInSUB-Pval.gff3 > C1-counts.txt; 
+
+
+#When counting it may give you a WARNING about a matched read, but not really anything to worry about. 
+#One thing that is HUGELY important to be aware of is if the way the chromosome is described in the gff3 file is different in the BAM file being counted all of the results will be 0, used to be such a confusing issue early on, but for anyone new to this it is the most common source of error
+
+
+
+#Something we haven't discussed a whole lot but is worth bringing up now is being organized and navigating in terminal
+#First, navigation. In order to be able to grab a script and run it right away, no matter if you just started Terminal or are a billion folders deep in some specific subfolder hole in your current session, we want to add a change directory command before we start running commands
+#This is done by 
+
+cd /Path/Where/You/Want/To/Go
+
+#PRO TIP, you can drag a folder or a file into terminal and once dropped the terminal will give you the exact path to that folder or file
+#There is no way to stress this enough. It is time consuming and error-prone to write out the path yourself. Always use this approach to get the path correctly
+
+#The other navigation and useful commands are
+
+mv - move
+rm - remove
+cp - copy
+
+#For example, let's say we are in some folder and there is a text file there called text.txt and another folder called FoldyMcFolderson and we want to make a copy of the text file and have it be inside the folder AND while doing this we want to change its name to TextoTheTextFile.txt
+#This would be the command for that
+
+cp text.txt FoldyMcFolderson/TextoTheTextFile.txt; 
+
+
+#The benefit of putting things in a subfolder is that there may be file names that share similarity and you only want to process them, but you don't want to do it one by one
+#The commands mentioned above, as well as "wc -l" "cat" and other terminal specific commands, all can utilize the * and grab several files as input and process them
+
+
+
+
+
+
+#DESeq2
+#This is all done in R
+#There will be several lines, so know that the next section is Visualization if you want to skip
+#DEFINITELY DEFINITELY DEFINITELY Do this in R studios and not just R in terminal or whatever
+
+##############################################################################    DESEQ2    ##################################################################################################################################################################
+
+
+#If needed
+#source("https://bioconductor.org/biocLite.R")
+#biocLite("DESeq2")
+#source("https://bioconductor.org/biocLite.R")
+#library("genefilter")
+#source("https://bioconductor.org/biocLite.R")
+#library("pheatmap")
+#source("https://bioconductor.org/biocLite.R")
+#biocLite("IHW")
+#install.packages("whateverismissingtypeitinhereandruntoinstall")
+#source("https://bioconductor.org/biocLite.R")
+#biocLite("tweeDEseq")
+
+library("DESeq2")
+library("kdecopula")
+library("foreign")
+library("ggplot2")
+library("MASS")
+library("pheatmap")
+library( "gplots" )
+library( "RColorBrewer" )
+
+#This is not the best way to do this cause there is a lot of preemptive matching and setting up, but this is what I had to work with form the website and just stuck with it
+#Instead of explaining each line, I just included the lines, and will annotate what I can
+
+#To set up where your counts files are you will tell R where the directory that holds your counts files is
+
+directory <- "/Volumes/Deal-5TB/SUBEXP-ATAC/Rice/UNSCALED-DEseq-CORRECT-NonuniqueAll"
+
+#Each of the text files had the word counts in it, so this line is identifying the counts files using that criterion
+
+sampleFiles <- grep("counts",list.files(directory),value=TRUE)
+
+#This ultimately does not matter, but for batch effects, you can specify if the samples were done on different days
+
+SampleDay <- c("DayOne", "DayTwo", "DayThree", "DayFour", "DayOne", "DayTwo", "DayThree", "DayFour")
+
+#This is what is most important. We had submergence and control samples. Instead, it may be one cell type or the other
+
+sampleCondition <- c("CON", "CON", "CON", "CON", "SUB","SUB", "SUB", "SUB")
+
+#Name information, again, this was in the original example
+Names <- c("OS-CON-1", "OS-CON-2", "OS-CON-3", "OS-CON-4", "OS-SUB-1", "OS-SUB-2", "OS-SUB-3", "OS-SUB-4")
+
+#The reason all that setup was done is this, to make a table
+sampleTable <- data.frame(sampleName = Names,
+                          fileName = sampleFiles,
+                          condition = sampleCondition,
+                          Batch = SampleDay)
+
+To view the table
+sampleTable
+
+
+#This is acutally still setting up the analysis to be run
+
+ddsHTseq <- DESeqDataSetFromHTSeqCount( sampleTable = sampleTable,
+                                        directory = directory,
+                                        design = ~condition) 
+colData(ddsHTseq)$condition <- factor(colData(ddsHTseq)$condition,
+                                      levels = c('CON','SUB'))
+
+
+#This is the DESeq2 analysis being run on the set up ddsHTseq variable defined
+
+dds <- DESeq(ddsHTseq)
+
+
+#This is the results output, what will be useful for getting the information out
+
+res <- results(dds)
+
+
+#These lines will create a csv file and save it the directory where R studios is
+
+resdataL <- merge(as.data.frame(res), as.data.frame(counts(dds,normalized=T)), by='row.names',sort=F)
+names(resdataL)[1] <- 'gene'
+head(resdataL)
+write.csv(resdataL, file="OS-ATAC-Initial-results.csv")
+
+
+#here we get some numbers, like how many THSs had padj value less than 0.05, and then the next line is how many had pvalue values less than 0.05
+
+sum(resdataL$padj < 0.05, na.rm=TRUE )
+sum(resdataL$pvalue < 0.05, na.rm=TRUE )
+
+
+#Here is some normalizing
+#DEseq2 automatically will estimate the sizes of bam files based on the read amounts at our coordinates analysed. However, to be 100% correct, we can input the ratios of the files relative to each other ourselves.
+#To input this information it is done as the second line below, but to ge this information you need to count the bam files in terminal using the samtools view -c command, and then you can get the ratios either by calculating the fraction of reads in each file relative to the average of all or you can do it relative to one file
+#Order listed here is very important
+
+ddsTestTwo <- dds
+sizeFactors(ddsTestTwo) <- c(1.227854012254020,	1.218911266300930,	1.001137579065360,	1.117253113693160,	0.676946896941124,	0.891067852160297,	0.790742421354222,	1.076087219941240)
+sizeFactors(ddsTestTwo)
+ddsTestTwo <- estimateDispersions(ddsTestTwo)
+ddsTestTwo <- nbinomWaldTest(ddsTestTwo)
+resTestTwo <- results(ddsTestTwo)
+
+
+#This will generate, and then save, a Manhattan plot, you can vary the axes by changing the -3 and 3 to whatever you wan the y-axes to be
+plotMA(resTestTwo, ylim = c(-3,3))
+dev.copy(png,'OS-MAnorm-Formforallspecies.png')
+dev.off()
+
+
+#some more number reporting, now that we have normalized we want to know the difference
+
+sum(resTestTwo$padj < 0.05, na.rm=TRUE )
+sum(resTestTwo$pvalue < 0.05, na.rm=TRUE )
+
+
+#One more bit of normalizing
+
+rld <- rlogTransformation(ddsTestTwo, blind=T)
+print(plotPCA(rld, intgroup = c("condition","Batch")))
+
+
+#The processed, normalized file is saved again as a csv file
+
+resTestTwoDFr <- merge(as.data.frame(resTestTwo), as.data.frame(counts(ddsTestTwo,normalized=T)), by='row.names',sort=F)
+names(resTestTwoDFr)[1] <- 'gene'
+head(resTestTwoDFr)
+write.csv(resTestTwoDFr, file="OS-resTestTwo-NormalizedResults.csv")
+
+
+#This generates a VOLCANO plot
+#Here we were doing purple and green because the rest of the paper's results were color coded that way
+#You can choose the colors and what the criteria are for the dots by changing the information (I know, no duh, but worth saying, for ease of mind)
+
+#For All Species - Same Format
+with(resTestTwoDFr, plot(log2FoldChange, -log10(pvalue), pch=20, main="Volcano plot", ylim=c(0,10), xlim=c(-4,4)))
+with(subset(resTestTwoDFr, abs(log2FoldChange)>1), points(log2FoldChange, -log10(pvalue), pch=20, col="blue"))
+with(subset(resTestTwoDFr, pvalue<.05 ), points(log2FoldChange, -log10(pvalue), pch=20, col="gray"))
+with(subset(resTestTwoDFr, pvalue<.05 & (log2FoldChange)>1), points(log2FoldChange, -log10(pvalue), pch=20, col="purple"))
+with(subset(resTestTwoDFr, pvalue<.05 & (log2FoldChange)<(-1)), points(log2FoldChange, -log10(pvalue), pch=20, col="green"))
+
+
+
+
+################################################################################    DESEQ2    ################################################################################################################################################################
+
+
+
+
+
+
+
+
+
+
+
+#VISUALIZATION
+
+#Deeptools is incredibly powerful and creates wonderful plots
+#Much like many powerful, useful programs it comes with a wealth of options for labeling, color coding, and showing data
+#However, all that takes writing lines 
+#Alternatively, a much easier approach is to use the SeqPlots app, which is not well described here, more just have to use it once with someone that knows how
+#Here, we'll once more look at the generating a bigiwg command because it is important for either visualizer, and then some Deeptools commands to show an example of how to plot a profile and how to plot a heatmap
+
+#To convert a bam file into a bigwig file
+
+bamCoverage -b InputBamFile.bam -o OutputBigWigFile.bw -bs=1 -normalizeUsingRPKM -p=max; 
+
+
+
+#For Deeptools, you first have to create a matrix file. Important things are where you are visualizing read information and what the sources for the information are
+#The matrix generation takes a while. Plotting a profile is very quick. Plotting a heatmap can be very slow, especially if you are clustering (SeqPlots is much much much much much better for this if you just want to check on some ideas quickly)
+
+#For peaks, we want our plots to be center
+#However, we may also want to plot reads across gene bodies, which means we would have a bed file with the gene body coordinates
+#But more importantly, for the gene body plots we would use a scale-regions options
+#Firs, the reference-point approach, for three different files
+#The -a is how many bases to go downstream of the center of the peak and b is how many bases to go upstream from the center
+
+computeMatrix reference-point --referencePoint center -S FileOne.bw FileTwo.bw FileThree.bw -R BedFileOfPeaks.bed -a 1000 -b 1000 -o NameForMatrix.gz; 
+
+
+#Toplot a profile plot 
+plotProfile -m NameForMatrix.gz --regionsLabel NameForPeaks --samplesLabel FileOne FileTwo FileThree --refPointLabel Peak-center --color green blue red --perGroup --outFileName NameForImage.png; 
+
+
+#To plot a heatmap
+plotHeatmap -m NameForMatrix.gz --regionsLabel NameForPeaks --missingDataColor white --samplesLabel FileOne FileTwo FileThree --refPointLabel Peak-center -out NameForPDFfile.pdf --colorMap=Blues; 
+
+
+
+#These are the lines for plotting but where you want to anchor the coordinates you have on one point of your plot (start coordinate) and end of your plot (end coordinate) and you can still use the -a and -b options to zoom, basically, the window out a bit
+
+computeMatrix scale-regions -S FileOne.bw FileTwo.bw FileThree.bw -R BedFileOfPeaks.bed -a 1000 -b 1000 -o NameForMatrix.gz; 
+
+
+#plotting is very similar, but some differences in what things are called and how they are labeled
+
+plotProfile -m NameForMatrix.gz --startLabel Name-SuchasTSS --endLabel Name-SuchasTTS --samplesLabel FileOne FileTwo FileThree --regionsLabel GenesOrSomething --color green blue red --perGroup --outFileName nameForImage; 
+
+plotHeatmap -m NameForMatrix.gz --startLabel Name-SuchasTSS --endLabel Name-SuchasTTS --samplesLabel FileOne FileTwo FileThree --regionsLabel GenesOrSomething --missingDataColor white-out NameForPDF.pdf --colorMap=Blues; 
+
+
+
+
+
+#Finding Nearest Genes For Coordinates
+#This really should have been put somewhere earlier but here it is now
+
+#Again, this uses java, so it will be specific to the computer. I need to double check for the lab computer what the path is
+
+#This java will search the annotation bed file and will annotate coordinates in the input bed file for what the nearest genes are and will output this information into the NearestGenes folder (May have to create it if it does not already exist)
+#Worth noting, the way it saves the output file is by adding a .tss between the original file name the ending, which is usually .bed but it doesn't have to be
+
+
+java -jar /PathToJavaFile/PeakAnnotator.jar -u TSS -p BedFileToAnnotate.bed -a BedFileListingGeneCoordinates.bed -o NearestGenes; 
+
+#To optimize the workflow, you can go into the folder, extract information you really want and need and move it to another specific folder
+
+cd /Full/Path/JustInCase/NearestGenes; 
+awk 'NR>1 {print $7}' BedFileToAnnotate.tss.bed > BedFileToAnnotate-Genes.txt; 
+awk 'NR>1 {print $4}' BedFileToAnnotate.tss.bed > BedFileToAnnotate-Distances.txt; 
+
+#this is where you could add a command to move the genes or distances file to somewhere else
+
+cd /Where/You/Want/To/Go/Next; 
+
+
+#Additionally, now that we've done ATAC-seq for some time, we know where THSs are primarily found and we also know where TFs typically regulate gene expression, so if these THSs are interacting with the nearest genes then there is really something to be said about the DISTANCE that they tend to be found in and interact from
+#This distance can be double checked and verified VISUALLY, and then we can actually remove any THSs that are outside this window of major occurence and highly likely regulation
+
+#So, above, we created a file called BedFileToAnnotate-Distances.txt
+#To see where those peaks are relative to TSS we can make a frequency plot in R with the x-axis showing the distance and the y-axis showing the distribution of the different distances out of the entire population
+#For better clarity, we can change the x-axis to a smaller window, but it is important to know that the distribution will recalculate the total percentages of each distance based on the information present for that peak
+
+#To look at this, first launch R and then adapt the below
+
+#just need to fill in the path and file name information
+
+Values <- read.table("/Path/To/Where/DistancesFileIs/DistancesFile.txt", header = F, sep = "\t", check.names =F)
+library("ggplot2")
+ggplot(Values, aes(x=Values$V1)) + geom_density() + xlab("Distance from TSS") + theme_bw() + theme( panel.grid.major=element_blank(), panel.grid.minor=element_blank()) + ggtitle("THS Distance from TSS") + theme(plot.title = element_text(hjust = 0.5)) + ylab("Density")
+
+#you can add a "+ xlim(-UpstreamValue,Downstreamvalue)" to choose where to focus your attention. I would add this right before the "+ geom_density" part
+
+
+
+#Now, if at some point you want to plot multiple lines of distances from several different sets of THSs
+#First, you would want to create a second column that separates the distances of one set form another, such as I did below, my header for this second column was Motif
+#Also, my distances had a header of Distance
+#That is to say, I also had a header, so it is true below
+#For R to know the different sets the as.factor is essential below
+#This may not be something you use, but if you ever wanted to this is how you would do it
+ 
+
+Values <- read.table("/PathToFile/File.txt", header = T, sep = "\t", check.names =F)
+Values$Motif <- as.factor(Values$Motif)
+library("ggplot2")
+ggplot(Values, aes(x=Distance, line=Motif, colour=Motif)) + xlim(-2000,500) + geom_density() + xlab("Distance from TSS") + theme_bw() + theme( panel.grid.major=element_blank(), panel.grid.minor=element_blank()) + ggtitle("THS Distance from TSS") + theme(plot.title = element_text(hjust = 0.5)) + ylab("Density")
+
+
+
+
+#Once you've visualized the distances and potentially agreed that the original annotation tss file could be cleaned a bit by removing lines that are outside the -2000 and +500 window you can again use the awk command and keep only the lines that are inside this window
+#Which would look like this
+
+awk -F "\t" '{if($4 >= -2000) {print}}' AnnotatedBedFile.tss.bed | awk -F "\t" '{if($4 <= 500) {print}}' | awk '{print $4}' > Curated-Distances.txt; 
+awk -F "\t" '{if($4 >= -2000) {print}}' AnnotatedBedFile.tss.bed | awk -F "\t" '{if($4 <= 500) {print}}' | awk '{print $7}' > Curated-Genes.txt; 
+
+
+
+
+
+#MOTIFs
+#Discovering enriched motifs really is dependent more on critical thinking than hours and hours and hours of enrichment analysis, matching, and validation
+#There are several different ways to approach motif discovery
+
+#MEME will discover enriched motifs, whether anything binds them or not, and will report back to you, but sometimes the motifs are just long stretches of sequence and not really a motif that is bound by a TF
+#DREME will do similar approach to MEME but you an provide a background, such as sequences of THSs that are not more accessible (stayed same levels between your comparisons)
+#AME is similar to MEME but you can match the motifs enriched to databases and see which TFs potentially bind your discovered sequences
+#CentriMO is like AME but it also gives weight to the center of the peak, so motifs that are enriched but located within the center of your sequence will be scored even higher. The output is very friendly
+
+#At the end, when you have motifs you want to pursue, to validate you will want to do this approach
+#Find every genomic occurence of your motif
+#Check that the threshold is stringent (more stringent for smaller motifs, more relaxed for longer, more variable motifs)
+#The max-stored-scores option will make it so the giant genome can be analyzed thoroughly without the command quitting because it found too many matches
+
+fimo --max-stored-scores 100000000 --thresh 0.0001 --o OutpuFileName MotifFile.txt GenomeFastaFile.fasta; 
+
+#If threshold was set well and all the coordinates are acceptable, then  you an pull out the motif coordinates and see whether the motif is found more in the set of THSs you analyzed compared to a global pool of THSs (for example, if a cell specific set of THSs has this motif in the THSs more so than the motif occurring in THSs of all cell types)
+#To do this, you pull out the motif coordinates and then intersect with one set of THS or the other and then look at the percentages of THSs of the two groups that had the motif
+
+
+cd /Navigate/To/Where/FimoOutputFileIs; awk 'NR>1 {print $3"\t"$4"\t"$5}' fimo.txt > /PathToWhereTheOtherBedFilesAre/MotifName-SpeciesAcronym-WG.bed; 
+
+#Should by now be able to understand some of this
+
+bedtools intersect -wa -a MotifName-SpeciesAcronym-WG.bed -b BedFileToIntersectMotifCoordiantesWith.bed > int.bed; awk '!x[$0]++' int.bed > MotifCoordsInThatTHSfile.bed; rm int.bed; 
+
+#Then can do for other bed file
+#You can quickly get numbers of motifs in one set of coordinates, or genomic features, by counting the lines in the file with "wc -l"
+
+#To advance this further, for example if you wanted to know if upregulation of gene expression of specific set of genes was cause by your motif you could do the same approach but the intersecting bed file would be for the genes of interest's promoter coordiantes (expectation is that the motif is found in the promoters of these genes)
+#And then you could compare the proportion that had the motif relative to proportion of all other genes and their promoters... this is beyond this here
+
+
+
+
+
+#One thing, among many things, not described here are violin plots. It's somewhere, it was done in R, but it's just another thing of many where it's not known whether we need to cover it here
+#More important lesson is to know how to navigate R and understand some parts of ggplot
+#Once that is a little figured out it's just a little googling to figure out how to make a violin plot or whatever else
+
+
+
+#curiosity: Want to know how much of a specific base there is in a fasta file?
+
+grep A -o File.fa | wc -l > NumbersOfAinFASTAfile.txt; 
+grep G -o File.fa | wc -l > NumbersOfGinFASTAfile.txt; 
+grep C -o File.fa | wc -l > NumbersOfCinFASTAfile.txt; 
+grep T -o File.fa | wc -l > NumbersOfTinFASTAfile.txt; 
+
+
+
+
+
+
+
+
+
+
+

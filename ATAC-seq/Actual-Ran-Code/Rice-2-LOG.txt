@@ -1,0 +1,531 @@
+samtools view -c ATCON1.filt.bam; 
+samtools view -c ATCON4.filt.bam; 
+samtools view -c ATSUB1.filt.bam; 
+samtools view -c ATSUB4.filt.bam; 
+
+6,789,156
+6,177,612
+7,403,194
+5,949,994
+
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Genomic-DNA; 
+samtools view -s 0.0804438601945951 -b Rice-2-gDNA-q2.sorted.bam > Rice-gDNA-scaled.bam; 
+samtools index Rice-gDNA-scaled.bam; 
+samtools view -c Rice-gDNA-scaled.bam; 
+bamCoverage -b Rice-gDNA-scaled.bam -o Rice-gDNA-scaled.bw -bs=1 --normalizeUsingRPKM -p=max; 
+
+5950597
+
+mv Rice-gDNA-scaled.bw /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/4Scaled-Bigwigs; 
+
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Initial-BAMs; 
+samtools view -s 0.8763967126399810 -b ATCON1.filt.bam > Rice-CON-1-4scaled.bam; 
+samtools view -s 0.9631543709770050 -b ATCON4.filt.bam > Rice-CON-4-4scaled.bam; 
+samtools view -s 0.8037063462067860 -b ATSUB1.filt.bam > Rice-SUB-1-4scaled.bam; 
+samtools view -s 1.0000000000000000 -b ATSUB4.filt.bam > Rice-SUB-4-4scaled.bam; 
+
+samtools index Rice-CON-1-4scaled.bam; 
+samtools index Rice-CON-4-4scaled.bam; 
+samtools index Rice-SUB-1-4scaled.bam; 
+samtools index Rice-SUB-4-4scaled.bam; 
+
+samtools view -c Rice-CON-1-4scaled.bam; 
+samtools view -c Rice-CON-4-4scaled.bam; 
+samtools view -c Rice-SUB-1-4scaled.bam; 
+samtools view -c Rice-SUB-4-4scaled.bam; 
+
+5949817
+5949896
+5949556
+5949994
+
+bamCoverage -b Rice-gDNA-scaled.bam -o Rice-gDNA-scaled.bw -bs=1 --normalizeUsingRPKM -p=max; 
+
+bamCoverage -b Rice-CON-1-4scaled.bam -o Rice-CON-1-4scaled.bw -bs=1 --normalizeUsingRPKM -p=max; 
+bamCoverage -b Rice-CON-4-4scaled.bam -o Rice-CON-4-4scaled.bw -bs=1 --normalizeUsingRPKM -p=max; 
+bamCoverage -b Rice-SUB-1-4scaled.bam -o Rice-SUB-1-4scaled.bw -bs=1 --normalizeUsingRPKM -p=max; 
+bamCoverage -b Rice-SUB-4-4scaled.bam -o Rice-SUB-4-4scaled.bw -bs=1 --normalizeUsingRPKM -p=max; 
+
+mv Rice-CON-1-4scaled.bw /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/4Scaled-Bigwigs; 
+mv Rice-CON-4-4scaled.bw /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/4Scaled-Bigwigs; 
+mv Rice-SUB-1-4scaled.bw /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/4Scaled-Bigwigs; 
+mv Rice-SUB-4-4scaled.bw /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/4Scaled-Bigwigs; 
+
+
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Initial-BAMs; 
+
+makeTagDirectory OS-CON1 ATCON1.filt.bam; 
+findpeaks OS-CON1/ -o OS-CON1-150Rr1-unscaled -minDist 150 -region -regionRes 1; 
+pos2bed.pl OS-CON1-150Rr1-unscaled | bedtools sort | bedtools merge > OS-CON1-mD150Rr1-unscaled.bed; 
+mv OS-CON1-mD150Rr1-unscaled.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks-Unscaled-mD150rR1; 
+
+makeTagDirectory OS-CON2 ATCON2.filt.bam; 
+findpeaks OS-CON2/ -o OS-CON2-150Rr1-unscaled -minDist 150 -region -regionRes 1; 
+pos2bed.pl OS-CON2-150Rr1-unscaled | bedtools sort | bedtools merge > OS-CON2-mD150Rr1-unscaled.bed; 
+mv OS-CON2-mD150Rr1-unscaled.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks-Unscaled-mD150rR1; 
+
+makeTagDirectory OS-CON3 ATCON3.filt.bam; 
+findpeaks OS-CON3/ -o OS-CON3-150Rr1-unscaled -minDist 150 -region -regionRes 1; 
+pos2bed.pl OS-CON3-150Rr1-unscaled | bedtools sort | bedtools merge > OS-CON3-mD150Rr1-unscaled.bed; 
+mv OS-CON3-mD150Rr1-unscaled.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks-Unscaled-mD150rR1; 
+
+makeTagDirectory OS-CON4 ATCON4.filt.bam; 
+findpeaks OS-CON4/ -o OS-CON4-150Rr1-unscaled -minDist 150 -region -regionRes 1; 
+pos2bed.pl OS-CON4-150Rr1-unscaled | bedtools sort | bedtools merge > OS-CON4-mD150Rr1-unscaled.bed; 
+mv OS-CON4-mD150Rr1-unscaled.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks-Unscaled-mD150rR1; 
+
+makeTagDirectory OS-SUB1 ATSUB1.filt.bam; 
+findpeaks OS-SUB1/ -o OS-SUB1-150Rr1-unscaled -minDist 150 -region -regionRes 1; 
+pos2bed.pl OS-SUB1-150Rr1-unscaled | bedtools sort | bedtools merge > OS-SUB1-mD150Rr1-unscaled.bed; 
+mv OS-SUB1-mD150Rr1-unscaled.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks-Unscaled-mD150rR1; 
+
+makeTagDirectory OS-SUB2 ATSUB2.filt.bam; 
+findpeaks OS-SUB2/ -o OS-SUB2-150Rr1-unscaled -minDist 150 -region -regionRes 1; 
+pos2bed.pl OS-SUB2-150Rr1-unscaled | bedtools sort | bedtools merge > OS-SUB2-mD150Rr1-unscaled.bed; 
+mv OS-SUB2-mD150Rr1-unscaled.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks-Unscaled-mD150rR1; 
+
+makeTagDirectory OS_SUB3 OS-SUB3.bam; 
+findpeaks OS_SUB3/ -o OS-SUB3-150Rr1-unscaled -minDist 150 -region -regionRes 1; 
+pos2bed.pl OS-SUB3-150Rr1-unscaled | bedtools sort | bedtools merge > OS-SUB3-mD150Rr1-unscaled.bed; 
+mv OS-SUB3-mD150Rr1-unscaled.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks-Unscaled-mD150rR1; 
+
+makeTagDirectory OS-SUB4 ATSUB4.filt.bam; 
+findpeaks OS-SUB4/ -o OS-SUB4-150Rr1-unscaled -minDist 150 -region -regionRes 1; 
+pos2bed.pl OS-SUB4-150Rr1-unscaled | bedtools sort | bedtools merge > OS-SUB4-mD150Rr1-unscaled.bed; 
+mv OS-SUB4-mD150Rr1-unscaled.bed /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks-Unscaled-mD150rR1; 
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks-Unscaled-mD150rR1; 
+
+bedtools intersect -wa -a OS-CON1-mD150Rr1-unscaled.bed -b OS-CON2-mD150Rr1-unscaled.bed -f 0.5 -F 0.5 > OS-CON-1and2-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a OS-CON2-mD150Rr1-unscaled.bed -b OS-CON1-mD150Rr1-unscaled.bed -f 0.5 -F 0.5 > OS-CON-1and2-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat OS-CON-1and2-mD150Rr1-unscaled-wa-50pINT-intersects.bed OS-CON-1and2-mD150Rr1-unscaled-wb-50pINT-intersects.bed > OS-CON-1and2-md150-wawb-50pINT-intersects.bed; 
+bedtools sort -i OS-CON-1and2-md150-wawb-50pINT-intersects.bed | bedtools merge > OS-CON-1and2-50pINT.bed; 
+bedtools intersect -wa -a OS-CON2-mD150Rr1-unscaled.bed -b OS-CON3-mD150Rr1-unscaled.bed -f 0.5 -F 0.5 > OS-CON-2and3-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a OS-CON3-mD150Rr1-unscaled.bed -b OS-CON2-mD150Rr1-unscaled.bed -f 0.5 -F 0.5 > OS-CON-2and3-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat OS-CON-2and3-mD150Rr1-unscaled-wa-50pINT-intersects.bed OS-CON-2and3-mD150Rr1-unscaled-wb-50pINT-intersects.bed > OS-CON-2and3-md150-wawb-50pINT-intersects.bed; 
+bedtools sort -i OS-CON-2and3-md150-wawb-50pINT-intersects.bed | bedtools merge > OS-CON-2and3-50pINT.bed; 
+bedtools intersect -wa -a OS-CON1-mD150Rr1-unscaled.bed -b OS-CON3-mD150Rr1-unscaled.bed -f 0.5 -F 0.5 > OS-CON-1and3-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a OS-CON3-mD150Rr1-unscaled.bed -b OS-CON1-mD150Rr1-unscaled.bed -f 0.5 -F 0.5 > OS-CON-1and3-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat OS-CON-1and3-mD150Rr1-unscaled-wa-50pINT-intersects.bed OS-CON-1and3-mD150Rr1-unscaled-wb-50pINT-intersects.bed > OS-CON-1and3-md150-wawb-50pINT-intersects.bed; 
+bedtools sort -i OS-CON-1and3-md150-wawb-50pINT-intersects.bed | bedtools merge > OS-CON-1and3-50pINT.bed; 
+bedtools intersect -wa -a OS-CON1-mD150Rr1-unscaled.bed -b OS-CON4-mD150Rr1-unscaled.bed -f 0.5 -F 0.5 > OS-CON-1and4-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a OS-CON4-mD150Rr1-unscaled.bed -b OS-CON1-mD150Rr1-unscaled.bed -f 0.5 -F 0.5 > OS-CON-1and4-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat OS-CON-1and4-mD150Rr1-unscaled-wa-50pINT-intersects.bed OS-CON-1and4-mD150Rr1-unscaled-wb-50pINT-intersects.bed > OS-CON-1and4-md150-wawb-50pINT-intersects.bed; 
+bedtools sort -i OS-CON-1and4-md150-wawb-50pINT-intersects.bed | bedtools merge > OS-CON-1and4-50pINT.bed; 
+bedtools intersect -wa -a OS-CON4-mD150Rr1-unscaled.bed -b OS-CON3-mD150Rr1-unscaled.bed -f 0.5 -F 0.5 > OS-CON-4and3-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a OS-CON3-mD150Rr1-unscaled.bed -b OS-CON4-mD150Rr1-unscaled.bed -f 0.5 -F 0.5 > OS-CON-4and3-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat OS-CON-4and3-mD150Rr1-unscaled-wa-50pINT-intersects.bed OS-CON-4and3-mD150Rr1-unscaled-wb-50pINT-intersects.bed > OS-CON-4and3-md150-wawb-50pINT-intersects.bed; 
+bedtools sort -i OS-CON-4and3-md150-wawb-50pINT-intersects.bed | bedtools merge > OS-CON-4and3-50pINT.bed; 
+bedtools intersect -wa -a OS-CON2-mD150Rr1-unscaled.bed -b OS-CON4-mD150Rr1-unscaled.bed -f 0.5 -F 0.5 > OS-CON-2and4-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a OS-CON4-mD150Rr1-unscaled.bed -b OS-CON2-mD150Rr1-unscaled.bed -f 0.5 -F 0.5 > OS-CON-2and4-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat OS-CON-2and4-mD150Rr1-unscaled-wa-50pINT-intersects.bed OS-CON-2and4-mD150Rr1-unscaled-wb-50pINT-intersects.bed > OS-CON-2and4-md150-wawb-50pINT-intersects.bed; 
+bedtools sort -i OS-CON-2and4-md150-wawb-50pINT-intersects.bed | bedtools merge > OS-CON-2and4-50pINT.bed; 
+cat OS-CON-1and2-50pINT.bed OS-CON-2and3-50pINT.bed OS-CON-1and3-50pINT.bed OS-CON-1and4-50pINT.bed OS-CON-4and3-50pINT.bed OS-CON-2and4-50pINT.bed > OS-CON-50pINT-unscaled-all4reps.bed; 
+
+bedtools intersect -wa -a OS-SUB1-mD150Rr1-unscaled.bed -b OS-SUB2-mD150Rr1-unscaled.bed -f 0.5 -F 0.5 > OS-SUB-1and2-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a OS-SUB2-mD150Rr1-unscaled.bed -b OS-SUB1-mD150Rr1-unscaled.bed -f 0.5 -F 0.5 > OS-SUB-1and2-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat OS-SUB-1and2-mD150Rr1-unscaled-wa-50pINT-intersects.bed OS-SUB-1and2-mD150Rr1-unscaled-wb-50pINT-intersects.bed > OS-SUB-1and2-md150-wawb-50pINT-intersects.bed; 
+bedtools sort -i OS-SUB-1and2-md150-wawb-50pINT-intersects.bed | bedtools merge > OS-SUB-1and2-50pINT.bed; 
+bedtools intersect -wa -a OS-SUB2-mD150Rr1-unscaled.bed -b OS-SUB3-mD150Rr1-unscaled.bed -f 0.5 -F 0.5 > OS-SUB-2and3-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a OS-SUB3-mD150Rr1-unscaled.bed -b OS-SUB2-mD150Rr1-unscaled.bed -f 0.5 -F 0.5 > OS-SUB-2and3-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat OS-SUB-2and3-mD150Rr1-unscaled-wa-50pINT-intersects.bed OS-SUB-2and3-mD150Rr1-unscaled-wb-50pINT-intersects.bed > OS-SUB-2and3-md150-wawb-50pINT-intersects.bed; 
+bedtools sort -i OS-SUB-2and3-md150-wawb-50pINT-intersects.bed | bedtools merge > OS-SUB-2and3-50pINT.bed; 
+bedtools intersect -wa -a OS-SUB1-mD150Rr1-unscaled.bed -b OS-SUB3-mD150Rr1-unscaled.bed -f 0.5 -F 0.5 > OS-SUB-1and3-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a OS-SUB3-mD150Rr1-unscaled.bed -b OS-SUB1-mD150Rr1-unscaled.bed -f 0.5 -F 0.5 > OS-SUB-1and3-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat OS-SUB-1and3-mD150Rr1-unscaled-wa-50pINT-intersects.bed OS-SUB-1and3-mD150Rr1-unscaled-wb-50pINT-intersects.bed > OS-SUB-1and3-md150-wawb-50pINT-intersects.bed; 
+bedtools sort -i OS-SUB-1and3-md150-wawb-50pINT-intersects.bed | bedtools merge > OS-SUB-1and3-50pINT.bed; 
+cat OS-SUB-1and2-50pINT.bed OS-SUB-2and3-50pINT.bed OS-SUB-1and3-50pINT.bed > OS-SUB-50pINT-unscaled-all3reps.bed; 
+bedtools intersect -wa -a OS-SUB1-mD150Rr1-unscaled.bed -b OS-SUB4-mD150Rr1-unscaled.bed -f 0.5 -F 0.5 > OS-SUB-1and4-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a OS-SUB4-mD150Rr1-unscaled.bed -b OS-SUB1-mD150Rr1-unscaled.bed -f 0.5 -F 0.5 > OS-SUB-1and4-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat OS-SUB-1and4-mD150Rr1-unscaled-wa-50pINT-intersects.bed OS-SUB-1and4-mD150Rr1-unscaled-wb-50pINT-intersects.bed > OS-SUB-1and4-md150-wawb-50pINT-intersects.bed; 
+bedtools sort -i OS-SUB-1and4-md150-wawb-50pINT-intersects.bed | bedtools merge > OS-SUB-1and4-50pINT.bed; 
+bedtools intersect -wa -a OS-SUB4-mD150Rr1-unscaled.bed -b OS-SUB3-mD150Rr1-unscaled.bed -f 0.5 -F 0.5 > OS-SUB-4and3-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a OS-SUB3-mD150Rr1-unscaled.bed -b OS-SUB4-mD150Rr1-unscaled.bed -f 0.5 -F 0.5 > OS-SUB-4and3-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat OS-SUB-4and3-mD150Rr1-unscaled-wa-50pINT-intersects.bed OS-SUB-4and3-mD150Rr1-unscaled-wb-50pINT-intersects.bed > OS-SUB-4and3-md150-wawb-50pINT-intersects.bed; 
+bedtools sort -i OS-SUB-4and3-md150-wawb-50pINT-intersects.bed | bedtools merge > OS-SUB-4and3-50pINT.bed; 
+bedtools intersect -wa -a OS-SUB2-mD150Rr1-unscaled.bed -b OS-SUB4-mD150Rr1-unscaled.bed -f 0.5 -F 0.5 > OS-SUB-2and4-mD150Rr1-unscaled-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a OS-SUB4-mD150Rr1-unscaled.bed -b OS-SUB2-mD150Rr1-unscaled.bed -f 0.5 -F 0.5 > OS-SUB-2and4-mD150Rr1-unscaled-wb-50pINT-intersects.bed; 
+cat OS-SUB-2and4-mD150Rr1-unscaled-wa-50pINT-intersects.bed OS-SUB-2and4-mD150Rr1-unscaled-wb-50pINT-intersects.bed > OS-SUB-2and4-md150-wawb-50pINT-intersects.bed; 
+bedtools sort -i OS-SUB-2and4-md150-wawb-50pINT-intersects.bed | bedtools merge > OS-SUB-2and4-50pINT.bed; 
+cat OS-SUB-1and2-50pINT.bed OS-SUB-2and3-50pINT.bed OS-SUB-1and3-50pINT.bed OS-SUB-1and4-50pINT.bed OS-SUB-4and3-50pINT.bed OS-SUB-2and4-50pINT.bed > OS-SUB-50pINT-unscaled-all4reps.bed; 
+
+cat OS-CON-50pINT-unscaled-all4reps.bed OS-SUB-50pINT-unscaled-all4reps.bed > OS-CON-and-SUB-50pINT-unscaled.bed; 
+bedtools sort -i OS-CON-and-SUB-50pINT-unscaled.bed | bedtools merge > OS-CON-SUB-50pINT-unscaled-all4reps.bed; 
+
+bedtools subtract -A -a OS-CON-SUB-50pINT-unscaled-all4reps.bed -b OS-CON-50pINT-unscaled-all4reps.bed > OS-SUBonly-unscaled-all4reps.bed; 
+bedtools subtract -A -a OS-CON-SUB-50pINT-unscaled-all4reps.bed -b OS-SUB-50pINT-unscaled-all4reps.bed > OS-CONonly-unscaled-all4reps.bed; 
+
+cp OS-CON-and-SUB-50pINT-unscaled.bed MAIN; 
+cp OS-SUBonly-unscaled-all4reps.bed MAIN; 
+cp OS-CONonly-unscaled-all4reps.bed MAIN; 
+
+
+Use OS-CON-and-SUB-50pINT-unscaled.bed to make gff3 file
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Initial-BAMs; 
+
+htseq-count -m union -s no -i gene_id -t exon -f bam ATCON1.filt.bam OS-CON-and-SUB-50pINT-unscaled.gff3 > OS-CON-1-unscaled-counts.txt; 
+mv OS-CON-1-unscaled-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/UNSCALED-DEseq; 
+
+htseq-count -m union -s no -i gene_id -t exon -f bam ATCON2.filt.bam OS-CON-and-SUB-50pINT-unscaled.gff3 > OS-CON-2-unscaled-counts.txt; 
+mv OS-CON-2-unscaled-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/UNSCALED-DEseq; 
+
+htseq-count -m union -s no -i gene_id -t exon -f bam ATCON3.filt.bam OS-CON-and-SUB-50pINT-unscaled.gff3 > OS-CON-3-unscaled-counts.txt; 
+mv OS-CON-3-unscaled-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/UNSCALED-DEseq; 
+
+htseq-count -m union -s no -i gene_id -t exon -f bam ATCON4.filt.bam OS-CON-and-SUB-50pINT-unscaled.gff3 > OS-CON-4-unscaled-counts.txt; 
+mv OS-CON-4-unscaled-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/UNSCALED-DEseq; 
+
+
+htseq-count -m union -s no -i gene_id -t exon -f bam ATSUB1.filt.bam OS-CON-and-SUB-50pINT-unscaled.gff3 > OS-SUB-1-unscaled-counts.txt; 
+mv OS-SUB-1-unscaled-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/UNSCALED-DEseq; 
+
+htseq-count -m union -s no -i gene_id -t exon -f bam ATSUB2.filt.bam OS-CON-and-SUB-50pINT-unscaled.gff3 > OS-SUB-2-unscaled-counts.txt; 
+mv OS-SUB-2-unscaled-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/UNSCALED-DEseq; 
+
+htseq-count -m union -s no -i gene_id -t exon -f bam OS-SUB3.bam OS-CON-and-SUB-50pINT-unscaled.gff3 > OS-SUB-3-unscaled-counts.txt; 
+mv OS-SUB-3-unscaled-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/UNSCALED-DEseq; 
+
+htseq-count -m union -s no -i gene_id -t exon -f bam ATSUB4.filt.bam OS-CON-and-SUB-50pINT-unscaled.gff3 > OS-SUB-4-unscaled-counts.txt; 
+mv OS-SUB-4-unscaled-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/UNSCALED-DEseq; 
+
+
+
+
+
+mkdir OS-UpInSUB-padj; 
+java -jar /Users/markobajic/Documents/Software/PeakAnnotator_Java_1.4/PeakAnnotator.jar -u TSS -p OS-UpInSUB-padj.bed -a O-sativa-Gene-TSS.bed -o OS-UpInSUB-padj;
+cd OS-UpInSUB-padj;
+awk 'NR>1 {print $7}' OS-UpInSUB-padj.tss.bed > OS-UpInSUB-padj-GENES.txt;
+cd ..; 
+
+mkdir OS-UpInSUB-pvalue; 
+java -jar /Users/markobajic/Documents/Software/PeakAnnotator_Java_1.4/PeakAnnotator.jar -u TSS -p OS-UpInSUB-pvalue.bed -a O-sativa-Gene-TSS.bed -o OS-UpInSUB-pvalue;
+cd OS-UpInSUB-pvalue;
+awk 'NR>1 {print $7}' OS-UpInSUB-pvalue.tss.bed > OS-UpInSUB-pvalue-GENES.txt;
+cd ..; 
+
+
+
+mkdir OS-PeaksForCounting; 
+java -jar /Users/markobajic/Documents/Software/PeakAnnotator_Java_1.4/PeakAnnotator.jar -u TSS -p OS-PeaksForCounting.bed -a O-sativa-Gene-TSS.bed -o OS-PeaksForCounting;
+cd OS-PeaksForCounting;
+awk 'NR>1 {print $7}' OS-PeaksForCounting.tss.bed > OS-PeaksForCounting-GENES.txt;
+cd ..; 
+
+
+
+
+Double check and remove any duplicate lines first
+
+bedtools getfasta -fi Oryza_sativa.IRGSP-1.0.30.dna.genome.fa -bed OS-UpInSUB-200bpcenter.bed -fo OS-UpInSUB-200bpcenter.fasta; 
+bedtools getfasta -fi Oryza_sativa.IRGSP-1.0.30.dna.genome.fa -bed OS-DownInSUB-200bpcenter.bed -fo OS-DownInSUB-200bpcenter.fasta; 
+
+
+
+samtools view -c ATCON1.filt.bam; samtools view -c -f 0x40 ATCON1.filt.bam; samtools view -c -f 0x80 ATCON1.filt.bam; samtools view -c ATCON2.filt.bam; samtools view -c -f 0x40 ATCON2.filt.bam; samtools view -c -f 0x80 ATCON2.filt.bam;
+6789156
+0
+0
+13399961
+6739709
+6660252
+
+Test to see if combining is possible, as a way of seeing what a combined SE and PE read containing file would look like
+
+This is how you separate out: samtools view -f 0x40 Paired.bam > Pair_1.bam
+
+
+
+samtools merge ATCON1and2merge.bam ATCON2.filt.bam ATCON1.filt.bam
+samtools view -c ATCON1and2merge.bam; samtools view -c -f 0x40 ATCON1and2merge.bam; samtools view -c -f 0x80 ATCON1and2merge.bam;
+20189117
+6739709
+6660252
+
+For the view -f 0x40 (first command below) command it is SUUUUPER important to keep that -b in the command, it will fail due to a missing header error at the merge command if you do not include the -b in the first command
+samtools view -f 0x40 -b ATCON2.filt.bam > ATCON2-Pair1.bam; 
+samtools merge ATCON1and2merge-OnlyPair1andSE.bam ATCON2-Pair1.bam ATCON1.filt.bam; 
+samtools view -c ATCON1and2merge-OnlyPair1andSE.bam; samtools view -c -f 0x40 ATCON1and2merge-OnlyPair1andSE.bam; samtools view -c -f 0x80 ATCON1and2merge-OnlyPair1andSE.bam;
+
+
+
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam ATCON2.filt.bam OS-CONandSub-ScaledDownOScounting.gff3 > Test-ATCON2-counts.txt; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam ATCON2-Pair1.bam OS-CONandSub-ScaledDownOScounting.gff3 > Test-ATCON2-Pair-counts.txt; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam ATCON1.filt.bam OS-CONandSub-ScaledDownOScounting.gff3 > Test-ATCON1-test-counts.txt; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam ATCON1and2merge-OnlyPair1andSE.bam OS-CONandSub-ScaledDownOScounting.gff3 > Test-ATCON1and2-Merged-counts.txt; 
+
+
+Results are CON2-Pair looks just about exactly the half number of counts for each THS as there are in CON2. This makes sense and is exciting, good news
+
+The merged bam file CON1and2merge did not go well. Issue is that it produces an error
+Error occured when processing SAM input (record #3 in file ATCON1and2merge-OnlyPair1andSE.bam):
+  'pair_alignments' needs a sequence of paired-end alignments
+  [Exception type: ValueError, raised in __init__.py:618]
+
+This is rather strange because the Pair file by itself DOES get counted, but it has issues when this information is combined with non paired end referencing (talking about it being paired end) information
+
+Perhaps, and this is a hunch, the way I merged the two files (CON1 and CON2-Pair) was not done optimally, there may be a need for a -b use in the command
+
+samtools merge TestMerge-ATCON1and2merge.bam -b ATCON2-Pair1.bam ATCON1.filt.bam; 
+This looked rather strange and it DID produce an error
+[E::hts_open_format] fail to open file 'BAM?'
+[bam_merge_core] fail to open file BAM?
+
+This was not ideal, but it still does not address the real problem we would have had. We currently have some files that have both SE and PE reads in them
+To move forward with these my idea is to remove the mate from all the paired end reads, but will that lose on all the SE reads as well
+Alternatively, instead of keeping with -f 0x40 what I can do is remove any -f 0x80 reads, which would keep only the SE and first mates, but is this an actual Samtools option
+Furthermore, I JUST demonstrated that if the mate information is removed the reads can be counted but NOT if they are together with SE reads
+To overcome this, the test where ATCON1 reads + ATCON2-pair reads = ATCON1-CON2-pair reads (if true) was essential, but the ATCON1-CON2-pair failed, so I cannot confirm that
+somehow if we are able to get rid of all but the first mates and then all the mates and count SE separately and the first mates separately I could just add the two together 
+and use this as a way of overcoming mixed sequencing type data...
+Need to do more work on this
+
+First, a test to see if sorting helps
+
+samtools sort ATCON1and2merge-OnlyPair1andSE.bam -o ATCON1and2merge-OnlyPair1andSE-SORTED.bam; 
+
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam ATCON1and2merge-OnlyPair1andSE-SORTED.bam OS-CONandSub-ScaledDownOScounting.gff3 > Test-ATCON1and2-Merged-counts.txt; 
+
+
+
+
+
+Removed duplicate lines in the OS-CON-and-SUB-50pINT-unscaled.gff3 file
+
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Initial-BAMs; 
+
+samtools view -f 0x40 -b ATSUB1.filt.bam > ATSUB1-Pair1.bam; 
+
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam ATCON1.filt.bam OS-CON-and-SUB-50pINT-unscaled.gff3 > OS-CON-1-unscaled-nonuniqueall-counts.txt; 
+mv OS-CON-1-unscaled-nonuniqueall-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/UNSCALED-DEseq/NonuniqueAll; 
+
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam ATCON2-Pair1.bam OS-CON-and-SUB-50pINT-unscaled.gff3 > OS-CON-2-unscaled-nonuniqueall-counts.txt; 
+mv OS-CON-2-unscaled-nonuniqueall-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/UNSCALED-DEseq/NonuniqueAll; 
+
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam ATCON3.filt.bam OS-CON-and-SUB-50pINT-unscaled.gff3 > OS-CON-3-unscaled-nonuniqueall-counts.txt; 
+mv OS-CON-3-unscaled-nonuniqueall-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/UNSCALED-DEseq/NonuniqueAll; 
+
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam ATCON4.filt.bam OS-CON-and-SUB-50pINT-unscaled.gff3 > OS-CON-4-unscaled-nonuniqueall-counts.txt; 
+mv OS-CON-4-unscaled-nonuniqueall-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/UNSCALED-DEseq/NonuniqueAll; 
+
+
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam ATSUB1-Pair1.bam OS-CON-and-SUB-50pINT-unscaled.gff3 > OS-SUB-1-unscaled-nonuniqueall-counts.txt; 
+mv OS-SUB-1-unscaled-nonuniqueall-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/UNSCALED-DEseq/NonuniqueAll; 
+
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam ATSUB2.filt.bam OS-CON-and-SUB-50pINT-unscaled.gff3 > OS-SUB-2-unscaled-nonuniqueall-counts.txt; 
+mv OS-SUB-2-unscaled-nonuniqueall-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/UNSCALED-DEseq/NonuniqueAll; 
+
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam OS-SUB3.bam OS-CON-and-SUB-50pINT-unscaled.gff3 > OS-SUB-3-unscaled-nonuniqueall-counts.txt; 
+mv OS-SUB-3-unscaled-nonuniqueall-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/UNSCALED-DEseq/NonuniqueAll; 
+
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam ATSUB4.filt.bam OS-CON-and-SUB-50pINT-unscaled.gff3 > OS-SUB-4-unscaled-nonuniqueall-counts.txt; 
+mv OS-SUB-4-unscaled-nonuniqueall-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/UNSCALED-DEseq/NonuniqueAll; 
+
+
+
+samtools view -c ATCON1.filt.bam; 
+samtools view -c ATCON2-Pair1.bam; 
+samtools view -c ATCON3.filt.bam; 
+samtools view -c ATCON4.filt.bam; 
+samtools view -c ATSUB1-Pair1.bam; 
+samtools view -c ATSUB2.filt.bam; 
+samtools view -c OS-SUB3.bam; 
+samtools view -c ATSUB4.filt.bam; 
+
+6789156
+6739709
+5535576
+6177612
+3743033
+4926969
+4372241
+5949994
+
+For DESEq library scaling
+1.227854012254020	1.218911266300930	1.001137579065360	1.117253113693160	0.676946896941124	0.891067852160297	0.790742421354222	1.076087219941240
+
+
+
+
+bedtools subtract -A -a OS-CON-SUB-50pINT-unscaled-all4reps.bed -b OS-CON-50pINT-unscaled-all4reps.bed > OS-SUBonly-unscaled-all4reps.bed; 
+bedtools subtract -A -a OS-CON-SUB-50pINT-unscaled-all4reps.bed -b OS-SUB-50pINT-unscaled-all4reps.bed > OS-CONonly-unscaled-all4reps.bed; 
+cp OS-SUBonly-unscaled-all4reps.bed MAIN/; 
+cp OS-CONonly-unscaled-all4reps.bed MAIN/; 
+
+
+bedtools sort -i OS-CON-and-SUB-50pINT-unscaled.bed > OS-CON-and-SUB-50pINT-unscaled-sorted.bed; 
+bedtools sort -i OS-CONonly-unscaled-all4reps.bed > OS-CONonly-unscaled-all4reps-sorted.bed; 
+bedtools sort -i OS-SUBonly-unscaled-all4reps.bed > OS-SUBonly-unscaled-all4reps-sorted.bed; 
+
+
+
+wc -l OS-CON1-mD150Rr1-unscaled.bed; 
+wc -l OS-CON2-mD150Rr1-unscaled.bed; 
+wc -l OS-CON3-mD150Rr1-unscaled.bed; 
+wc -l OS-CON4-mD150Rr1-unscaled.bed; 
+
+wc -l OS-SUB1-mD150Rr1-unscaled.bed; 
+wc -l OS-SUB2-mD150Rr1-unscaled.bed; 
+wc -l OS-SUB3-mD150Rr1-unscaled.bed; 
+wc -l OS-SUB4-mD150Rr1-unscaled.bed; 
+
+43129 OS-CON1-mD150Rr1-unscaled.bed
+60204 OS-CON2-mD150Rr1-unscaled.bed
+21103 OS-CON3-mD150Rr1-unscaled.bed
+34542 OS-CON4-mD150Rr1-unscaled.bed
+44668 OS-SUB1-mD150Rr1-unscaled.bed
+37028 OS-SUB2-mD150Rr1-unscaled.bed
+    0 OS-SUB3-mD150Rr1-unscaled.bed
+49300 OS-SUB4-mD150Rr1-unscaled.bed
+
+
+
+
+CORRECTED the Error with SUB3 and reran all the combinations... unfortunately, this will result in having to redo the freaking counting AGAIN*(UYRQ#*RH#@*(HR
+
+wc -l OS-CON1-mD150Rr1-unscaled.bed; 
+wc -l OS-CON2-mD150Rr1-unscaled.bed; 
+wc -l OS-CON3-mD150Rr1-unscaled.bed; 
+wc -l OS-CON4-mD150Rr1-unscaled.bed; 
+
+wc -l OS-SUB1-mD150Rr1-unscaled.bed; 
+wc -l OS-SUB2-mD150Rr1-unscaled.bed; 
+wc -l OS-SUB3-mD150Rr1-unscaled.bed; 
+wc -l OS-SUB4-mD150Rr1-unscaled.bed; 
+
+43129 OS-CON1-mD150Rr1-unscaled.bed
+60204 OS-CON2-mD150Rr1-unscaled.bed
+21103 OS-CON3-mD150Rr1-unscaled.bed
+34542 OS-CON4-mD150Rr1-unscaled.bed
+44668 OS-SUB1-mD150Rr1-unscaled.bed
+37028 OS-SUB2-mD150Rr1-unscaled.bed
+22137 OS-SUB3-mD150Rr1-unscaled.bed
+49300 OS-SUB4-mD150Rr1-unscaled.bed
+
+Remove the redundant lines
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Peaks-Unscaled-mD150rR1/MAIN;  
+wc -l OS-CON-and-SUB-50pINT-unscaled.bed; 
+wc -l OS-SUBonly-unscaled-all4reps.bed; 
+wc -l OS-CONonly-unscaled-all4reps.bed; 
+
+198789 OS-CON-and-SUB-50pINT-unscaled.bed
+6516 OS-SUBonly-unscaled-all4reps.bed
+7661 OS-CONonly-unscaled-all4reps.bed
+
+
+OS-CON-and-SUB-50pINT-unscaled.gff3
+
+
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/Initial-BAMs; 
+
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam ATCON1.filt.bam OS-CON-and-SUB-50pINT-unscaled.gff3 > OS-CON-1-correct-counts.txt; 
+mv OS-CON-1-correct-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/UNSCALED-DEseq-CORRECT-NonuniqueAll; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam ATCON2-Pair1.bam OS-CON-and-SUB-50pINT-unscaled.gff3 > OS-CON-2-correct-counts.txt; 
+mv OS-CON-2-correct-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/UNSCALED-DEseq-CORRECT-NonuniqueAll; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam ATCON3.filt.bam OS-CON-and-SUB-50pINT-unscaled.gff3 > OS-CON-3-correct-counts.txt; 
+mv OS-CON-3-correct-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/UNSCALED-DEseq-CORRECT-NonuniqueAll; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam ATCON4.filt.bam OS-CON-and-SUB-50pINT-unscaled.gff3 > OS-CON-4-correct-counts.txt; 
+mv OS-CON-4-correct-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/UNSCALED-DEseq-CORRECT-NonuniqueAll; 
+
+
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam ATSUB1-Pair1.bam OS-CON-and-SUB-50pINT-unscaled.gff3 > OS-SUB-1-correct-counts.txt; 
+mv OS-SUB-1-correct-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/UNSCALED-DEseq-CORRECT-NonuniqueAll; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam ATSUB2.filt.bam OS-CON-and-SUB-50pINT-unscaled.gff3 > OS-SUB-2-correct-counts.txt; 
+mv OS-SUB-2-correct-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/UNSCALED-DEseq-CORRECT-NonuniqueAll; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam OS-SUB3.bam OS-CON-and-SUB-50pINT-unscaled.gff3 > OS-SUB-3-correct-counts.txt; 
+mv OS-SUB-3-correct-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/UNSCALED-DEseq-CORRECT-NonuniqueAll; 
+htseq-count -m union -s no --nonunique all -i gene_id -t exon -f bam ATSUB4.filt.bam OS-CON-and-SUB-50pINT-unscaled.gff3 > OS-SUB-4-correct-counts.txt; 
+mv OS-SUB-4-correct-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/UNSCALED-DEseq-CORRECT-NonuniqueAll; 
+
+For DESEq library scaling
+1.227854012254020	1.218911266300930	1.001137579065360	1.117253113693160	0.676946896941124	0.891067852160297	0.790742421354222	1.076087219941240
+
+
+
+
+
+
+
+Previously done:
+
+samtools view -c Rice-CON-1-4scaled.bam; 
+samtools view -c Rice-CON-4-4scaled.bam; 
+samtools view -c Rice-SUB-1-4scaled.bam; 
+samtools view -c Rice-SUB-4-4scaled.bam; 
+
+5949817
+5949896
+5949556
+5949994
+
+But when combining I will want gDNA to be twice as much
+Previous:
+samtools view -s 0.0804438601945951 -b Rice-2-gDNA-q2.sorted.bam > Rice-gDNA-scaled.bam; 
+
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Genomic-DNA; 
+samtools view -s 0.1608877203891900 -b Rice-2-gDNA-q2.sorted.bam > Rice-gDNA-scaled-CorrectlyForDoubleBW.bam; 
+samtools index Rice-gDNA-scaled-CorrectlyForDoubleBW.bam; 
+samtools view -c Rice-gDNA-scaled-CorrectlyForDoubleBW.bam; 
+bamCoverage -b Rice-gDNA-scaled-CorrectlyForDoubleBW.bam -o Rice-gDNA-scaled-CorrectlyForDoubleBW.bw -bs=1 --normalizeUsingRPKM -p=max; 
+mv Rice-gDNA-scaled-CorrectlyForDoubleBW.bw /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/4Scaled-Bigwigs; 
+
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/GenomeInfo/RICE; 
+samtools faidx Oryza_sativa.IRGSP-1.0.30.dna.genome.fa; 
+cut -f1,2 Oryza_sativa.IRGSP-1.0.30.dna.genome.fa.fai > OS-ChrSizestest.txt; 
+
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/Rice/4Scaled-Bigwigs; 
+bigWigMerge Rice-CON-1-4scaled.bw Rice-CON-4-4scaled.bw Rice-CON-1and4-merged-scaled.bedGraph; 
+bedtools sort -i Rice-CON-1and4-merged-scaled.bedGraph > Rice-CON-1and4-merged-scaled-sorted.bedGraph; 
+bedGraphToBigWig Rice-CON-1and4-merged-scaled-sorted.bedGraph /Volumes/Deal-5TB/SUBEXP-ATAC/GenomeInfo/RICE/OS-ChrSizestest.txt Rice-CON-1and4-merged-scaled.bw; 
+
+bigWigMerge Rice-SUB-1-4scaled.bw Rice-SUB-4-4scaled.bw Rice-SUB-1and4-merged-scaled.bedGraph; 
+bedtools sort -i Rice-SUB-1and4-merged-scaled.bedGraph > Rice-SUB-1and4-merged-scaled-sorted.bedGraph; 
+bedGraphToBigWig Rice-SUB-1and4-merged-scaled-sorted.bedGraph /Volumes/Deal-5TB/SUBEXP-ATAC/GenomeInfo/RICE/OS-ChrSizestest.txt Rice-SUB-1and4-merged-scaled.bw; 
+
+
+Rice-SUB-1and4-merged-scaled.bedGraph is not case-sensitive sorted at line 12670.  Please use "sort -k1,1 -k2,2n" with LC_COLLATE=C,  or bedSort and try again.
+
+Downloaded bedSort
+chmod +x bedSort to make it executable
+
+
+Alternatively, while getting bedSort downloaded, executable, pathed...blahblah, just use bedtools instead:
+
+bedtools sort -i Rice-SUB-1and4-merged-scaled.bedGraph > Rice-SUB-1and4-merged-scaled-sorted.bedGraph
+
+bedGraphToBigWig Rice-SUB-1and4-merged-scaled-sorted.bedGraph /Volumes/Deal-5TB/SUBEXP-ATAC/GenomeInfo/RICE/OS-ChrSizestest.txt Rice-SUB-1and4-merged-scaled.bw; 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

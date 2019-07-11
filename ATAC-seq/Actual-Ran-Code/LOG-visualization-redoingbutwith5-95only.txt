@@ -1,0 +1,336 @@
+
+
+cd /Users/markobajic/Desktop/SUBEXP-DESeq-Results/MAR-MEME-ChIP; 
+awk 'FNR==NR { a[$1]; next } ($4 in a)' MAR-MEMEChIP-CisBP-Motifs.txt TF_Information.txt | awk ' {print $4"\t"$6}' > MAR-MEMEChIP-IDd.txt; 
+
+
+
+cd /Users/markobajic/Desktop/SUBEXP-DESeq-Results/Visualization-TopandBottom5PercentRemoved; 
+
+cp /Users/markobajic/Desktop/SUBEXP-DESeq-Results/OS-UpInSUB-pval.bed /Users/markobajic/Desktop/SUBEXP-DESeq-Results/Visualization-TopandBottom5PercentRemoved/OS-UpInSUB-pval.bed; 
+cp /Users/markobajic/Desktop/SUBEXP-DESeq-Results/Visualization/Results/OS-UpInSUB-pval.gz /Users/markobajic/Desktop/SUBEXP-DESeq-Results/Visualization-TopandBottom5PercentRemoved/OS-UpInSUB-pval.gz
+
+cd /Users/markobajic/Desktop/SUBEXP-DESeq-Results/Visualization-TopandBottom5PercentRemoved; 
+
+cp /Users/markobajic/Desktop/SUBEXP-DESeq-Results/MTRallTHSs.bed MTRallTHSs.bed; 
+cp /Users/markobajic/Desktop/SUBEXP-DESeq-Results/MT-UpInSUB-Pval.bed MT-UpInSUB-Pval.bed; 
+cp /Users/markobajic/Desktop/SUBEXP-DESeq-Results/MT-DownInSUB-Pval.bed MT-DownInSUB-Pval.bed; 
+cp /Users/markobajic/Desktop/SUBEXP-DESeq-Results/OS-AllTHSs.bed OS-AllTHSs.bed; 
+cp /Users/markobajic/Desktop/SUBEXP-DESeq-Results/OS-DownInSUB-pval.bed OS-DownInSUB-pval.bed; 
+cp /Users/markobajic/Desktop/SUBEXP-DESeq-Results/OS-UpInSUB-pval.bed OS-UpInSUB-pval.bed; 
+
+
+cp /Users/markobajic/Desktop/SUBEXP-DESeq-Results/Tomato/SL-HAIRY-All.bed SL-HAIRY-All.bed; 
+cp /Users/markobajic/Desktop/SUBEXP-DESeq-Results/Tomato/SL-HAIRY-DownInSUB.bed SL-HAIRY-DownInSUB.bed; 
+cp /Users/markobajic/Desktop/SUBEXP-DESeq-Results/Tomato/SL-HAIRY-UpInSUB.bed SL-HAIRY-UpInSUB.bed; 
+
+cp /Users/markobajic/Desktop/SUBEXP-DESeq-Results/Tomato/SL-ROOT-All.bed SL-ROOT-All.bed; 
+cp /Users/markobajic/Desktop/SUBEXP-DESeq-Results/Tomato/SL-ROOT-DownInSUB.bed SL-ROOT-DownInSUB.bed; 
+cp /Users/markobajic/Desktop/SUBEXP-DESeq-Results/Tomato/SL-ROOT-UpInSUB.bed SL-ROOT-UpInSUB.bed; 
+
+cp /Users/markobajic/Desktop/SUBEXP-DESeq-Results/Tomato/SL-SHOOT-All.bed SL-SHOOT-All.bed; 
+cp /Users/markobajic/Desktop/SUBEXP-DESeq-Results/Tomato/SL-SHOOT-DownInSUB.bed SL-SHOOT-DownInSUB.bed; 
+cp /Users/markobajic/Desktop/SUBEXP-DESeq-Results/Tomato/SL-SHOOT-UpInSUB.bed SL-SHOOT-UpInSUB.bed; 
+
+cp /Users/markobajic/Desktop/SUBEXP-DESeq-Results/Tomato/SP-ROOT-All-dashed.bed SP-ROOT-All-dashed.bed; 
+cp /Users/markobajic/Desktop/SUBEXP-DESeq-Results/Tomato/SP-ROOT-DownInSUB-dashed.bed SP-ROOT-DownInSUB-dashed.bed; 
+cp /Users/markobajic/Desktop/SUBEXP-DESeq-Results/Tomato/SP-ROOT-UpInSUB-dashed.bed SP-ROOT-UpInSUB-dashed.bed; 
+
+cp /Users/markobajic/Desktop/SUBEXP-DESeq-Results/Tomato/SP-SHOOT-All-dashed.bed SP-SHOOT-All-dashed.bed; 
+cp /Users/markobajic/Desktop/SUBEXP-DESeq-Results/Tomato/SP-SHOOT-DownInSUB-dashed.bed SP-SHOOT-DownInSUB-dashed.bed; 
+cp /Users/markobajic/Desktop/SUBEXP-DESeq-Results/Tomato/SP-SHOOT-UpInSUB-dashed.bed SP-SHOOT-UpInSUB-dashed.bed
+
+
+cp /Users/markobajic/Desktop/SUBEXP-DESeq-Results/Visualization/Results/MT-All.gz MT-All.gz; 
+cp /Users/markobajic/Desktop/SUBEXP-DESeq-Results/Visualization/Results/UpInSUB-pval.gz MT-UpInSUB-pval.gz; 
+cp /Users/markobajic/Desktop/SUBEXP-DESeq-Results/Visualization/Results/DownInSUB-pval.gz MT-DownInSUB-pval.gz; 
+
+cp /Users/markobajic/Desktop/SUBEXP-DESeq-Results/Visualization/Results/OS-UpInSUB-pval.gz OS-UpInSUB-pval.gz; 
+cp /Users/markobajic/Desktop/SUBEXP-DESeq-Results/Visualization/Results/OS-DownInSUB-pval.gz OS-DownInSUB-pval.gz; 
+cp /Users/markobajic/Desktop/SUBEXP-DESeq-Results/Visualization/Results/OS-All.gz OS-All.gz; 
+
+
+TheTomatoesIjustDidbyHand
+
+Then did some R work, general formula is this
+
+setwd("/Users/markobajic/Desktop/SUBEXP-DESeq-Results/Visualization-TopandBottom5PercentRemoved")
+inp_mat="OS-All.gz"
+inp_bed="OS-AllTHSs.bed"
+out_bed="OS-AllTHSs-5-95pcnt.bed"
+matrix_sp=read.delim(inp_mat,header=F,comment.char = "@")
+matrix_sp[1:4,1:4]
+matrix_sp[is.na(matrix_sp)]=0
+dim(matrix_sp)
+mat_sp_num=matrix_sp[,7:ncol(matrix_sp)]
+mat_sp_num$Sum=rowSums(mat_sp_num)
+low=5
+high=95
+val_exceed_sp=mat_sp_num$Sum>quantile(mat_sp_num$Sum,low/100)&mat_sp_num$Sum<quantile(mat_sp_num$Sum,high/100)
+table(val_exceed_sp)
+selected_sp=matrix_sp[val_exceed_sp,1:6]
+selected_sp$ID=paste0(selected_sp$V1,selected_sp$V2,selected_sp$V3)
+bed_up_SP=read.delim(inp_bed,header=F)
+bed_up_SP$ID=paste0(bed_up_SP$V1,bed_up_SP$V2,bed_up_SP$V3)
+bed_up_SP_filt=bed_up_SP[bed_up_SP$ID%in%selected_sp$ID,]
+write.table(bed_up_SP_filt[,1:3],out_bed,quote=F,row.names=F,sep = "\t",col.names=F)
+
+
+
+
+Now to plot with the new bed files
+
+cd /Users/markobajic/Desktop/SUBEXP-DESeq-Results/Visualization-TopandBottom5PercentRemoved; 
+cp *5-95pcnt.bed /Users/markobajic/Desktop/SUBEXP-DESeq-Results/Visualization; 
+cd /Users/markobajic/Desktop/SUBEXP-DESeq-Results/Visualization; 
+ls *pcnt.bed; 
+
+MT-AllTHSs-5-95pcnt.bed
+MT-DownInSUB-pval-5-95pcnt.bed
+MT-UpInSUB-pval-5-95pcnt.bed
+OS-AllTHSs-5-95pcnt.bed
+OS-DownInSUB-pval-5-95pcnt.bed
+OS-UpInSUB-pval-5-95pcnt.bed
+SL-HAIRY-All-5-95pcnt.bed
+SL-HAIRY-DownInSUB-5-95pcnt.bed
+SL-HAIRY-UpInSUB-5-95pcnt.bed
+SL-ROOT-All-5-95pcnt.bed
+SL-ROOT-UpInSUB-5-95pcnt.bed
+SL-SHOOT-All-5-95pcnt.bed
+SL-SHOOT-DownInSUB-5-95pcnt.bed
+SL-SHOOT-UpInSUB-5-95pcnt.bed
+SP-ROOT-All-5-95pcnt.bed
+SP-ROOT-DownInSUB-5-95pcnt.bed
+SP-ROOT-UpInSUB-5-95pcnt.bed
+SP-SHOOT-All-5-95pcnt.bed
+SP-SHOOT-DownInSUB-5-95pcnt.bed
+SP-SHOOT-UpInSUB-5-95pcnt.bed
+
+computeMatrix reference-point --referencePoint center -S Rice-CON-1and4-merged-scaled.bw Rice-SUB-1and4-merged-scaled.bw Rice-gDNA-scaled-CorrectlyForDoubleBW.bw -R OS-UpInSUB-pval-5-95pcnt.bed -a 1000 -b 1000 -o OS-UpInSUB-pval-5-95pcnt.gz; 
+mv OS-UpInSUB-pval-5-95pcnt.gz 5-95pcnt-Results; 
+cd 5-95pcnt-Results; 
+plotProfile -m OS-UpInSUB-pval-5-95pcnt.gz --regionsLabel OS-UpInSUB --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel THS-center --color green blue red --perGroup --outFileName OS-UpInSUB-pval.png; 
+plotHeatmap -m OS-UpInSUB-pval-5-95pcnt.gz --hclust 1 --regionsLabel OS-UpInSUB --missingDataColor white --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel THS-center -out OS-UpInSUB-pval.pdf --colorMap=Blues; 
+
+
+
+###CONTINUEHERE
+
+computeMatrix reference-point --referencePoint center -S Rice-CON-1and4-merged-scaled.bw Rice-SUB-1and4-merged-scaled.bw Rice-gDNA-scaled-CorrectlyForDoubleBW.bw -R OS-DownInSUB-pval-5-95pcnt.bed -a 1000 -b 1000 -o OS-DownInSUB-pval-5-95pcnt.gz; 
+computeMatrix reference-point --referencePoint center -S Rice-CON-1and4-merged-scaled.bw Rice-SUB-1and4-merged-scaled.bw Rice-gDNA-scaled-CorrectlyForDoubleBW.bw -R OS-AllTHSs-5-95pcnt.bed -a 1000 -b 1000 -o OS-AllTHSs-5-95pcnt.gz; 
+
+computeMatrix reference-point --referencePoint center -S CON-1and2-merged-scaled.bw SUB-1and2-merged-scaled.bw Mt-gDNA-ScaledForDoubleBigwig.bw -R MT-UPInSUB-pval-5-95pcnt.bed -a 1000 -b 1000 -o MT-UpInSUB-pval-5-95pcnt.gz; 
+computeMatrix reference-point --referencePoint center -S CON-1and2-merged-scaled.bw SUB-1and2-merged-scaled.bw Mt-gDNA-ScaledForDoubleBigwig.bw -R MT-DownInSUB-pval-5-95pcnt.bed -a 1000 -b 1000 -o MT-DownInSUB-pval-5-95pcnt.gz; 
+computeMatrix reference-point --referencePoint center -S CON-1and2-merged-scaled.bw SUB-1and2-merged-scaled.bw Mt-gDNA-ScaledForDoubleBigwig.bw -R MT-AllTHSs-5-95pcnt.bed -a 1000 -b 1000 -o MT-AllTHSs-5-95pcnt.gz; 
+
+computeMatrix reference-point --referencePoint center -S SL-HAIRY-CON.bw SL-HAIRY-SUB.bw SL-gDNA-HAIRY.bw -R SL-HAIRY-UPInSUB-5-95pcnt.bed -a 1000 -b 1000 -o SL-HAIRY-UpInSUB-5-95pcnt.gz; 
+computeMatrix reference-point --referencePoint center -S SL-HAIRY-CON.bw SL-HAIRY-SUB.bw SL-gDNA-HAIRY.bw -R SL-HAIRY-DownInSUB-5-95pcnt.bed -a 1000 -b 1000 -o SL-HAIRY-DownInSUB-5-95pcnt.gz; 
+computeMatrix reference-point --referencePoint center -S SL-HAIRY-CON.bw SL-HAIRY-SUB.bw SL-gDNA-HAIRY.bw -R SL-HAIRY-All-5-95pcnt.bed -a 1000 -b 1000 -o SL-HAIRY-AllTHSs-5-95pcnt.gz; 
+
+computeMatrix reference-point --referencePoint center -S SL-ROOT-CON.bw SL-ROOT-SUB.bw SL-gDNA-ROOT.bw -R SL-ROOT-UPInSUB-5-95pcnt.bed -a 1000 -b 1000 -o SL-ROOT-UpInSUB-5-95pcnt.gz; 
+computeMatrix reference-point --referencePoint center -S SL-ROOT-CON.bw SL-ROOT-SUB.bw SL-gDNA-ROOT.bw -R SL-ROOT-DownInSUB-5-95pcnt.bed -a 1000 -b 1000 -o SL-ROOT-DownInSUB-5-95pcnt.gz; 
+computeMatrix reference-point --referencePoint center -S SL-ROOT-CON.bw SL-ROOT-SUB.bw SL-gDNA-ROOT.bw -R SL-ROOT-All-5-95pcnt.bed -a 1000 -b 1000 -o SL-ROOT-AllTHSs-5-95pcnt.gz; 
+
+computeMatrix reference-point --referencePoint center -S SL-SHOOT-CON.bw SL-SHOOT-SUB.bw SL-gDNA-SHOOT.bw -R SL-SHOOT-UPInSUB-5-95pcnt.bed -a 1000 -b 1000 -o SL-SHOOT-UpInSUB-5-95pcnt.gz; 
+computeMatrix reference-point --referencePoint center -S SL-SHOOT-CON.bw SL-SHOOT-SUB.bw SL-gDNA-SHOOT.bw -R SL-SHOOT-DownInSUB-5-95pcnt.bed -a 1000 -b 1000 -o SL-SHOOT-DownInSUB-5-95pcnt.gz; 
+computeMatrix reference-point --referencePoint center -S SL-SHOOT-CON.bw SL-SHOOT-SUB.bw SL-gDNA-SHOOT.bw -R SL-SHOOT-All-5-95pcnt.bed -a 1000 -b 1000 -o SL-SHOOT-AllTHSs-5-95pcnt.gz; 
+
+computeMatrix reference-point --referencePoint center -S SP-ROOT-CON.bw SP-ROOT-SUB.bw SP-gDNA-ROOT.bw -R SP-ROOT-UPInSUB-5-95pcnt.bed -a 1000 -b 1000 -o SP-ROOT-UpInSUB-5-95pcnt.gz; 
+computeMatrix reference-point --referencePoint center -S SP-ROOT-CON.bw SP-ROOT-SUB.bw SP-gDNA-ROOT.bw -R SP-ROOT-DownInSUB-5-95pcnt.bed -a 1000 -b 1000 -o SP-ROOT-DownInSUB-5-95pcnt.gz; 
+computeMatrix reference-point --referencePoint center -S SP-ROOT-CON.bw SP-ROOT-SUB.bw SP-gDNA-ROOT.bw -R SP-ROOT-All-5-95pcnt.bed -a 1000 -b 1000 -o SP-ROOT-AllTHSs-5-95pcnt.gz; 
+
+computeMatrix reference-point --referencePoint center -S SP-SHOOT-CON.bw SP-SHOOT-SUB.bw SP-gDNA-SHOOT.bw -R SP-SHOOT-UPInSUB-5-95pcnt.bed -a 1000 -b 1000 -o SP-SHOOT-UpInSUB-5-95pcnt.gz; 
+computeMatrix reference-point --referencePoint center -S SP-SHOOT-CON.bw SP-SHOOT-SUB.bw SP-gDNA-SHOOT.bw -R SP-SHOOT-DownInSUB-5-95pcnt.bed -a 1000 -b 1000 -o SP-SHOOT-DownInSUB-5-95pcnt.gz; 
+computeMatrix reference-point --referencePoint center -S SP-SHOOT-CON.bw SP-SHOOT-SUB.bw SP-gDNA-SHOOT.bw -R SP-SHOOT-All-5-95pcnt.bed -a 1000 -b 1000 -o SP-SHOOT-AllTHSs-5-95pcnt.gz; 
+
+mv *-5-95pcnt.gz 5-95pcnt-Results; 
+cd 5-95pcnt-Results; 
+
+plotProfile -m OS-DownInSUB-pval-5-95pcnt.gz --regionsLabel OS-DownInSUB --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel THS-center --color green blue red --perGroup --outFileName OS-DownInSUB-pval.png; 
+plotHeatmap -m OS-DownInSUB-pval-5-95pcnt.gz --hclust 1 --regionsLabel OS-DownInSUB --missingDataColor white --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel THS-center -out OS-DownInSUB-pval.pdf --colorMap=Blues; 
+
+plotProfile -m OS-AllTHSs-5-95pcnt.gz --regionsLabel OS-AllTHSs --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel THS-center --color green blue red --perGroup --outFileName OS-AllTHSs.png; 
+plotHeatmap -m OS-AllTHSs-5-95pcnt.gz --regionsLabel OS-AllTHSs --missingDataColor white --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel THS-center -out OS-AllTHSs.pdf --colorMap=Blues; 
+
+plotProfile -m MT-UpInSUB-pval-5-95pcnt.gz --regionsLabel MT-UpInSUB --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel THS-center --color green blue red --perGroup --outFileName MT-UpInSUB-pval.png; 
+plotHeatmap -m MT-UpInSUB-pval-5-95pcnt.gz --hclust 1 --regionsLabel MT-UpInSUB --missingDataColor white --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel THS-center -out MT-UpInSUB-pval.pdf --colorMap=Blues; 
+
+plotProfile -m MT-DownInSUB-pval-5-95pcnt.gz --regionsLabel MT-DownInSUB --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel THS-center --color green blue red --perGroup --outFileName MT-DownInSUB-pval.png; 
+plotHeatmap -m MT-DownInSUB-pval-5-95pcnt.gz --hclust 1 --regionsLabel MT-DownInSUB --missingDataColor white --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel THS-center -out MT-DownInSUB-pval.pdf --colorMap=Blues; 
+
+plotProfile -m MT-AllTHSs-5-95pcnt.gz --regionsLabel MT-AllTHSs --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel THS-center --color green blue red --perGroup --outFileName MT-AllTHSs.png; 
+plotHeatmap -m MT-AllTHSs-5-95pcnt.gz --regionsLabel MT-AllTHSs --missingDataColor white --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel THS-center -out MT-AllTHSs.pdf --colorMap=Blues; 
+
+plotProfile -m SL-HAIRY-UpInSUB-5-95pcnt.gz --regionsLabel SL-HAIRY-UpInSUB --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel THS-center --color green blue red --perGroup --outFileName SL-HAIRY-UpInSUB.png; 
+plotHeatmap -m SL-HAIRY-UpInSUB-5-95pcnt.gz --hclust 1 --regionsLabel SL-HAIRY-UpInSUB --missingDataColor white --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel THS-center -out SL-HAIRY-UpInSUB.pdf --colorMap=Blues; 
+
+plotProfile -m SL-HAIRY-DownInSUB-5-95pcnt.gz --regionsLabel SL-HAIRY-DownInSUB --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel THS-center --color green blue red --perGroup --outFileName SL-HAIRY-DownInSUB.png; 
+plotHeatmap -m SL-HAIRY-DownInSUB-5-95pcnt.gz --hclust 1 --regionsLabel SL-HAIRY-DownInSUB --missingDataColor white --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel THS-center -out SL-HAIRY-DownInSUB.pdf --colorMap=Blues; 
+
+plotProfile -m SL-HAIRY-AllTHSs-5-95pcnt.gz --regionsLabel SL-HAIRY-AllTHSs --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel THS-center --color green blue red --perGroup --outFileName SL-HAIRY-AllTHSs.png; 
+plotHeatmap -m SL-HAIRY-AllTHSs-5-95pcnt.gz --regionsLabel SL-HAIRY-AllTHSs --missingDataColor white --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel THS-center -out SL-HAIRY-AllTHSs.pdf --colorMap=Blues; 
+
+
+plotProfile -m SL-ROOT-UpInSUB-5-95pcnt.gz --regionsLabel SL-ROOT-UpInSUB --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel THS-center --color green blue red --perGroup --outFileName SL-ROOT-UpInSUB.png; 
+plotHeatmap -m SL-ROOT-UpInSUB-5-95pcnt.gz --hclust 1 --regionsLabel SL-ROOT-UpInSUB --missingDataColor white --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel THS-center -out SL-ROOT-UpInSUB.pdf --colorMap=Blues; 
+
+plotProfile -m SL-ROOT-DownInSUB-5-95pcnt.gz --regionsLabel SL-ROOT-DownInSUB --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel THS-center --color green blue red --perGroup --outFileName SL-ROOT-DownInSUB.png; 
+plotHeatmap -m SL-ROOT-DownInSUB-5-95pcnt.gz --hclust 1 --regionsLabel SL-ROOT-DownInSUB --missingDataColor white --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel THS-center -out SL-ROOT-DownInSUB.pdf --colorMap=Blues; 
+
+plotProfile -m SL-ROOT-AllTHSs-5-95pcnt.gz --regionsLabel SL-ROOT-AllTHSs --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel THS-center --color green blue red --perGroup --outFileName SL-ROOT-AllTHSs.png; 
+plotHeatmap -m SL-ROOT-AllTHSs-5-95pcnt.gz --regionsLabel SL-ROOT-AllTHSs --missingDataColor white --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel THS-center -out SL-ROOT-AllTHSs.pdf --colorMap=Blues; 
+
+
+plotProfile -m SL-SHOOT-UpInSUB-5-95pcnt.gz --regionsLabel SL-SHOOT-UpInSUB --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel THS-center --color green blue red --perGroup --outFileName SL-SHOOT-UpInSUB.png; 
+plotHeatmap -m SL-SHOOT-UpInSUB-5-95pcnt.gz --hclust 1 --regionsLabel SL-SHOOT-UpInSUB --missingDataColor white --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel THS-center -out SL-SHOOT-UpInSUB.pdf --colorMap=Blues; 
+
+plotProfile -m SL-SHOOT-DownInSUB-5-95pcnt.gz --regionsLabel SL-SHOOT-DownInSUB --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel THS-center --color green blue red --perGroup --outFileName SL-SHOOT-DownInSUB.png; 
+plotHeatmap -m SL-SHOOT-DownInSUB-5-95pcnt.gz --hclust 1 --regionsLabel SL-SHOOT-DownInSUB --missingDataColor white --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel THS-center -out SL-SHOOT-DownInSUB.pdf --colorMap=Blues; 
+
+plotProfile -m SL-SHOOT-AllTHSs-5-95pcnt.gz --regionsLabel SL-SHOOT-AllTHSs --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel THS-center --color green blue red --perGroup --outFileName SL-SHOOT-AllTHSs.png; 
+plotHeatmap -m SL-SHOOT-AllTHSs-5-95pcnt.gz --regionsLabel SL-SHOOT-AllTHSs --missingDataColor white --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel THS-center -out SL-SHOOT-AllTHSs.pdf --colorMap=Blues; 
+
+
+plotProfile -m SP-ROOT-UpInSUB-5-95pcnt.gz --regionsLabel SP-ROOT-UpInSUB --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel THS-center --color green blue red --perGroup --outFileName SP-ROOT-UpInSUB.png; 
+plotHeatmap -m SP-ROOT-UpInSUB-5-95pcnt.gz --hclust 1 --regionsLabel SP-ROOT-UpInSUB --missingDataColor white --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel THS-center -out SP-ROOT-UpInSUB.pdf --colorMap=Blues; 
+
+plotProfile -m SP-ROOT-DownInSUB-5-95pcnt.gz --regionsLabel SP-ROOT-DownInSUB --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel THS-center --color green blue red --perGroup --outFileName SP-ROOT-DownInSUB.png; 
+plotHeatmap -m SP-ROOT-DownInSUB-5-95pcnt.gz --hclust 1 --regionsLabel SP-ROOT-DownInSUB --missingDataColor white --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel THS-center -out SP-ROOT-DownInSUB.pdf --colorMap=Blues; 
+
+plotProfile -m SP-ROOT-AllTHSs-5-95pcnt.gz --regionsLabel SP-ROOT-AllTHSs --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel THS-center --color green blue red --perGroup --outFileName SP-ROOT-AllTHSs.png; 
+plotHeatmap -m SP-ROOT-AllTHSs-5-95pcnt.gz --regionsLabel SP-ROOT-AllTHSs --missingDataColor white --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel THS-center -out SP-ROOT-AllTHSs.pdf --colorMap=Blues; 
+
+
+plotProfile -m SP-SHOOT-UpInSUB-5-95pcnt.gz --regionsLabel SP-SHOOT-UpInSUB --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel THS-center --color green blue red --perGroup --outFileName SP-SHOOT-UpInSUB.png; 
+plotHeatmap -m SP-SHOOT-UpInSUB-5-95pcnt.gz --hclust 1 --regionsLabel SP-SHOOT-UpInSUB --missingDataColor white --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel THS-center -out SP-SHOOT-UpInSUB.pdf --colorMap=Blues; 
+
+plotProfile -m SP-SHOOT-DownInSUB-5-95pcnt.gz --regionsLabel SP-SHOOT-DownInSUB --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel THS-center --color green blue red --perGroup --outFileName SP-SHOOT-DownInSUB.png; 
+plotHeatmap -m SP-SHOOT-DownInSUB-5-95pcnt.gz --hclust 1 --regionsLabel SP-SHOOT-DownInSUB --missingDataColor white --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel THS-center -out SP-SHOOT-DownInSUB.pdf --colorMap=Blues; 
+
+plotProfile -m SP-SHOOT-AllTHSs-5-95pcnt.gz --regionsLabel SP-SHOOT-AllTHSs --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel THS-center --color green blue red --perGroup --outFileName SP-SHOOT-AllTHSs.png; 
+plotHeatmap -m SP-SHOOT-AllTHSs-5-95pcnt.gz --regionsLabel SP-SHOOT-AllTHSs --missingDataColor white --samplesLabel CONTROL SUBMERGENCE gDNA --refPointLabel THS-center -out SP-SHOOT-AllTHSs.pdf --colorMap=Blues; 
+
+
+22813
+
+
+
+
+
+
+
+cd /Users/markobajic/Desktop/BedFiles; 
+
+
+
+
+Values <- read.table("/Users/markobajic/Desktop/BedFiles/AllSPecies-Root-Distances.txt", header = T, sep = "\t", check.names = F) 
+Values$Peaks <- as.factor(Values$Species)
+library("ggplot2")
+ggplot(Values, aes(x=Distance, line=Species, colour=Species)) + xlim(-5000,5000) + geom_density(alpha = 0.2) + xlab("Distance from TSS") + theme_bw() + theme( panel.grid.major=element_blank(), panel.grid.minor=element_blank()) + ggtitle("THS Distance from TSS") + theme(plot.title = element_text(hjust = 0.5)) + ylab("Density")
+
+
+ggplot(Values, aes(x=Distance, line=Species, colour=Species)) + xlim(-12000,12000) + geom_density(alpha = 0.2) + xlab("Distance from TSS") + theme_bw() + theme( panel.grid.major=element_blank(), panel.grid.minor=element_blank()) + ggtitle("THS Distance from TSS") + theme(plot.title = element_text(hjust = 0.5)) + ylab("Density")
+
+
+
+
+#Some Curiosity Hunting
+ggplot(Values, aes(x=Distance, fill=Species)) + geom_density(alpha = 0.2) + xlim(-5000,1000) + xlab("Distance from TSS")
+
+ggplot(Values, aes(x=Distance, line=Species, colour=Species)) + geom_density(alpha = 0.2) + xlim(-5000,1000) + xlab("Distance from TSS")
+
+ggplot(Values, aes(x=Distance, line=Species, colour=Species)) + geom_density(alpha = 0.2) + xlim(-5000,5000) + ylab("Density") + theme_bw() + theme( panel.grid.major=element_blank(), panel.grid.minor=element_blank()) + ggtitle("THS Distance from TSS") + xlab("Distance from TSS") 
+
+ggplot(Values, aes(x=Distance, line=Species, colour=Species)) + scale_x_log10() + geom_density(alpha = 0.2) + xlab("Distance from TSS") + theme_bw() + theme( panel.grid.major=element_blank(), panel.grid.minor=element_blank())
+
+
+ggplot(Values, aes(x=Distance, line=Species, colour=Species)) + geom_density(alpha = 0.2) + scale_x_sqrt() + ylab("Density") + theme_bw() + theme( panel.grid.major=element_blank(), panel.grid.minor=element_blank()) + ggtitle("THS Distance from TSS") + xlab("Distance from TSS") 
+
+
+ValuesPOS <- read.table("/Users/markobajic/Desktop/BedFiles/AllSPecies-Root-Distances-POSITIVEvalues.txt", header = T, sep = "\t", check.names = F) 
+ValuesPOS$Peaks <- as.factor(ValuesPOS$Species)
+ValuesNEG <- read.table("/Users/markobajic/Desktop/BedFiles/AllSPecies-Root-Distances-NEGATIVEvalues.txt", header = T, sep = "\t", check.names = F) 
+ValuesNEG$Peaks <- as.factor(ValuesNEG$Species)
+ValuesNEG$Distance <- abs(ValuesNEG$Distance)
+library("ggplot2")
+
+ggplot(ValuesPOS, aes(x=Distance, line=Species, colour=Species)) + scale_x_sqrt() + geom_density(alpha = 0.2) + xlab("Distance from TSS") + theme_bw() + theme( panel.grid.major=element_blank(), panel.grid.minor=element_blank())
+ggplot(ValuesNEG, aes(x=Distance, line=Species, colour=Species)) + scale_x_sqrt()  + geom_density(alpha = 0.2) + xlab("Distance from TSS") + theme_bw() + theme( panel.grid.major=element_blank(), panel.grid.minor=element_blank())
+ggplot(ValuesNEG, aes(x=rev(Distance), line=Species, colour=Species)) + scale_x_sqrt()  + geom_density(alpha = 0.2) + xlab("Distance from TSS") + theme_bw() + theme( panel.grid.major=element_blank(), panel.grid.minor=element_blank())
+
+
+
+ggplot(ValuesPOS, aes(x=Distance, line=Species, colour=Species)) + scale_x_log10() + geom_density(alpha = 0.2) + xlab("Distance from TSS") + theme_bw() + theme( panel.grid.major=element_blank(), panel.grid.minor=element_blank()) + ggtitle("THS Distance from TSS") + ylab("Density")
+ggplot(ValuesNEG, aes(x=Distance, line=Species, colour=Species)) + scale_x_log10()  + geom_density(alpha = 0.2) + xlab("Distance from TSS") + theme_bw() + theme( panel.grid.major=element_blank(), panel.grid.minor=element_blank()) + ggtitle("THS Distance from TSS") + ylab("Density")
+ggplot(ValuesNEG, aes(x=rev(Distance), line=Species, colour=Species)) + scale_x_log10()  + geom_density(alpha = 0.2) + xlab("Distance from TSS") + theme_bw() + theme( panel.grid.major=element_blank(), panel.grid.minor=element_blank()) + ggtitle("THS Distance from TSS") + ylab("Density")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

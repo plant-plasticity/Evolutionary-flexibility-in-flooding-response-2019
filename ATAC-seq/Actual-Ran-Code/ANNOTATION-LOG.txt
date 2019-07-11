@@ -1,0 +1,133 @@
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/ANNOTATION; 
+
+gffread /Volumes/Deal-5TB/SUBEXP-ATAC/GenomeInfo/MEDICAGO/MT4.gff3 -T -o /Volumes/Deal-5TB/SUBEXP-ATAC/GenomeInfo/MEDICAGO/MT4.gtf; 
+parseGTF.pl /Volumes/Deal-5TB/SUBEXP-ATAC/GenomeInfo/MEDICAGO/MT4.gtf ann > MT4annFile.txt; 
+assignGenomeAnnotation MT4annFile.txt MT4annFile.txt -prioritize MT4UseThisAnnotationTable.txt > stats.txt; 
+
+		Annotation	Number of peaks	Total size (bp)	Log2 Enrichment
+		TTS	90735.0	47466522	0.230
+		Exon	245889.0	48647635	1.633
+		Intron	210351.0	65190965	0.986
+		Intergenic	0.0	188506889	-19.331
+		Promoter	112548.0	54950805	0.330
+
+rm stats.txt; 
+
+To annotate, first edit the bed file so that it has 6 columns with this info: Chr Start End UniqueID blank Strand
+So, you would need to process your bed file a bit before running the command. Processing it you would need to add in 3 new columns after Chr Start End A UniqueID(I make this with UniqueID=numberthatincreaseswithrows) a blank row(nothing) and the last column is Strand Info which doesn't matter but + is more correct
+
+annotatePeaks.pl MT-UpInSUB-PAIRED.bed /Volumes/Deal-5TB/SUBEXP-ATAC/GenomeInfo/MEDICAGO/Mt4_JC.fa -ann MT4UseThisAnnotationTable.txt > MT-UpInSUB-PAIRED-Annotated.txt; 
+
+		Annotation	Number of peaks	Total size (bp)	Log2 Enrichment
+		TTS	1414.0	45549560	0.319
+		Exon	908.0	47200757	-0.372
+		Intron	649.0	63706240	-1.289
+		Intergenic	4051.0	180502425	-0.149
+		Promoter	2682.0	52907518	1.026
+
+First, the output file MT-UpInSUB-PAIRED-Annotated.txt has all the information in the 8th column
+We really only want this info, for making the chart
+And we do NOT want anything besides the annotation words (such as exon) instead of the full annotation (such as exon(GeneIDblahblah))
+
+Well, there is no actual reason to do any of these counting things that I have been doing because the actual annotation output gives you all the values.
+The R script can give you the percentages, but this is very easy to do. NEAT
+
+awk 'NR>1 {print $8}' MT-UpInSUB-PAIRED-Annotated.txt > MT-UpInSUB-PAIRED-Annotations.txt; 
+
+R; 
+
+
+MtrUpInSUBannotated <- read.table("/Volumes/Deal-5TB/SUBEXP-ATAC/ANNOTATION/MT-UpInSUB-PAIRED-Annotations.txt", header = F, sep = "\t", check.names = T) 
+summary(MtrUpInSUBannotated$V1)
+
+multi.fun <- function(x) {
+  cbind(freq = table(x), 
+        percentage = round(prop.table(table(x))*100, 2))
+}
+multi.fun(MtrUpInSUBannotated$V1)
+
+
+
+q(); 
+
+annotatePeaks.pl MT-DownInSUB-PAIRED.bed /Volumes/Deal-5TB/SUBEXP-ATAC/GenomeInfo/MEDICAGO/Mt4_JC.fa -ann MT4UseThisAnnotationTable.txt > MT-DownInSUB-PAIRED-Annotated.txt; 
+
+		Annotation	Number of peaks	Total size (bp)	Log2 Enrichment
+		TTS	6.0	45213716	0.769
+		Exon	6.0	46901638	0.716
+		Intron	2.0	63373467	-1.303
+		Intergenic	12.0	177257467	-0.202
+		Promoter	4.0	52534651	-0.032
+
+
+Wait, I never formatted this bed file. I guess you can just use a regular ole 3 column bed file. WTF?!!! reading notes actually screwed me up with extra work? This was simple and straightforward all along..faoiehfr8-9q42 3t89-hqw????
+
+annotatePeaks.pl MTRallTHSs.bed /Volumes/Deal-5TB/SUBEXP-ATAC/GenomeInfo/MEDICAGO/Mt4_JC.fa -ann MT4UseThisAnnotationTable.txt > MTRallTHSs-annotated.txt; 
+
+		Annotation	Number of peaks	Total size (bp)	Log2 Enrichment
+		TTS	25379.0	46577017	0.248
+		Exon	18536.0	47965698	-0.248
+		Intron	13147.0	64737663	-1.176
+		Intergenic	64892.0	186185425	-0.397
+		Promoter	61329.0	54022264	1.307
+
+Upstream	61329
+Exon		18536
+Intron		13147
+Downstream	25379
+Intergenic	64892
+
+awk 'NR>1 {print $8}' MTRallTHSs-annotated.txt > MTRallTHSs-ANNOTATION.txt; 
+
+Using R to find summary
+
+Upstream	 61329      33.46
+Exon         18536      10.11
+Intron       13147       7.17
+Downstream   25379      13.85
+Intergenic   64892      35.41
+
+Ah, so there is nothing wrong with the approach BUT there will at times be NAs and these seem to be primarily on scaffolds. Because of this, the total number of annotated THSs
+does not match the total number analyzed. The NAs technically fall into the Intergenic space and should therefore be added to this group. So, after annotating, the difference between
+the analyzed and the annotated values should be found and added to the Intergenic values. There
+
+This also means that the awk command is NOT necessary, just use the output in the Terminal, and you can use wc -l to get the total number if needed
+
+wc -l MTRallTHSs.bed; 
+183992
+
+
+
+cd /Volumes/Deal-5TB/SUBEXP-ATAC/ANNOTATION; 
+
+gffread /Volumes/Deal-5TB/SUBEXP-ATAC/GenomeInfo/RICE/Oryza_sativa.IRGSP-1.0.36.gff3 -T -o /Volumes/Deal-5TB/SUBEXP-ATAC/GenomeInfo/RICE/Oryza_sativa.IRGSP-1.0.36.gtf; 
+parseGTF.pl /Volumes/Deal-5TB/SUBEXP-ATAC/GenomeInfo/RICE/Oryza_sativa.IRGSP-1.0.36.gtf ann > OSannFile.txt; 
+assignGenomeAnnotation OSannFile.txt OSannFile.txt -prioritize OSUseThisAnnotationTable.txt > stats.txt; 
+rm stats.txt; 
+
+gffread /Volumes/Deal-5TB/SUBEXP-ATAC/GenomeInfo/TOMATO/ITAG3.2_gene_models.gff -T -o /Volumes/Deal-5TB/SUBEXP-ATAC/GenomeInfo/TOMATO/ITAG3.2_gene_models.gtf; 
+parseGTF.pl /Volumes/Deal-5TB/SUBEXP-ATAC/GenomeInfo/TOMATO/ITAG3.2_gene_models.gtf ann > SLannFile.txt; 
+assignGenomeAnnotation SLannFile.txt SLannFile.txt -prioritize SLUseThisAnnotationTable.txt > stats.txt; 
+rm stats.txt; 
+
+gffread /Volumes/Deal-5TB/SUBEXP-ATAC/GenomeInfo/TOMATO/spenn_v2.0_gene_models_annot.gff -T -o /Volumes/Deal-5TB/SUBEXP-ATAC/GenomeInfo/TOMATO/spenn_v2.0_gene_models_annot.gtf; 
+parseGTF.pl /Volumes/Deal-5TB/SUBEXP-ATAC/GenomeInfo/TOMATO/spenn_v2.0_gene_models_annot.gtf ann > SPannFile.txt; 
+assignGenomeAnnotation SPannFile.txt SPannFile.txt -prioritize SPUseThisAnnotationTable.txt > stats.txt; 
+rm stats.txt; 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

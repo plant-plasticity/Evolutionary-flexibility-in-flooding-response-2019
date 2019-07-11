@@ -1,0 +1,257 @@
+samtools view -c CON-1-SCALED.bam; 
+samtools view -c CON-2-SCALED.bam; 
+samtools view -c CON-7.sorted.Q2.bam; 
+samtools view -c SUB-1-SCALED.bam; 
+samtools view -c SUB-2-SCALED.bam; 
+samtools view -c SUB-7-SCALED.bam; 
+
+20,973,384
+20,973,135
+20,970,752
+20,971,635
+20,967,371
+20,970,543
+
+
+PEAKS - mindist 150 and region option
+MT-CON1-mD150.bed 
+MT-CON2-mD150.bed 
+MT-CON3-mD150.bed 
+MT-SUB1-mD150.bed 
+MT-SUB2-mD150.bed 
+MT-SUB3-mD150.bed 
+
+CON-1	20,161
+CON-2	7,480
+CON-3	25,811
+SUB-1	19,817
+SUB-2	29,592
+SUB-3	37,862
+
+From PCA, samples 1 and 2 are most similar to each other, both in CON and SUB
+
+bedtools intersect -wa -a MT-CON1-mD150.bed -b MT-CON2-mD150.bed > MT-CON-1and2-md150-wa-intersects.bed; 
+bedtools intersect -wa -a MT-CON2-mD150.bed -b MT-CON1-mD150.bed > MT-CON-1and2-md150-wb-intersects.bed; 
+bedtools sort -i MT-CON-1and2-md150-wawb-intersects.bed | bedtools merge > MT-CON-1and2.bed; 
+
+bedtools intersect -wa -a MT-SUB1-mD150.bed -b MT-SUB2-mD150.bed > MT-SUB-1and2-md150-wa-intersects.bed; 
+bedtools intersect -wa -a MT-SUB2-mD150.bed -b MT-SUB1-mD150.bed > MT-SUB-1and2-md150-wb-intersects.bed; 
+bedtools sort -i MT-SUB-1and2-md150-wawb-intersects.bed | bedtools merge > MT-SUB-1and2.bed; 
+
+bedtools sort -i MT-CONSUB-1and2.bed | bedtools merge > MT-CONandSUB-1and2.bed; 
+
+
+bedtools subtract -A -a MT-CONSUB-1and2.bed -b MT-CON-1and2.bed > MT-SUBonly-1and2.bed; 
+bedtools subtract -A -a MT-CONSUB-1and2.bed -b MT-SUB-1and2.bed > MT-CONonly-1and2.bed; 
+
+11,909		MT-SUBonly-1and2.bed
+544			MT-CONonly-1and2.bed
+10,090		SHARED
+
+Change 0s to 1s int he gff3 file you make because it WILL fail if there is a 0 as the start GRRRR
+
+
+htseq-count -m union -s no -i gene_id -t exon -f bam CON-1-SCALED.bam MT-CON-SUB-COUNTING.gff3 > MT-CON-1-counts.txt; mv MT-CON-1-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/DESeq; 
+htseq-count -m union -s no -i gene_id -t exon -f bam CON-2-SCALED.bam MT-CON-SUB-COUNTING.gff3 > MT-CON-2-counts.txt; mv MT-CON-2-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/DESeq; 
+htseq-count -m union -s no -i gene_id -t exon -f bam CON-7.sorted.Q2.bam MT-CON-SUB-COUNTING.gff3 > MT-CON-3-counts.txt; mv MT-CON-3-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/DESeq; 
+htseq-count -m union -s no -i gene_id -t exon -f bam SUB-1-SCALED.bam MT-CON-SUB-COUNTING.gff3 > MT-SUB-1-counts.txt; mv MT-SUB-1-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/DESeq; 
+htseq-count -m union -s no -i gene_id -t exon -f bam SUB-2-SCALED.bam MT-CON-SUB-COUNTING.gff3 > MT-SUB-2-counts.txt; mv MT-SUB-2-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/DESeq; 
+htseq-count -m union -s no -i gene_id -t exon -f bam SUB-7-SCALED.bam MT-CON-SUB-COUNTING.gff3 > MT-SUB-3-counts.txt; mv MT-SUB-3-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/DESeq; 
+
+
+
+
+
+
+
+
+
+
+mkdir Up-In-SUB-LeastStringent; 
+java -jar -Xmx512m /Users/deallabuser/Documents/Software/PeakAnnotator_Java_1.4/PeakAnnotator.jar -u TSS -p MT-UpINSUB-LeastStringent.bed -a M-truncatula-Gene-TSS.bed -o Up-In-SUB-LeastStringent;
+cd Up-In-SUB-LeastStringent/; 
+awk 'NR>1 {print $7}' MT-UpINSUB-LeastStringent.tss.bed > MT-ATAC-UpInSUB-LEASTstringent-GENES.bed; 
+cd ..;
+
+mkdir Down-In-SUB-LeastStringent; 
+java -jar -Xmx512m /Users/deallabuser/Documents/Software/PeakAnnotator_Java_1.4/PeakAnnotator.jar -u TSS -p MT-DownINSUB-LeastStringent.bed -a M-truncatula-Gene-TSS.bed -o Down-In-SUB-LeastStringent;
+cd Down-In-SUB-LeastStringent/; 
+awk 'NR>1 {print $7}' MT-DownINSUB-LeastStringent.tss.bed > MT-ATAC-DownINSUB-LEASTstringent-GENES.bed; 
+cd ..;
+
+
+
+
+
+computeMatrix reference-point -S CON-1-SCALED.bw CON-2-SCALED.bw CON-3-SCALED.bw SUB-1-SCALED.bw SUB-2-SCALED.bw SUB-3-SCALED.bw -R MT-DownInSUB.bed -a 1000 -b 1000 -o MT-ATAC-DownInSUB.gz; 
+plotProfile -m MT-ATAC-DownInSUB.gz --samplesLabel CON-1 CON-2 CON-3 SUB-1 SUB-2 SUB-3 --refPointLabel THS-center --color green lightgreen forestgreen blue lightblue cyan --perGroup --outFileName MT-ATAC-DownInSUB; 
+plotHeatmap -m MT-ATAC-DownInSUB.gz --samplesLabel CON-1 CON-2 CON-3 SUB-1 SUB-2 SUB-3 --refPointLabel THS-center -out MT-ATAC-DownInSUB.pdf --colorMap=Blues; 
+
+computeMatrix reference-point -S CON-1-SCALED.bw CON-2-SCALED.bw CON-3-SCALED.bw SUB-1-SCALED.bw SUB-2-SCALED.bw SUB-3-SCALED.bw -R MT-UpInSUB.bed -a 1000 -b 1000 -o MT-ATAC-UpInSUB.gz; 
+plotProfile -m MT-ATAC-UpInSUB.gz --samplesLabel CON-1 CON-2 CON-3 SUB-1 SUB-2 SUB-3 --refPointLabel THS-center --color green lightgreen forestgreen blue lightblue cyan --perGroup --outFileName MT-ATAC-UpInSUB; 
+plotHeatmap -m MT-ATAC-UpInSUB.gz --samplesLabel CON-1 CON-2 CON-3 SUB-1 SUB-2 SUB-3 --refPointLabel THS-center -out MT-ATAC-UpInSUB.pdf --colorMap=Blues; 
+
+
+mkdir Up-In-SUB; 
+java -jar -Xmx512m /Users/deallabuser/Documents/Software/PeakAnnotator_Java_1.4/PeakAnnotator.jar -u TSS -p MT-UpInSUB.bed -a M-truncatula-Gene-TSS.bed -o Up-In-SUB;
+cd Up-In-SUB/; 
+awk 'NR>1 {print $7}' MT-UpInSUB.tss.bed > MT-ATAC-UpInSUB-GENES.bed; 
+cd ..;
+
+mkdir Down-In-SUB; 
+java -jar -Xmx512m /Users/deallabuser/Documents/Software/PeakAnnotator_Java_1.4/PeakAnnotator.jar -u TSS -p MT-DownInSUB.bed -a M-truncatula-Gene-TSS.bed -o Down-In-SUB;
+cd Down-In-SUB/; 
+awk 'NR>1 {print $7}' MT-DownInSUB.tss.bed > MT-ATAC-DownInSUB-GENES.bed; 
+cd ..;
+
+
+
+
+computeMatrix scale-regions -S CON-1-SCALED.bw CON-2-SCALED.bw CON-3-SCALED.bw SUB-1-SCALED.bw SUB-2-SCALED.bw SUB-3-SCALED.bw -R MT-ATAC-UpInSUB-GeneCoords.bed -a 1000 -b 1000 -o MT-ATAC-UpInSUB-GeneCoords.gz; 
+plotProfile -m MT-ATAC-UpInSUB-GeneCoords.gz --startLabel TSS --endLabel TES --samplesLabel CON-1 CON-2 CON-3 SUB-1 SUB-2 SUB-3 --color green lightgreen forestgreen blue lightblue cyan --perGroup --outFileName MT-ATAC-UpInSUB-GeneCoords; 
+plotHeatmap -m MT-ATAC-UpInSUB-GeneCoords.gz --samplesLabel CON-1 CON-2 CON-3 SUB-1 SUB-2 SUB-3 --startLabel TSS --endLabel TES -out MT-ATAC-UpInSUB-GeneCoords.pdf --colorMap=Blues; 
+
+computeMatrix scale-regions -S CON-1-SCALED.bw CON-2-SCALED.bw CON-3-SCALED.bw SUB-1-SCALED.bw SUB-2-SCALED.bw SUB-3-SCALED.bw -R MT-ATAC-DownInSUB-GeneCoords.bed -a 1000 -b 1000 -o MT-ATAC-DownInSUB-GeneCoords.gz; 
+plotProfile -m MT-ATAC-DownInSUB-GeneCoords.gz --startLabel TSS --endLabel TES --samplesLabel CON-1 CON-2 CON-3 SUB-1 SUB-2 SUB-3 --color green lightgreen forestgreen blue lightblue cyan --perGroup --outFileName MT-ATAC-DownInSUB-GeneCoords; 
+plotHeatmap -m MT-ATAC-DownInSUB-GeneCoords.gz --samplesLabel CON-1 CON-2 CON-3 SUB-1 SUB-2 SUB-3 --startLabel TSS --endLabel TES -out MT-ATAC-DownInSUB-GeneCoords.pdf --colorMap=Blues; 
+
+
+
+
+computeMatrix scale-regions -S CON-1-SCALED.bw CON-2-SCALED.bw CON-3-SCALED.bw SUB-1-SCALED.bw SUB-2-SCALED.bw SUB-3-SCALED.bw -R Medicago-ERFs.bed -a 1000 -b 1000 -o Medicago-ERFs.gz; 
+plotProfile -m Medicago-ERFs.gz --startLabel TSS --endLabel TES --samplesLabel CON-1 CON-2 CON-3 SUB-1 SUB-2 SUB-3 --color green lightgreen forestgreen blue lightblue cyan --perGroup --outFileName Medicago-ERFs; 
+plotHeatmap -m Medicago-ERFs.gz --samplesLabel CON-1 CON-2 CON-3 SUB-1 SUB-2 SUB-3 --startLabel TSS --endLabel TES -out Medicago-ERFs.pdf --colorMap=Blues; 
+
+
+
+
+
+htseq-count -m union -s no -i gene_id -t exon -f bam CON-1-SCALED.bam MTR4-200centeredonTSS-AllGenes-COUNTING.gff3 > MT-CON-1-TSS-counts.txt; mv MT-CON-1-TSS-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/TSScenteredDESeq; 
+htseq-count -m union -s no -i gene_id -t exon -f bam CON-2-SCALED.bam MTR4-200centeredonTSS-AllGenes-COUNTING.gff3 > MT-CON-2-TSS-counts.txt; mv MT-CON-2-TSS-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/TSScenteredDESeq; 
+htseq-count -m union -s no -i gene_id -t exon -f bam CON-7.sorted.Q2.bam MTR4-200centeredonTSS-AllGenes-COUNTING.gff3 > MT-CON-3-TSS-counts.txt; mv MT-CON-3-TSS-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/TSScenteredDESeq; 
+htseq-count -m union -s no -i gene_id -t exon -f bam SUB-1-SCALED.bam MTR4-200centeredonTSS-AllGenes-COUNTING.gff3 > MT-SUB-1-TSS-counts.txt; mv MT-SUB-1-TSS-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/TSScenteredDESeq; 
+htseq-count -m union -s no -i gene_id -t exon -f bam SUB-2-SCALED.bam MTR4-200centeredonTSS-AllGenes-COUNTING.gff3 > MT-SUB-2-TSS-counts.txt; mv MT-SUB-2-TSS-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/TSScenteredDESeq; 
+htseq-count -m union -s no -i gene_id -t exon -f bam SUB-7-SCALED.bam MTR4-200centeredonTSS-AllGenes-COUNTING.gff3 > MT-SUB-3-TSS-counts.txt; mv MT-SUB-3-TSS-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/TSScenteredDESeq; 
+
+
+
+
+
+
+
+CON1 - 25,462
+CON2 - 11,188
+CON3 - 30,714
+SUB1 - 30,295
+SUB2 - 40,364
+SUB3 - 48,394
+
+
+
+mD150-rR1-Better Joining
+
+bedtools intersect -wa -a MT-CON1-mD150Rr1.bed -b MT-CON2-mD150Rr1.bed > MT-CON-1and2-md150rR1-wa-intersects.bed; 
+bedtools intersect -wa -a MT-CON2-mD150Rr1.bed -b MT-CON1-mD150Rr1.bed > MT-CON-1and2-md150rR1-wb-intersects.bed; 
+cat MT-CON-1and2-md150rR1-wa-intersects.bed MT-CON-1and2-md150rR1-wb-intersects.bed > MT-CON-1and2-md150-wawb-intersects.bed; 
+bedtools sort -i MT-CON-1and2-md150-wawb-intersects.bed | bedtools merge > MT-CON-1and2.bed; 
+bedtools intersect -wa -a MT-CON2-mD150Rr1.bed -b MT-CON3-mD150Rr1.bed > MT-CON-2and3-md150rR1-wa-intersects.bed; 
+bedtools intersect -wa -a MT-CON3-mD150Rr1.bed -b MT-CON2-mD150Rr1.bed > MT-CON-2and3-md150rR1-wb-intersects.bed; 
+cat MT-CON-2and3-md150rR1-wa-intersects.bed MT-CON-2and3-md150rR1-wb-intersects.bed > MT-CON-2and3-md150-wawb-intersects.bed; 
+bedtools sort -i MT-CON-2and3-md150-wawb-intersects.bed | bedtools merge > MT-CON-2and3.bed; 
+bedtools intersect -wa -a MT-CON1-mD150Rr1.bed -b MT-CON3-mD150Rr1.bed > MT-CON-1and3-md150rR1-wa-intersects.bed; 
+bedtools intersect -wa -a MT-CON3-mD150Rr1.bed -b MT-CON1-mD150Rr1.bed > MT-CON-1and3-md150rR1-wb-intersects.bed; 
+cat MT-CON-1and3-md150rR1-wa-intersects.bed MT-CON-1and3-md150rR1-wb-intersects.bed > MT-CON-1and3-md150-wawb-intersects.bed; 
+bedtools sort -i MT-CON-1and3-md150-wawb-intersects.bed | bedtools merge > MT-CON-1and3.bed; 
+cat MT-CON-1and2.bed MT-CON-2and3.bed MT-CON-1and3.bed > MT-CON-all3reps.bed; 
+
+bedtools intersect -wa -a MT-CON1-mD150Rr1.bed -b MT-CON2-mD150Rr1.bed -f 0.5 -F 0.5 > MT-CON-1and2-md150rR1-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a MT-CON2-mD150Rr1.bed -b MT-CON1-mD150Rr1.bed -f 0.5 -F 0.5 > MT-CON-1and2-md150rR1-wb-50pINT-intersects.bed; 
+cat MT-CON-1and2-md150rR1-wa-50pINT-intersects.bed MT-CON-1and2-md150rR1-wb-50pINT-intersects.bed > MT-CON-1and2-md150-wawb-50pINT-intersects.bed; 
+bedtools sort -i MT-CON-1and2-md150-wawb-50pINT-intersects.bed | bedtools merge > MT-CON-1and2-50pINT.bed; 
+bedtools intersect -wa -a MT-CON2-mD150Rr1.bed -b MT-CON3-mD150Rr1.bed -f 0.5 -F 0.5 > MT-CON-2and3-md150rR1-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a MT-CON3-mD150Rr1.bed -b MT-CON2-mD150Rr1.bed -f 0.5 -F 0.5 > MT-CON-2and3-md150rR1-wb-50pINT-intersects.bed; 
+cat MT-CON-2and3-md150rR1-wa-50pINT-intersects.bed MT-CON-2and3-md150rR1-wb-50pINT-intersects.bed > MT-CON-2and3-md150-wawb-50pINT-intersects.bed; 
+bedtools sort -i MT-CON-2and3-md150-wawb-50pINT-intersects.bed | bedtools merge > MT-CON-2and3-50pINT.bed; 
+bedtools intersect -wa -a MT-CON1-mD150Rr1.bed -b MT-CON3-mD150Rr1.bed -f 0.5 -F 0.5 > MT-CON-1and3-md150rR1-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a MT-CON3-mD150Rr1.bed -b MT-CON1-mD150Rr1.bed -f 0.5 -F 0.5 > MT-CON-1and3-md150rR1-wb-50pINT-intersects.bed; 
+cat MT-CON-1and3-md150rR1-wa-50pINT-intersects.bed MT-CON-1and3-md150rR1-wb-50pINT-intersects.bed > MT-CON-1and3-md150-wawb-50pINT-intersects.bed; 
+bedtools sort -i MT-CON-1and3-md150-wawb-50pINT-intersects.bed | bedtools merge > MT-CON-1and3-50pINT.bed; 
+cat MT-CON-1and2-50pINT.bed MT-CON-2and3-50pINT.bed MT-CON-1and3-50pINT.bed > MT-CON-50pINT-all3reps.bed; 
+
+bedtools intersect -wa -a MT-SUB1-mD150Rr1.bed -b MT-SUB2-mD150Rr1.bed -f 0.5 -F 0.5 > MT-SUB-1and2-md150rR1-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a MT-SUB2-mD150Rr1.bed -b MT-SUB1-mD150Rr1.bed -f 0.5 -F 0.5 > MT-SUB-1and2-md150rR1-wb-50pINT-intersects.bed; 
+cat MT-SUB-1and2-md150rR1-wa-50pINT-intersects.bed MT-SUB-1and2-md150rR1-wb-50pINT-intersects.bed > MT-SUB-1and2-md150-wawb-50pINT-intersects.bed; 
+bedtools sort -i MT-SUB-1and2-md150-wawb-50pINT-intersects.bed | bedtools merge > MT-SUB-1and2-50pINT.bed; 
+bedtools intersect -wa -a MT-SUB2-mD150Rr1.bed -b MT-SUB3-mD150Rr1.bed -f 0.5 -F 0.5 > MT-SUB-2and3-md150rR1-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a MT-SUB3-mD150Rr1.bed -b MT-SUB2-mD150Rr1.bed -f 0.5 -F 0.5 > MT-SUB-2and3-md150rR1-wb-50pINT-intersects.bed; 
+cat MT-SUB-2and3-md150rR1-wa-50pINT-intersects.bed MT-SUB-2and3-md150rR1-wb-50pINT-intersects.bed > MT-SUB-2and3-md150-wawb-50pINT-intersects.bed; 
+bedtools sort -i MT-SUB-2and3-md150-wawb-50pINT-intersects.bed | bedtools merge > MT-SUB-2and3-50pINT.bed; 
+bedtools intersect -wa -a MT-SUB1-mD150Rr1.bed -b MT-SUB3-mD150Rr1.bed -f 0.5 -F 0.5 > MT-SUB-1and3-md150rR1-wa-50pINT-intersects.bed; 
+bedtools intersect -wa -a MT-SUB3-mD150Rr1.bed -b MT-SUB1-mD150Rr1.bed -f 0.5 -F 0.5 > MT-SUB-1and3-md150rR1-wb-50pINT-intersects.bed; 
+cat MT-SUB-1and3-md150rR1-wa-50pINT-intersects.bed MT-SUB-1and3-md150rR1-wb-50pINT-intersects.bed > MT-SUB-1and3-md150-wawb-50pINT-intersects.bed; 
+bedtools sort -i MT-SUB-1and3-md150-wawb-50pINT-intersects.bed | bedtools merge > MT-SUB-1and3-50pINT.bed; 
+cat MT-SUB-1and2-50pINT.bed MT-SUB-2and3-50pINT.bed MT-SUB-1and3-50pINT.bed > MT-SUB-50pINT-all3reps.bed; 
+
+
+cat MT-CON-50pINT-all3reps.bed MT-SUB-50pINT-all3reps.bed > MT-CON-and-SUB-50pINT.bed; 
+bedtools sort -i MT-CON-and-SUB-50pINT.bed | bedtools merge > MT-CON-SUB-50pINT-all3reps.bed; 
+92,258
+
+bedtools subtract -A -a MT-CON-SUB-50pINT-all3reps.bed -b MT-CON-50pINT-all3reps.bed > MT-SUBonly-all3reps.bed; 
+bedtools subtract -A -a MT-CON-SUB-50pINT-all3reps.bed -b MT-SUB-50pINT-all3reps.bed > MT-CONonly-all3reps.bed; 
+
+14,123		MT-SUBonly-all3reps.bed
+1,737		MT-CONonly-all3reps.bed
+86,398		SHARED-betweenthe3
+
+Change 0s to 1s in the gff3 file you make because it WILL fail if there is a 0 as the start GRRRR
+
+
+htseq-count -m union -s no -i gene_id -t exon -f bam CON-1-SCALED.bam MT-CON-SUB-all3reps-50pINT.gff3 > MT-CON-1-counts.txt; mv MT-CON-1-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/DESEQ-All3reps-50pINT; 
+htseq-count -m union -s no -i gene_id -t exon -f bam CON-2-SCALED.bam MT-CON-SUB-all3reps-50pINT.gff3 > MT-CON-2-counts.txt; mv MT-CON-2-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/DESEQ-All3reps-50pINT; 
+htseq-count -m union -s no -i gene_id -t exon -f bam CON-7.sorted.Q2.bam MT-CON-SUB-all3reps-50pINT.gff3 > MT-CON-3-counts.txt; mv MT-CON-3-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/DESEQ-All3reps-50pINT; 
+htseq-count -m union -s no -i gene_id -t exon -f bam SUB-1-SCALED.bam MT-CON-SUB-all3reps-50pINT.gff3 > MT-SUB-1-counts.txt; mv MT-SUB-1-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/DESEQ-All3reps-50pINT; 
+htseq-count -m union -s no -i gene_id -t exon -f bam SUB-2-SCALED.bam MT-CON-SUB-all3reps-50pINT.gff3 > MT-SUB-2-counts.txt; mv MT-SUB-2-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/DESEQ-All3reps-50pINT; 
+htseq-count -m union -s no -i gene_id -t exon -f bam SUB-7-SCALED.bam MT-CON-SUB-all3reps-50pINT.gff3 > MT-SUB-3-counts.txt; mv MT-SUB-3-counts.txt /Volumes/Deal-5TB/SUBEXP-ATAC/Medicago/DESEQ-All3reps-50pINT; 
+
+
+
+mkdir UpInSUB; 
+java -jar /Users/markobajic/Documents/Software/PeakAnnotator_Java_1.4/PeakAnnotator.jar -u TSS -p UpInSUB.bed -a MTR4_TSS.col.switch.bed -o UpInSUB;
+cd UpInSUB;
+awk 'NR>1 {print $7}' UpInSUB.tss.bed > UpInSUB-GENES.txt;
+cd ..; 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

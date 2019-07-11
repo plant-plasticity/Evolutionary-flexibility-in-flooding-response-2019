@@ -1,0 +1,381 @@
+bowtie2 -p 6 -x Mt4_JC -1 CON_S4_R1_001.fastq.gz -2 CON_S4_R2_001.fastq.gz -S CON-7.sam; 
+bowtie2 -p 6 -x Mt4_JC -1 SUB_S5_R1_001.fastq.gz -2 SUB_S5_R2_001.fastq.gz -S SUB-7.sam; 
+bowtie2 -p 6 -x Mt4_JC -1 SUBx4_S6_R1_001.fastq.gz -2 SUBx4_S6_R2_001.fastq.gz -S SUB-x4-7.sam; 
+samtools view -o CON-7.bam CON-7.sam; 
+samtools view -o SUB-7.bam SUB-7.sam; 
+samtools view -o SUB-x4-7.bam SUB-x4-7.sam; 
+samtools sort CON-7.bam -o CON-7.sorted.bam; 
+samtools sort SUB-7.bam -o SUB-7.sorted.bam; 
+samtools sort SUB-x4-7.bam -o SUB-x4-7.sorted.bam; 
+samtools index CON-7.sorted.bam; 
+samtools index SUB-7.sorted.bam; 
+samtools index SUB-x4-7.sorted.bam; 
+java -jar /Users/deallabuser/Documents/Software/picard.jar CollectInsertSizeMetrics I=CON-7.sorted.bam O=CON-7.sorted.txt H=CON-7.sorted.pdf M=0.5; 
+java -jar /Users/deallabuser/Documents/Software/picard.jar CollectInsertSizeMetrics I=SUB-7.sorted.bam O=SUB-7.sorted.txt H=SUB-7.sorted.pdf M=0.5; 
+java -jar /Users/deallabuser/Documents/Software/picard.jar CollectInsertSizeMetrics I=SUB-x4-7.sorted.bam O=SUB-x4-7.sorted.txt H=SUB-Xx-7.sorted.pdf M=0.5; 
+samtools view -c CON-7.sorted.bam; 
+samtools view -c SUB-7.sorted.bam; 
+samtools view -c SUB-x4-7.sorted.bam; 
+samtools view -q 2 -b CON-7.sorted.bam > CON-7.sorted.Q2.bam; 
+samtools view -q 2 -b SUB-7.sorted.bam > SUB-7.sorted.Q2.bam; 
+samtools view -q 2 -b SUB-x4-7.sorted.bam > SUB-x4-7.sorted.Q2.bam; 
+samtools view -c CON-7.sorted.Q2.bam; 
+samtools view -c SUB-7.sorted.Q2.bam; 
+samtools view -c SUB-x4-7.sorted.Q2.bam; 
+samtools index CON-7.sorted.Q2.bam; 
+samtools index SUB-7.sorted.Q2.bam; 
+samtools index SUB-x4-7.sorted.Q2.bam; 
+java -jar /Users/deallabuser/Documents/Software/picard.jar CollectInsertSizeMetrics I=CON-7.sorted.Q2.bam O=CON-7.sorted.Q2.txt H=CON-7.sorted.Q2.pdf M=0.5; 
+java -jar /Users/deallabuser/Documents/Software/picard.jar CollectInsertSizeMetrics I=SUB-7.sorted.Q2.bam O=SUB-7.sorted.Q2.txt H=SUB-7.sorted.Q2.pdf M=0.5; 
+java -jar /Users/deallabuser/Documents/Software/picard.jar CollectInsertSizeMetrics I=SUB-x4-7.sorted.Q2.bam O=SUB-x4-7.sorted.Q2.txt H=SUB-Xx-7.sorted.Q2.pdf M=0.5; 
+
+36508753 reads; of these:
+  36508753 (100.00%) were paired; of these:
+    20926778 (57.32%) aligned concordantly 0 times
+    7579192 (20.76%) aligned concordantly exactly 1 time
+    8002783 (21.92%) aligned concordantly >1 times
+    ----
+    20926778 pairs aligned concordantly 0 times; of these:
+      156879 (0.75%) aligned discordantly 1 time
+    ----
+    20769899 pairs aligned 0 times concordantly or discordantly; of these:
+      41539798 mates make up the pairs; of these:
+        40734798 (98.06%) aligned 0 times
+        339750 (0.82%) aligned exactly 1 time
+        465250 (1.12%) aligned >1 times
+44.21% overall alignment rate
+
+63007288 reads; of these:
+  63007288 (100.00%) were paired; of these:
+    35765306 (56.76%) aligned concordantly 0 times
+    13504157 (21.43%) aligned concordantly exactly 1 time
+    13737825 (21.80%) aligned concordantly >1 times
+    ----
+    35765306 pairs aligned concordantly 0 times; of these:
+      250353 (0.70%) aligned discordantly 1 time
+    ----
+    35514953 pairs aligned 0 times concordantly or discordantly; of these:
+      71029906 mates make up the pairs; of these:
+        69518298 (97.87%) aligned 0 times
+        770414 (1.08%) aligned exactly 1 time
+        741194 (1.04%) aligned >1 times
+44.83% overall alignment rate
+
+55111534 reads; of these:
+  55111534 (100.00%) were paired; of these:
+    30136221 (54.68%) aligned concordantly 0 times
+    12957312 (23.51%) aligned concordantly exactly 1 time
+    12018001 (21.81%) aligned concordantly >1 times
+    ----
+    30136221 pairs aligned concordantly 0 times; of these:
+      194723 (0.65%) aligned discordantly 1 time
+    ----
+    29941498 pairs aligned 0 times concordantly or discordantly; of these:
+      59882996 mates make up the pairs; of these:
+        58754772 (98.12%) aligned 0 times
+        548076 (0.92%) aligned exactly 1 time
+        580148 (0.97%) aligned >1 times
+46.69% overall alignment rate
+
+
+CON			73017506
+SUB			126014576
+SUBx4		110223068
+
+CON-q2		20970752
+SUB-q2		37134856
+SUBx4-q2	34626816
+
+
+makeTagDirectory CON-7-tags CON-7.sorted.Q2.bam -single; findpeaks CON-7-tags/ -o CON-7-peaks -minDist 150 -region; pos2bed.pl CON-7-peaks | bedtools sort | bedtools merge > CON-7-peaks.bed; 
+makeTagDirectory SUB-7-tags SUB-7.sorted.Q2.bam -single; findpeaks SUB-7-tags/ -o SUB-7-peaks -minDist 150 -region; pos2bed.pl SUB-7-peaks | bedtools sort | bedtools merge > SUB-7-peaks.bed; 
+makeTagDirectory SUB-x4-7-tags SUB-x4-7.sorted.Q2.bam -single; findpeaks SUB-x4-7-tags/ -o SUB-x4-7-peaks -minDist 150 -region; pos2bed.pl SUB-x4-7-peaks | bedtools sort | bedtools merge > SUB-x4-7-peaks.bed; 
+
+CON
+	0.10% FDR Threshold set at 15.0 (poisson pvalue ~ 9.20e-07)
+	78854 peaks passed threshold
+	Stitching together putative peaks into regions
+	Clonal filtering: 26105 of 26340 (99.11% passed)
+	Total Peaks identified = 26105
+
+	Converted 26105 peaks total
+
+SUB
+	0.10% FDR Threshold set at 17.0 (poisson pvalue ~ 1.94e-06)
+	246386 peaks passed threshold
+	Stitching together putative peaks into regions
+	Clonal filtering: 56786 of 56999 (99.63% passed)
+	Total Peaks identified = 56786
+
+	Converted 56786 peaks total
+
+SUB-x4
+	0.10% FDR Threshold set at 17.0 (poisson pvalue ~ 4.38e-06)
+	220714 peaks passed threshold
+	Stitching together putative peaks into regions
+	Clonal filtering: 53767 of 53999 (99.57% passed)
+	Total Peaks identified = 53767
+
+	Converted 53767 peaks total
+
+
+samtools view -c CON-1.sorted.q2.bam; 
+samtools view -c CON-2.sorted.q2.bam; 
+samtools view -c SUB-1.sorted.q2.bam; 
+samtools view -c SUB-2.sorted.q2.bam; 
+
+CON-1 		44623793		0.4699455288348
+CON-2 		81590307		0.2570250409770
+CON-7 		20970752		1.0000000000000
+
+SUB-1 		55952592		0.3747950050285
+SUB-2 		78136533		0.2683860058137
+SUB-7 		37134856		0.5647188183522
+SUB-7-x4 	34626816		0.6056217239263
+
+samtools view -s 0.4699455288348 -b CON-1.sorted.q2.bam > CON-1-SCALED.bam; 
+samtools view -s 0.2570250409770 -b CON-2.sorted.q2.bam > CON-2-SCALED.bam; 
+samtools view -s 0.3747950050285 -b SUB-1.sorted.q2.bam > SUB-1-SCALED.bam; 
+samtools view -s 0.2683860058137 -b SUB-2.sorted.q2.bam > SUB-2-SCALED.bam; 
+samtools view -s 0.5647188183522 -b SUB-7.sorted.q2.bam > SUB-7-SCALED.bam; 
+samtools view -s 0.6056217239263 -b SUB-x4-7.sorted.q2.bam > SUB-7-x4-SCALED.bam; 
+
+samtools view -c CON-1-SCALED.bam; 
+samtools view -c CON-2-SCALED.bam; 
+samtools view -c SUB-1-SCALED.bam; 
+samtools view -c SUB-2-SCALED.bam; 
+samtools view -c SUB-7-SCALED.bam; 
+samtools view -c SUB-7-x4-SCALED.bam; 
+
+
+CON-1 		20973384
+CON-2 		20973135
+CON-7 		20970752
+
+SUB-1 		20971635
+SUB-2 		20967371
+SUB-7 		20970543
+SUB-7-x4 	20976752
+
+You must index the bam files before doing the PCA
+
+samtools index CON-1-SCALED.bam; 
+samtools index CON-2-SCALED.bam; 
+samtools index CON-7.sorted.q2.bam; 
+samtools index SUB-1-SCALED.bam; 
+samtools index SUB-2-SCALED.bam; 
+samtools index SUB-7-SCALED.bam; 
+samtools index SUB-7-x4-SCALED.bam; 
+multiBamSummary bins -b CON-1-SCALED.bam CON-2-SCALED.bam CON-7.sorted.q2.bam SUB-1-SCALED.bam SUB-2-SCALED.bam SUB-7-SCALED.bam SUB-7-x4-SCALED.bam -out CON-SUB.npz -bs=5000 -p=max; 
+plotPCA -T=Control-Submergence -in CON-SUB.npz -o Control-Submergence-PCA.pdf --labels Control-1 Control-2 Control-3 Submergence-1 Submergence-2 Submergence-3 Submergence-3-x4; 
+
+
+makeTagDirectory CON-1-tags CON-1-SCALED.bam -single; findpeaks CON-1-tags/ -o CON-1-peaks -minDist 150 -region; pos2bed.pl CON-1-peaks | bedtools sort | bedtools merge > CON-1-peaks.bed; 
+makeTagDirectory CON-2-tags CON-2-SCALED.bam -single; findpeaks CON-2-tags/ -o CON-2-peaks -minDist 150 -region; pos2bed.pl CON-2-peaks | bedtools sort | bedtools merge > CON-2-peaks.bed; 
+makeTagDirectory CON-3-tags CON-7.sorted.q2.bam -single; findpeaks CON-3-tags/ -o CON-3-peaks -minDist 150 -region; pos2bed.pl CON-3-peaks | bedtools sort | bedtools merge > CON-3-peaks.bed; 
+
+makeTagDirectory SUB-1-tags SUB-1-SCALED.bam -single; findpeaks SUB-1-tags/ -o SUB-1-peaks -minDist 150 -region; pos2bed.pl SUB-1-peaks | bedtools sort | bedtools merge > SUB-1-peaks.bed; 
+makeTagDirectory SUB-2-tags SUB-2-SCALED.bam -single; findpeaks SUB-2-tags/ -o SUB-2-peaks -minDist 150 -region; pos2bed.pl SUB-2-peaks | bedtools sort | bedtools merge > SUB-2-peaks.bed; 
+makeTagDirectory SUB-3-tags SUB-7-SCALED.bam -single; findpeaks SUB-3-tags/ -o SUB-3-peaks -minDist 150 -region; pos2bed.pl SUB-3-peaks | bedtools sort | bedtools merge > SUB-3-peaks.bed; 
+makeTagDirectory SUB-3x4-tags SUB-7-x4-SCALED.bam -single; findpeaks SUB-3x4-tags/ -o SUB-3x4-peaks -minDist 150 -region; pos2bed.pl SUB-3x4-peaks | bedtools sort | bedtools merge > SUB-3x4-peaks.bed;  
+
+CON-1
+	0.10% FDR Threshold set at 14.0 (poisson pvalue ~ 1.46e-06)
+	69895 peaks passed threshold
+	Stitching together putative peaks into regions
+	Clonal filtering: 20625 of 20895 (98.71% passed)
+	Total Peaks identified = 20625
+
+	Converted 20625 peaks total
+
+CON-2
+	0.10% FDR Threshold set at 18.0 (poisson pvalue ~ 3.50e-07)
+	22422 peaks passed threshold
+	Stitching together putative peaks into regions
+	Clonal filtering: 7685 of 7938 (96.81% passed)
+	Total Peaks identified = 7685
+
+	Converted 7685 peaks total
+
+CON-3
+	0.10% FDR Threshold set at 15.0 (poisson pvalue ~ 9.20e-07)
+	78854 peaks passed threshold
+	Stitching together putative peaks into regions
+	Clonal filtering: 26105 of 26340 (99.11% passed)
+	Total Peaks identified = 26105
+
+	Converted 26105 peaks total
+
+
+SUB-1
+	0.10% FDR Threshold set at 13.0 (poisson pvalue ~ 4.71e-07)
+	75752 peaks passed threshold
+	Stitching together putative peaks into regions
+	Clonal filtering: 20139 of 20385 (98.79% passed)
+	Total Peaks identified = 20139
+
+	Converted 20139 peaks total
+
+SUB-2
+	0.10% FDR Threshold set at 15.0 (poisson pvalue ~ 2.37e-06)
+	122173 peaks passed threshold
+	Stitching together putative peaks into regions
+	Clonal filtering: 30188 of 30419 (99.24% passed)
+	Total Peaks identified = 30188
+
+	Converted 30188 peaks total
+
+SUB-3
+	0.10% FDR Threshold set at 13.0 (poisson pvalue ~ 2.12e-06)
+	139134 peaks passed threshold
+	Stitching together putative peaks into regions
+	Clonal filtering: 38116 of 38343 (99.41% passed)
+	Total Peaks identified = 38116
+
+	Converted 38116 peaks total
+
+SUB-3x4
+	0.10% FDR Threshold set at 13.0 (poisson pvalue ~ 3.18e-06)
+	179627 peaks passed threshold
+	Stitching together putative peaks into regions
+	Clonal filtering: 45909 of 46121 (99.54% passed)
+	Total Peaks identified = 45909
+
+	Converted 45909 peaks total
+
+
+java -jar /Users/deallabuser/Documents/Software/picard.jar CollectInsertSizeMetrics I=CON-1-SCALED.bam O=CON-1.txt H=CON-1.pdf M=0.5; 
+java -jar /Users/deallabuser/Documents/Software/picard.jar CollectInsertSizeMetrics I=CON-2-SCALED.bam O=CON-2.txt H=CON-2.pdf M=0.5; 
+java -jar /Users/deallabuser/Documents/Software/picard.jar CollectInsertSizeMetrics I=CON-7.sorted.q2.bam O=CON-3.txt H=CON-3.pdf M=0.5; 
+java -jar /Users/deallabuser/Documents/Software/picard.jar CollectInsertSizeMetrics I=SUB-1-SCALED.bam O=SUB-1.txt H=SUB-1.pdf M=0.5; 
+java -jar /Users/deallabuser/Documents/Software/picard.jar CollectInsertSizeMetrics I=SUB-2-SCALED.bam O=SUB-2.txt H=SUB-2.pdf M=0.5; 
+java -jar /Users/deallabuser/Documents/Software/picard.jar CollectInsertSizeMetrics I=SUB-7-SCALED.bam O=SUB-3.txt H=SUB-3.pdf M=0.5; 
+java -jar /Users/deallabuser/Documents/Software/picard.jar CollectInsertSizeMetrics I=SUB-7-x4-SCALED.bam O=SUB-3x4.txt H=SUB-3x4.pdf M=0.5; 
+
+
+
+bamCoverage -b CON-1-SCALED.bam -o CON-1-SCALED.bw -bs=1 --normalizeUsingRPKM -p=max; 
+bamCoverage -b CON-2-SCALED.bam -o CON-2-SCALED.bw -bs=1 --normalizeUsingRPKM -p=max; 
+bamCoverage -b CON-7.sorted.q2.bam -o CON-3-SCALED.bw -bs=1 --normalizeUsingRPKM -p=max;  
+bamCoverage -b SUB-1-SCALED.bam -o SUB-1-SCALED.bw -bs=1 --normalizeUsingRPKM -p=max; 
+bamCoverage -b SUB-2-SCALED.bam -o SUB-2-SCALED.bw -bs=1 --normalizeUsingRPKM -p=max; 
+bamCoverage -b SUB-7-SCALED.bam -o SUB-3-SCALED.bw -bs=1 --normalizeUsingRPKM -p=max; 
+bamCoverage -b SUB-7-x4-SCALED.bam -o SUB-3x4-SCALED.bw -bs=1 --normalizeUsingRPKM -p=max; 
+
+
+
+CON-1 		20625
+CON-2 		7685
+CON-3 		26105
+SUB-1 		20139
+SUB-2 		30188
+SUB-3		38116
+SUB-3x4 	45909
+
+
+Maybe, just the peaks that are present in reps 1 and 3. Looks right to me, just based on numbers
+
+bedtools intersect -a CON-1-peaks.bed -b CON-3-peaks.bed > CON-peaks.bed; bedtools sort -i CON-peaks.bed > CON-peaks.sorted.bed; bedtools intersect -a SUB-1-peaks.bed -b SUB-3-peaks.bed > SUB-peaks.bed; bedtools sort -i SUB-peaks.bed > SUB-peaks.sorted.bed; 
+
+CON peaks = 15495
+SUB peaks = 18772
+
+bedtools subtract -A -a SUB-peaks.sorted.bed -b CON-peaks.sorted.bed > SUB-peaks-that-were-not-present-in-CON.bed; 
+
+SUB only peaks = 6754
+
+bedtools subtract -A -a CON-peaks.sorted.bed -b SUB-peaks.sorted.bed > CON-peaks-that-were-not-present-in-SUB.bed; 
+
+CON only peaks = 3307
+
+cat CON-peaks.sorted.bed SUB-peaks.sorted.bed > CON-SUB-peaks.bed; bedtools sort -i CON-SUB-peaks.bed > CON-SUB-peaks.sorted.bed; bedtools merge -i CON-SUB-peaks.sorted.bed > CON-SUB-peaks.sorted.merged.bed; 
+
+bedtools intersect -a SUB-peaks.sorted.bed -b CON-peaks.sorted.bed > SUB-CON-peaks-intersected.bed; 
+12433 in common
+
+samtools view -s 0.0817958411883 -b Mt_gDNA.q2.sorted.bam > Mt-gDNA-SCALED.bam; samtools view -c Mt-gDNA-SCALED.bam; samtools index Mt-gDNA-SCALED.bam; 
+20971880
+
+bamCoverage -b Mt-gDNA-SCALED.bam -o Mt-gDNA-SCALED.bw -bs=1 --normalizeUsingRPKM -p=max; 
+
+
+
+
+
+
+
+
+
+
+
+In Con-peaks-that-were-not-present-in-SUB.bed had to change peak scaffold2146	44	237 to scaffold2146	101	237, otherwise I would get an error because 44-100 is outside of index
+and in the SUB one I changed two lines of the scaffold ones
+OMG, SOOO much troubleshooting, even going so far to make sure that peaks were not hitting the edges of the ends (after a and b) but the real issue was peaks that were too small. Scale these first, always
+
+
+
+computeMatrix reference-point -S CON-1-SCALED.bw CON-2-SCALED.bw CON-3-SCALED.bw SUB-1-SCALED.bw SUB-2-SCALED.bw SUB-3-SCALED.bw SUB-3x4-SCALED.bw Mt-gDNA-SCALED.bw -R CON-peaks-that-were-not-present-in-SUB.bed --referencePoint center -a 1000 -b 1000 -o CONonly.gz; 
+plotProfile -m CONonly.gz --refPointLabel FootprintCenter --samplesLabel Control-1 Control-2 Control-3 Submergence-1 Submergence-2 Submergence-3 Submergence-3x4 gDNA --color green teal darkgreen blue lightblue darkblue purple grey --perGroup --outFileName CONonly; 
+plotHeatmap -m CONonly.gz --hclust 1 --regionsLabel PeakCenter --samplesLabel Control-1 Control-2 Control-3 Submergence-1 Submergence-2 Submergence-3 Submergence-3x4 gDNA -out CONonly.pdf --colorMap=Blues;
+
+computeMatrix reference-point -S CON-1-SCALED.bw CON-2-SCALED.bw CON-3-SCALED.bw SUB-1-SCALED.bw SUB-2-SCALED.bw SUB-3-SCALED.bw SUB-3x4-SCALED.bw Mt-gDNA-SCALED.bw -R SUB-peaks-that-were-not-present-in-CON.bed --referencePoint center -a 1000 -b 1000 -o SUBonly.gz; 
+plotProfile -m SUBonly.gz --refPointLabel FootprintCenter --samplesLabel Control-1 Control-2 Control-3 Submergence-1 Submergence-2 Submergence-3 Submergence-3x4 gDNA --color green teal darkgreen blue lightblue darkblue purple grey --perGroup --outFileName SUBonly; 
+plotHeatmap -m SUBonly.gz --hclust 1 --regionsLabel PeakCenter --samplesLabel Control-1 Control-2 Control-3 Submergence-1 Submergence-2 Submergence-3 Submergence-3x4 gDNA -out SUBonly.pdf --colorMap=Blues;
+
+
+
+
+mkdir CONonly-Cleaned-NearbyGenes; 
+java -jar -Xmx512m /Users/deallabuser/Documents/Software/PeakAnnotator_Java_1.4/PeakAnnotator.jar -u TSS -p CONonly-Cleaned.bed -a MTR4_TSS.col.switch.bed -o CONonly-Cleaned-NearbyGenes; 
+cd CONonly-Cleaned-NearbyGenes/; awk 'NR>1 {print $7}' CONonly-Cleaned.tss.bed > CONonly-Cleaned-GENES.txt; cd ..; 
+
+
+mkdir SUBonly-Cleaned-NearbyGenes; 
+java -jar -Xmx512m /Users/deallabuser/Documents/Software/PeakAnnotator_Java_1.4/PeakAnnotator.jar -u TSS -p SUBonlypeakscleaned.bed -a MTR4_TSS.col.switch.bed -o SUBonly-Cleaned-NearbyGenes; 
+cd SUBonly-Cleaned-NearbyGenes/; awk 'NR>1 {print $7}' SUBonlypeakscleaned.tss.bed > SUBonly-Cleaned-GENES.txt; cd ..; 
+
+
+Take values of CONonly and CONSUB and SUBonly - > combine -> ALLpeaks -> Use to get counts
+
+Will also need CONSUB plus CONonly -> Con peaks for MEME
+CONSUB plus SUBonly -> Sub peaks for MEME
+For both, will need to scale to 300, mask, and run analysis
+Look inside the peaks, if too many are big, will need to go back to peak counting and do it using rR 2
+
+
+
+mkdir CON-peaksALL-Cleaned-NearbyGenes; 
+java -jar -Xmx512m /Users/deallabuser/Documents/Software/PeakAnnotator_Java_1.4/PeakAnnotator.jar -u TSS -p CON-peaks-ALL-Cleaned.bed -a MTR4_TSS.col.switch.bed -o CON-peaksALL-Cleaned-NearbyGenes; 
+cd CON-peaksALL-Cleaned-NearbyGenes/; awk 'NR>1 {print $7}' CON-peaks-ALL-Cleaned.tss.bed > CON-peaks-ALL-Cleaned-GENES.txt; cd ..; 
+
+mkdir SUB-peaksALL-Cleaned-NearbyGenes; 
+java -jar -Xmx512m /Users/deallabuser/Documents/Software/PeakAnnotator_Java_1.4/PeakAnnotator.jar -u TSS -p SUB-peaks-ALL-Cleaned.bed -a MTR4_TSS.col.switch.bed -o SUB-peaksALL-Cleaned-NearbyGenes; 
+cd SUB-peaksALL-Cleaned-NearbyGenes/; awk 'NR>1 {print $7}' SUB-peaks-ALL-Cleaned.tss.bed > SUB-peaks-ALL-Cleaned-GENES.txt; cd ..; 
+
+
+computeMatrix reference-point -S CON-1-SCALED.bw CON-2-SCALED.bw CON-3-SCALED.bw SUB-1-SCALED.bw SUB-2-SCALED.bw SUB-3-SCALED.bw SUB-3x4-SCALED.bw Mt-gDNA-SCALED.bw -R CON-SUB-Cleaned.bed --referencePoint center -a 1000 -b 1000 -o CON-SUB-Cleaned-RP.gz; 
+plotProfile -m CON-SUB-Cleaned-RP.gz --refPointLabel FootprintCenter --samplesLabel Control-1 Control-2 Control-3 Submergence-1 Submergence-2 Submergence-3 Submergence-3x4 gDNA --color green teal darkgreen blue lightblue darkblue purple grey --perGroup --outFileName CON-SUB-Cleaned-RP; 
+plotHeatmap -m CON-SUB-Cleaned-RP.gz --hclust 1 --regionsLabel PeakCenter --samplesLabel Control-1 Control-2 Control-3 Submergence-1 Submergence-2 Submergence-3 Submergence-3x4 gDNA -out CON-SUB-Cleaned-RP.pdf --colorMap=Blues;
+
+
+computeMatrix reference-point -S CON-1-SCALED.bw CON-2-SCALED.bw CON-3-SCALED.bw SUB-1-SCALED.bw SUB-2-SCALED.bw SUB-3-SCALED.bw SUB-3x4-SCALED.bw Mt-gDNA-SCALED.bw -R CONonly-Cleaned.bed --referencePoint center -a 1000 -b 1000 -o CON-only-Cleaned-RP.gz; 
+plotProfile -m CON-only-Cleaned-RP.gz --refPointLabel FootprintCenter --samplesLabel Control-1 Control-2 Control-3 Submergence-1 Submergence-2 Submergence-3 Submergence-3x4 gDNA --color green teal darkgreen blue lightblue darkblue purple grey --perGroup --outFileName CON-only-Cleaned-RP; 
+plotHeatmap -m CON-only-Cleaned-RP.gz --hclust 1 --regionsLabel PeakCenter --samplesLabel Control-1 Control-2 Control-3 Submergence-1 Submergence-2 Submergence-3 Submergence-3x4 gDNA -out CON-only-Cleaned-RP.pdf --colorMap=Blues;
+
+
+computeMatrix reference-point -S CON-1-SCALED.bw CON-2-SCALED.bw CON-3-SCALED.bw SUB-1-SCALED.bw SUB-2-SCALED.bw SUB-3-SCALED.bw SUB-3x4-SCALED.bw Mt-gDNA-SCALED.bw -R SUBonlypeakscleaned.bed --referencePoint center -a 1000 -b 1000 -o SUB-only-Cleaned-RP.gz; 
+plotProfile -m CON-only-Cleaned-RP.gz --refPointLabel FootprintCenter --samplesLabel Control-1 Control-2 Control-3 Submergence-1 Submergence-2 Submergence-3 Submergence-3x4 gDNA --color green teal darkgreen blue lightblue darkblue purple grey --perGroup --outFileName SUB-only-Cleaned-RP; 
+plotHeatmap -m SUB-only-Cleaned-RP.gz --hclust 1 --regionsLabel PeakCenter --samplesLabel Control-1 Control-2 Control-3 Submergence-1 Submergence-2 Submergence-3 Submergence-3x4 gDNA -out SUB-only-Cleaned-RP.pdf --colorMap=Blues;
+
+
+
+
+
+
+
+
+
+
+
+
+
