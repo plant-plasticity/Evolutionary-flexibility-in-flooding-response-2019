@@ -1,0 +1,1 @@
+These scripts allow cross-species comparison of DEGs using gene family information from Phytozome. The input is the DEG_AllContrasts.csv file from limma-voom analysis, and the output in this example where all submergence-upregulated genes are compared in all species, is a Venn diagram of the overlapping upregulated genes.
