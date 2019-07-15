@@ -21,4 +21,9 @@ Code and supplementary files used in analysis for "Evolutionary flexibility in f
 - [Ribotaper for periodicity](https://github.com/plant-plasticity/Evolutionary-flexibility-in-flooding-response-2019/tree/master/Ribotaper-periodicity)
 - [Clustering]()
 - [Cross-species comparisons using Phytozome gene families](https://github.com/plant-plasticity/Evolutionary-flexibility-in-flooding-response-2019/tree/master/Gene-families-Phytozome)
-- [Cross-species comparisons using synteny](https://github.com/plant-plasticity/Evolutionary-flexibility-in-flooding-response-2019/tree/master/Synteny)
+
+
+## Other resources by topic (*in progress*)
+
+- [Syntenic relationships for cross-species comparisons](https://github.com/plant-plasticity/Evolutionary-flexibility-in-flooding-response-2019/tree/master/Synteny)
+- [Cytoscape files for Figure 4](https://github.com/plant-plasticity/Evolutionary-flexibility-in-flooding-response-2019/tree/master/Cytoscape)
