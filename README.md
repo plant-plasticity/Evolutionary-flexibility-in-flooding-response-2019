@@ -19,11 +19,11 @@ Code and supplementary files used in analysis for "Evolutionary flexibility in f
 - [RNA mapping for rice](https://github.com/plant-plasticity/Evolutionary-flexibility-in-flooding-response-2019/tree/master/Mapping-RNA-seq-Os)
 - [Differential Gene Expression by limma-voom](https://github.com/plant-plasticity/Evolutionary-flexibility-in-flooding-response-2019/tree/master/DEG-analysis-limma-voom)
 - [Ribotaper for periodicity](https://github.com/plant-plasticity/Evolutionary-flexibility-in-flooding-response-2019/tree/master/Ribotaper-periodicity)
-- [Clustering]()
+- Clustering
 - [Cross-species comparisons using Phytozome gene families](https://github.com/plant-plasticity/Evolutionary-flexibility-in-flooding-response-2019/tree/master/Gene-families-Phytozome)
 
 
 ## Other resources by topic (*in progress*)
 
-- [Syntenic relationships for cross-species comparisons](https://github.com/plant-plasticity/Evolutionary-flexibility-in-flooding-response-2019/tree/master/Synteny)
+- Syntenic relationships for cross-species comparisons
 - [Cytoscape files for Figure 4](https://github.com/plant-plasticity/Evolutionary-flexibility-in-flooding-response-2019/tree/master/Cytoscape)
