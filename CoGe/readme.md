@@ -1,4 +1,5 @@
-## Data from Reynoso, Kajala, Bajic, West, Pauluzzi et al., (2019) Evolutionary flexibility in flooding response circuitry in angiosperms. Science. https://science.sciencemag.org/cgi/doi/10.1126/science.aax8862
+## Data from Reynoso, Kajala, Bajic, West, Pauluzzi et al., (2019) 
+Evolutionary flexibility in flooding response circuitry in angiosperms. [Science](https://science.sciencemag.org/cgi/doi/10.1126/science.aax8862)
 
 Normalized read coverage tracks are available on Cyverse and CoGe for root tip data for each species for:
 
