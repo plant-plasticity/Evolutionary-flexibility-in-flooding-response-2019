@@ -5,11 +5,11 @@ Code and supplementary files used in analysis for "Evolutionary flexibility in f
 
 **Authors:**  [Mauricio A. Reynoso](https://github.com/reynosoma), [Kaisa Kajala](https://github.com/kaisakajala), [Marko Bajic](https://github.com/DealLab), Donnelly A. West, Germain Pauluzzi, Andrew Yao, Katie Hatch, Kristina  Zumstein, Margaret Woodhouse, [Joel Rodriguez-Medina](https://github.com/rodriguezmDNA), Neelima Sinha, Siobhan M. Brady, [Roger B. Deal](https://github.com/DealLab), [Julia Bailey-Serres](https://github.com/jbserres)
 
-**Journal:** To be added
+**Journal:** [Science](https://science.sciencemag.org/cgi/doi/10.1126/science.aax8862)
 
 **Abstract:** 
 
-> To be added
+> Flooding due to extreme weather threatens crops and ecosystems. To understand variation in gene regulatory networks activated by submergence,we conducted a high-resolution analysis of chromatin accessibility and gene expression at three scales of transcript control in four angiosperms, ranging from a dryland-adapted wild species to a wetland crop. The data define a cohort of conserved submergence-activated genes with signatures of overlapping cis-regulation by four transcription factor families. Syntenic genes are more highly expressed than nonsyntenic genes, yet both can have the cismotifs and chromatin accessibility associated with submergence up-regulation. Whereas the flexible circuitry spans the eudicot-monocot divide, the frequency of specific cis-motifs, extent of chromatin accessibility, and the degree of submergence activation is more prevalent in thewetland crop andmay have adaptive importance.
 
 
 
@@ -24,6 +24,7 @@ Code and supplementary files used in analysis for "Evolutionary flexibility in f
 
 
 ## Other resources by topic (*in progress*)
-
-- Syntenic relationships for cross-species comparisons
+- [Genome browser - CoGe viewer of ATAC-seq, nuclear RNA, total RNA, TRAP RNA and Ribo-seq](https://github.com/plant-plasticity/Evolutionary-flexibility-in-flooding-response-2019/tree/master/CoGe)
+- [Syntenic relationships for cross-species comparisons](https://github.com/plant-plasticity/Evolutionary-flexibility-in-flooding-response-2019/tree/master/Synteny)
 - [Cytoscape files for Figure 4](https://github.com/plant-plasticity/Evolutionary-flexibility-in-flooding-response-2019/tree/master/Cytoscape)
+
