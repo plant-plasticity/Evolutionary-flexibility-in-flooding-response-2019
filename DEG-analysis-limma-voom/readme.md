@@ -11,3 +11,9 @@ MT = *Medicago truncatula*
 
 
 To run RPKM calculation, run RPKM_Calculation.R
+
+
+**Update 7-Oct-2019**:
+Now available: 
+- Count data for all species in the Counts folder.
+- The outputs from limma-voom (logFC and p.adj.val) for all comparisons.
