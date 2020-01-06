@@ -58,8 +58,8 @@ bowtie2 -p 6 -x ShortNameThatTheGenomeIndicesAllShareThatYouSpecifiedWhenBuildin
 #SAM files are huge. Convert to binary format (BAM file) and then get rid of the SAM file (may not have to be right away, but no reason to keep it once you have the bam file
 #Command for converting
 
-samtools view -bS -o OutputBAMfile.bam InputSAMfile.sam; 
-
+samtools view -bS OutputBAMfile.bam InputSAMfile.sam; 
+#Please note, in the newer versions of samtools you do not include an older "-o" designation before the specified output file name, which comes before the input sam file, because ¯\_(ツ)_/¯
 
 
 #To remove the same file
@@ -70,7 +70,8 @@ rm InputSAMfile.sam
 
 #Next you sort the bam file (newer version of Samtools, older version had a "-o" precede the output name)
 
-samtools sort BamFile.bam SortedBamFile.bam;
+samtools sort BamFile.bam SortedBamFile;
+#Please note, with the newer versions of samtools you do not need the ".bam" ending in the specified output file
 
 
 #For reporting purposes, we want to know how many reads aligned, to do this we can count the reads in the bam file, by doing
@@ -85,6 +86,7 @@ samtools view -c BamFileToCount.bam > BamFileCounted-Reads.txt;
 
 samtools view -q 2 -b INPUTbamFile.bam > OutputQualityFilteredBamFile.bam; 
 
+#Apparently, again with the newer versions of samtools, you will need to sort and index these interim files before proceeding. So, in the cases of the bam files that have been filtered for quality and those where the organellar reads have been removed, you will need to sort the resulting files and index them before proceeding, otherwise you get an error. This was not the case when I was originally writing this bundle of text but it is the case now so if you are going to automate the steps you will want to add in the two extra commands at the interim steps
 
 
 #Now we can count again, the difference in this read number versusus the original tells us how many reads got removed
