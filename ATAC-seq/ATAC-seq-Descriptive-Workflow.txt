@@ -58,11 +58,14 @@ bowtie2 -p 6 -x ShortNameThatTheGenomeIndicesAllShareThatYouSpecifiedWhenBuildin
 #SAM files are huge. Convert to binary format (BAM file) and then get rid of the SAM file (may not have to be right away, but no reason to keep it once you have the bam file
 #Command for converting
 
-samtools view -bS OutputBAMfile.bam InputSAMfile.sam; 
+samtools view -S -b InputSAMfile.sam > OutputBAMfile.bam; 
+
 #Please note, in the newer versions of samtools you do not include an older "-o" designation before the specified output file name, which comes before the input sam file, because ¯\_(ツ)_/¯
+#Also, now you can't just use -bS and have to separate them and basically the carrot method approach above works and that's good enough
 
 
 #To remove the same file
+#I actually do NOT recommend doing this, just delete the SAM files manually if you need to free up space. If you mess up a command or something then the BAM file will be useless but you will get rid of the SAM file and that is a lot of time lost because aligning is not super fast
 rm InputSAMfile.sam
 
 
@@ -286,7 +289,17 @@ awk '{print $1"\t"$2"\t"$3"\t"($3-$2)}' INPUTbedFile.bed | awk -F "\t" '{if($4 >
 #I have somewhere the details of how to build the annotation file (important for new genomes or species) but for now we already have this for Arabidopsis
 
 
+#To actually build the annotation table you start with a GFF3 file (annotation file) and go from there using the following set of commands. The last bit that builds the table can take some time, 10+ minutes
+
+gffread GFF3annotationFile.gff -T -o OutputAnnotationGTFfile.gtf; 
+parseGTF.pl OutputAnnotationGTFfile.gtf ann > AnnotatedInterimFile.txt; 
+assignGenomeAnnotation AnnotatedInterimFile.txt AnnotatedInterimFile.txt -prioritize AnnotationTable.txt > stats.txt; 
+
+#Now you can use that annotationtable to annotate any set of coordinates. It will basically pick the center (expected highest part of the peak) of the coordinates and annotate that
+
 annotatePeaks.pl BedFileToAnnotate.bed /Navigate/To/Where/Genome/Fasta/File/Is/GenomeFile.fa -ann /Navigate/To/Where/AnnotationTableIs/AnnotationTable.txt > AnnotatedBed.txt; 
+
+#This bit is for preparing a text file that you can use in R to make a PieChart for the results of the annotation
 
 less AnnotatedBed.txt | grep -c "promoter-TSS" | awk '{print $1"\t""Promoter"}' > number1.txt; 
 less AnnotatedBed.txt | grep -c "exon" | awk '{print $1"\t""Exon"}' > number2.txt; 
@@ -300,7 +313,7 @@ rm number*.txt
 
 
 
-#PleasePleasePlease NOTE that this is to run R. You can run R in terminal or you can do it in R studios. While R studios is waaaay more user friendly, powerful, and amazing for storing your work, if you know what you want to do and it's pretty simple then you can just launch R in terminal and run your R script there
+#PleasePleasePlease NOTE that this is supposed to be done in R. You can run R in terminal or you can do it in R studios. While R studios is waaaay more user friendly, powerful, and amazing for storing your work, if you know what you want to do and it's pretty simple then you can just launch R in terminal and run your R script there
 #For here, the terminal command is to press R
 
 R
