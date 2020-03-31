@@ -658,6 +658,18 @@ ggplot(Values, aes(x=Values$V1)) + geom_density() + xlab("Distance from TSS") + 
 #you can add a "+ xlim(-UpstreamValue,Downstreamvalue)" to choose where to focus your attention. I would add this right before the "+ geom_density" part
 
 
+#UPDATE
+#This is a much better way to plot the THS Center Distances 
+#Apparently the distance output DOES contain a header that is useful if you skip the NR>1 option in the previous awk command and you can use that to your advantage
+#But the biggest difference comes in the plotting of this as geom_freqpoly which will NOT scale things based on what is shown in the plot area, and instead will just report the actual numbers of THSs, which is much more informative than the distribution within the plot area
+
+Values <- read.table("/Path/To/Where/DistancesFileIs/DistancesFile.txt", header = T, sep = "\t", check.names =F)
+ggplot(Values, aes(x=Distance)) + xlim(-500,500) + geom_freqpoly(binwidth=10) + xlab("Distance (bp)") + theme_bw() + theme( panel.grid.major=element_blank(), panel.grid.minor=element_blank()) + ggtitle("THS Center Distance From Nearest TSS") + theme(plot.title = element_text(hjust = 0.5)) + ylab("Number Of THSs")
+
+#The xlim(-500,500) is probably too restrictive but most of the THSs I was looking at had centers that were primarily at the TSS so this was appropritae, but it is important to change this window and determine what works best, cast a wider net first, such as -2000,2000
+
+#This is the change in the previous awk command, I just took out the first part
+awk '{print $4}' BedFileToAnnotate.tss.bed > BedFileToAnnotate-Distances.txt; 
 
 #Now, if at some point you want to plot multiple lines of distances from several different sets of THSs
 #First, you would want to create a second column that separates the distances of one set form another, such as I did below, my header for this second column was Motif
