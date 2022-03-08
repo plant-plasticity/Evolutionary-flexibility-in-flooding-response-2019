@@ -13,7 +13,7 @@ Code and supplementary files used in analysis for "Evolutionary flexibility in f
 
 
 
-## Code used by topic (*in progress*)
+## Code used by topic
 
 - [ATAC-seq](https://github.com/plant-plasticity/Evolutionary-flexibility-in-flooding-response-2019/tree/master/ATAC-seq)
 - [RNA mapping for rice](https://github.com/plant-plasticity/Evolutionary-flexibility-in-flooding-response-2019/tree/master/Mapping-RNA-seq-Os)
@@ -23,7 +23,7 @@ Code and supplementary files used in analysis for "Evolutionary flexibility in f
 - [Cross-species comparisons using Phytozome gene families](https://github.com/plant-plasticity/Evolutionary-flexibility-in-flooding-response-2019/tree/master/Gene-families-Phytozome)
 
 
-## Other resources by topic (*in progress*)
+## Other resources by topic
 - [Genome browser - CoGe viewer of ATAC-seq, nuclear RNA, total RNA, TRAP RNA and Ribo-seq](https://github.com/plant-plasticity/Evolutionary-flexibility-in-flooding-response-2019/tree/master/CoGe)
 - [Syntenic relationships for cross-species comparisons](https://github.com/plant-plasticity/Evolutionary-flexibility-in-flooding-response-2019/tree/master/Synteny)
 - [Cytoscape files for Figure 4](https://github.com/plant-plasticity/Evolutionary-flexibility-in-flooding-response-2019/tree/master/Cytoscape)
